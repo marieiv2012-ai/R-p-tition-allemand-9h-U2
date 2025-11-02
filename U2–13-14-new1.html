@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Révision Allemand U2 - Interactive</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .stats {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-around;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .controls {
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .btn-success {
+            background: #48bb78;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #38a169;
+        }
+
+        .btn-danger {
+            background: #f56565;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #e53e3e;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .card.flipped {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .card.known {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+        }
+
+        .french {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .card.flipped .french,
+        .card.known .french {
+            color: white;
+        }
+
+        .german {
+            font-size: 1.1em;
+            color: white;
+            display: none;
+        }
+
+        .card.flipped .german,
+        .card.known .german {
+            display: block;
+        }
+
+        .category {
+            background: rgba(102, 126, 234, 0.2);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            display: inline-block;
+            margin-bottom: 10px;
+            color: #667eea;
+        }
+
+        .card.flipped .category,
+        .card.known .category {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+
+        .progress-bar {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .progress-label {
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .progress {
+            height: 30px;
+            background: #e2e8f0;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #48bb78 0%, #38a169 100%);
+            transition: width 0.5s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .card .action-buttons {
+            display: none;
+        }
+
+        .card.flipped .action-buttons {
+            display: flex;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🇩🇪 Révision Allemand - U2 🇩🇪</h1>
+        
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number" id="total">0</div>
+                <div class="stat-label">Total de mots</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="known">0</div>
+                <div class="stat-label">✅ Connus</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="remaining">0</div>
+                <div class="stat-label">📚 À réviser</div>
+            </div>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-label">Progression</div>
+            <div class="progress">
+                <div class="progress-fill" id="progressFill">0%</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-primary" onclick="showAll()">👁️ Tout afficher</button>
+            <button class="btn btn-primary" onclick="hideAll()">🙈 Tout cacher</button>
+            <button class="btn btn-success" onclick="shuffle()">🔀 Mélanger</button>
+            <button class="btn btn-danger" onclick="resetProgress()">🔄 Recommencer</button>
+        </div>
+
+        <div class="cards-grid" id="cardsContainer"></div>
+    </div>
+
+    <script>
+        const vocabulary = [
+            // Lieux et directions
+            {french: "le croisement", german: "die Kreuzung, -en", category: "Lieux"},
+            {french: "le feu (de signalisation)", german: "die Ampel, -n", category: "Lieux"},
+            {french: "le lieu, l'endroit", german: "der Ort, -e", category: "Lieux"},
+            {french: "l'arrêt", german: "die Haltestelle, -n", category: "Lieux"},
+            {french: "descendre d'un véhicule", german: "aus|steigen, er steigt aus", category: "Verbes"},
+            {french: "Klara descend au prochain arrêt.", german: "Klara steigt an der nächsten Haltestelle aus.", category: "Phrases"},
+            {french: "la place du marché", german: "der Marktplatz, \"-e", category: "Lieux"},
+            {french: "proche, à proximité", german: "nah", category: "Adjectifs"},
+            {french: "Tout est à proximité.", german: "Alles ist ganz nah.", category: "Phrases"},
+            {french: "loin", german: "weit", category: "Adjectifs"},
+            {french: "Le cinéma n'est pas loin.", german: "Das Kino ist nicht weit.", category: "Phrases"},
+            {french: "le centre de jeunes", german: "das Jugendzentrum, Jugendzentren", category: "Lieux"},
+            {french: "l'hôtel de ville", german: "das Rathaus", category: "Lieux"},
+            {french: "le terrain de jeu", german: "der Spielplatz, \"-e", category: "Lieux"},
+            {french: "le chemin de l'école", german: "der Schulweg, -e", category: "Lieux"},
+            {french: "tourner, virer", german: "ab|biegen, er biegt ab", category: "Verbes"},
+            {french: "Je tourne à gauche.", german: "Ich biege links ab.", category: "Phrases"},
+            
+            // Magasins
+            {french: "magasins", german: "Geschäfte", category: "Magasins"},
+            {french: "acheter", german: "kaufen, er kauft", category: "Verbes"},
+            {french: "coûter", german: "kosten, er kostet", category: "Verbes"},
+            {french: "La veste ne coûte pas cher.", german: "Die Jacke kostet nicht viel.", category: "Phrases"},
+            {french: "le supermarché", german: "der Supermarkt, \"-e", category: "Magasins"},
+            {french: "le restaurant", german: "das Restaurant, -s", category: "Magasins"},
+            {french: "la boulangerie", german: "die Bäckerei, -en", category: "Magasins"},
+            {french: "À la boulangerie, il y a du pain et des petits pains.", german: "In der Bäckerei gibt es Brot und Brötchen.", category: "Phrases"},
+            {french: "le kiosque", german: "der Kiosk, -e", category: "Magasins"},
+            {french: "Au kiosque, il y a des magazines et des journaux.", german: "Am Kiosk gibt es Zeitschriften und Zeitungen.", category: "Phrases"},
+            {french: "la poste", german: "die Post", category: "Magasins"},
+            {french: "la pharmacie", german: "die Apotheke, -n", category: "Magasins"},
+            {french: "À la pharmacie, on peut acheter des médicaments.", german: "In der Apotheke kann man Medikamente kaufen.", category: "Phrases"},
+            {french: "la banque", german: "die Bank, -en", category: "Magasins"},
+            {french: "Jakob attend devant la banque.", german: "Jakob wartet vor der Bank.", category: "Phrases"},
+            {french: "faire les courses", german: "ein|kaufen, er kauft ein", category: "Verbes"},
+            {french: "payer", german: "bezahlen, er bezahlt", category: "Verbes"},
+            {french: "Je paie à la caisse.", german: "Ich bezahle an der Kasse.", category: "Phrases"},
+            {french: "faire du shopping", german: "shoppen, er shoppt", category: "Verbes"},
+            {french: "le grand magasin", german: "das Kaufhaus, \"-er", category: "Magasins"},
+            {french: "le magasin", german: "das Geschäft, -e", category: "Magasins"},
+            {french: "la caisse", german: "die Kasse, -n", category: "Magasins"},
+            
+            // Aliments
+            {french: "aliments et denrées", german: "Lebensmittel und Waren", category: "Aliments"},
+            {french: "le shampoing", german: "das Shampoo, -s", category: "Produits"},
+            {french: "la saucisse", german: "die Wurst, \"-e", category: "Aliments"},
+            {french: "le fromage", german: "der Käse (Sg.)", category: "Aliments"},
+            {french: "la banane", german: "die Banane, -n", category: "Aliments"},
+            {french: "le pain", german: "das Brot, -e", category: "Aliments"},
+            {french: "le petit pain", german: "das Brötchen, -", category: "Aliments"},
+            {french: "le médicament", german: "das Medikament, -e", category: "Produits"},
+            {french: "le magazine", german: "die Zeitschrift, -en", category: "Produits"},
+            {french: "le journal", german: "die Zeitung, -en", category: "Produits"},
+            
+            // Affaires d'école
+            {french: "affaires d'école", german: "Schulsachen", category: "École"},
+            {french: "le cahier", german: "das Heft, -e", category: "École"},
+            {french: "le livre", german: "das Buch, \"-er", category: "École"},
+            {french: "le papier", german: "das Papier, -e", category: "École"},
+            {french: "le stylo", german: "der Stift, -e", category: "École"}
+        ];
+
+        let knownWords = new Set();
+
+        function createCard(word, index) {
+            return `
+                <div class="card" id="card-${index}" onclick="flipCard(${index})">
+                    <div class="category">${word.category}</div>
+                    <div class="french">${word.french}</div>
+                    <div class="german">${word.german}</div>
+                    <div class="action-buttons">
+                        <button class="btn btn-success" onclick="markAsKnown(event, ${index})">✅ Je connais</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderCards() {
+            const container = document.getElementById('cardsContainer');
+            container.innerHTML = vocabulary.map((word, index) => createCard(word, index)).join('');
+            updateStats();
+        }
+
+        function flipCard(index) {
+            const card = document.getElementById(`card-${index}`);
+            if (!card.classList.contains('known')) {
+                card.classList.toggle('flipped');
+            }
+        }
+
+        function markAsKnown(event, index) {
+            event.stopPropagation();
+            const card = document.getElementById(`card-${index}`);
+            card.classList.add('known');
+            knownWords.add(index);
+            updateStats();
+        }
+
+        function updateStats() {
+            const total = vocabulary.length;
+            const known = knownWords.size;
+            const remaining = total - known;
+            const percentage = Math.round((known / total) * 100);
+
+            document.getElementById('total').textContent = total;
+            document.getElementById('known').textContent = known;
+            document.getElementById('remaining').textContent = remaining;
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('progressFill').textContent = percentage + '%';
+        }
+
+        function showAll() {
+            document.querySelectorAll('.card').forEach(card => {
+                if (!card.classList.contains('known')) {
+                    card.classList.add('flipped');
+                }
+            });
+        }
+
+        function hideAll() {
+            document.querySelectorAll('.card').forEach(card => {
+                card.classList.remove('flipped');
+            });
+        }
+
+        function shuffle() {
+            const array = [...vocabulary];
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            vocabulary.length = 0;
+            vocabulary.push(...array);
+            renderCards();
+        }
+
+        function resetProgress() {
+            if (confirm('Es-tu sûr de vouloir recommencer ? Tu vas perdre ta progression.')) {
+                knownWords.clear();
+                document.querySelectorAll('.card').forEach(card => {
+                    card.classList.remove('flipped', 'known');
+                });
+                updateStats();
+            }
+        }
+
+        // Initialisation
+        renderCards();
+    </script>
+</body>
+</html>
