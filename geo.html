@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cours de Géographie et Astronomie - 9ème Harmos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        nav {
+            background: #f8f9fa;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            background: white;
+            border: 2px solid #667eea;
+            color: #667eea;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .nav-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .nav-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        h3 {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin: 25px 0 15px 0;
+        }
+
+        .info-box {
+            background: #f0f4ff;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .success-box {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-size: 1.1em;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        tr:hover {
+            background-color: #e9ecef;
+            transition: background-color 0.3s;
+        }
+
+        .planet-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .planet-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .planet-card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        ul, ol {
+            margin: 15px 0 15px 30px;
+        }
+
+        li {
+            margin: 8px 0;
+        }
+
+        .mnemonic {
+            font-size: 1.3em;
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        /* Quiz styles */
+        .question {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .question h4 {
+            color: #667eea;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+
+        .answer-input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .answer-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .check-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 20px 10px 0 0;
+            transition: all 0.3s;
+        }
+
+        .check-btn:hover {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        .reset-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 20px 0 0 0;
+            transition: all 0.3s;
+        }
+
+        .reset-btn:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+        }
+
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .result.correct {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            display: block;
+        }
+
+        .result.incorrect {
+            background: #f8d7da;
+            border-left: 5px solid #dc3545;
+            display: block;
+        }
+
+        .score-display {
+            text-align: center;
+            font-size: 2em;
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .map-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .interactive-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .list-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s;
+        }
+
+        .list-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .emoji {
+            font-size: 2em;
+            margin-right: 10px;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            nav {
+                flex-direction: column;
+            }
+
+            .nav-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌍 Géographie et Astronomie 🌌</h1>
+            <p>Cours pour 9ème Harmos - Lecture: 10 minutes</p>
+        </header>
+
+        <nav>
+            <button class="nav-btn active" onclick="showSection('systeme-solaire')">Système Solaire</button>
+            <button class="nav-btn" onclick="showSection('planetes-types')">Types de Planètes</button>
+            <button class="nav-btn" onclick="showSection('continent-7')">7ème Continent</button>
+            <button class="nav-btn" onclick="showSection('terre')">Continents & Océans</button>
+            <button class="nav-btn" onclick="showSection('test')">🎯 Test</button>
+        </nav>
+
+        <div class="content">
+            <!-- Section 1: Système Solaire -->
+            <div id="systeme-solaire" class="section active">
+                <h2>🪐 Le Système Solaire</h2>
+                
+                <div class="info-box">
+                    <strong>💡 À retenir:</strong> Notre système solaire contient <strong>8 planètes</strong> qui tournent autour du Soleil.
+                </div>
+
+                <h3>Les 8 planètes dans l'ordre</h3>
+                <div class="mnemonic">
+                    Me Voici Toute Mignonne, Je Suis Une Naine
+                </div>
+                <p style="text-align: center; margin-top: 10px; font-style: italic;">
+                    (Mercure - Vénus - Terre - Mars - Jupiter - Saturne - Uranus - Neptune)
+                </p>
+
+                <h3>Tableau récapitulatif</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Position</th>
+                            <th>Planète</th>
+                            <th>Type</th>
+                            <th>Caractéristique</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>☿️ Mercure</td>
+                            <td>Tellurique</td>
+                            <td>La plus proche du Soleil</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>♀️ Vénus</td>
+                            <td>Tellurique</td>
+                            <td>La plus chaude</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>🌍 Terre</td>
+                            <td>Tellurique</td>
+                            <td>Notre planète (eau liquide)</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>♂️ Mars</td>
+                            <td>Tellurique</td>
+                            <td>La planète rouge</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>♃ Jupiter</td>
+                            <td>Jovienne</td>
+                            <td>La plus grosse planète</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>♄ Saturne</td>
+                            <td>Jovienne</td>
+                            <td>Avec de magnifiques anneaux</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>♅ Uranus</td>
+                            <td>Jovienne</td>
+                            <td>Couleur bleu-vert</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td>♆ Neptune</td>
+                            <td>Jovienne</td>
+                            <td>La plus éloignée du Soleil</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="warning-box">
+                    <strong>⚠️ Important:</strong> Pluton n'est PLUS considérée comme une planète depuis 2006. C'est maintenant une planète naine.
+                </div>
+            </div>
+
+            <!-- Section 2: Types de Planètes -->
+            <div id="planetes-types" class="section">
+                <h2>🔬 Les Planètes Telluriques et Joviennes</h2>
+
+                <h3>🪨 Les Planètes Telluriques</h3>
+                <div class="planet-card">
+                    <h4>Définition</h4>
+                    <p>Les planètes telluriques (du latin <em>tellus</em> = terre) sont des planètes <strong>rocheuses</strong> avec une surface solide.</p>
+                </div>
+
+                <div class="info-box">
+                    <strong>Caractéristiques des planètes telluriques:</strong>
+                    <ul>
+                        <li>🪨 Surface solide et rocheuse</li>
+                        <li>📏 Petite taille</li>
+                        <li>🏔️ Présence de reliefs (montagnes, cratères)</li>
+                        <li>📍 Proches du Soleil</li>
+                        <li>🌡️ Températures élevées (sauf Mars)</li>
+                    </ul>
+                </div>
+
+                <div class="interactive-list">
+                    <div class="list-item">
+                        <span class="emoji">☿️</span><strong>Mercure</strong>
+                    </div>
+                    <div class="list-item">
+                        <span class="emoji">♀️</span><strong>Vénus</strong>
+                    </div>
+                    <div class="list-item">
+                        <span class="emoji">🌍</span><strong>Terre</strong>
+                    </div>
+                    <div class="list-item">
+                        <span class="emoji">♂️</span><strong>Mars</strong>
+                    </div>
+                </div>
+
+                <h3>⛽ Les Planètes Joviennes</h3>
+                <div class="planet-card">
+                    <h4>Définition</h4>
+                    <p>Les planètes joviennes (de Jupiter, le dieu romain) sont des <strong>géantes gazeuses</strong> composées principalement de gaz.</p>
+                </div>
+
+                <div class="info-box">
+                    <strong>Caractéristiques des planètes joviennes:</strong>
+                    <ul>
+                        <li>⛽ Composées de gaz (hydrogène, hélium)</li>
+                        <li>🎈 Très grande taille</li>
+                        <li>❌ Pas de surface solide</li>
+                        <li>🌀 Présence d'anneaux</li>
+                        <li>🌙 Beaucoup de satellites naturels (lunes)</li>
+                        <li>📍 Éloignées du Soleil</li>
+                    </ul>
+                </div>
+
+                <div class="interactive-list">
+                    <div class="list-item">
+                        <span class="emoji">♃</span><strong>Jupiter</strong>
+                    </div>
+                    <div class="list-item">
+                        <span class="emoji">♄</span><strong>Saturne</strong>
+                    </div>
+                    <div class="list-item">
+                        <span class="emoji">♅</span><strong>Uranus</strong>
+                    </div>
+                    <div class="list-item">
+                        <span class="emoji">♆</span><strong>Neptune</strong>
+                    </div>
+                </div>
+
+                <div class="success-box">
+                    <strong>✅ Astuce mémo:</strong><br>
+                    <strong>MVTM</strong> = Telluriques (les 4 premières)<br>
+                    <strong>JSUN</strong> = Joviennes (les 4 dernières)
+                </div>
+            </div>
+
+            <!-- Section 3: 7ème Continent -->
+            <div id="continent-7" class="section">
+                <h2>🗑️ Le « 7ème Continent »</h2>
+
+                <div class="warning-box">
+                    <strong>⚠️ Attention:</strong> Le nom « 7ème continent » est <strong>trompeur</strong> ! Ce n'est PAS un continent au sens géographique.
+                </div>
+
+                <h3>Qu'est-ce que c'est ?</h3>
+                <div class="planet-card">
+                    <p>Le 7ème continent désigne une <strong>immense zone de déchets plastiques</strong> qui flotte dans l'océan Pacifique, entre la Californie et Hawaï.</p>
+                </div>
+
+                <h3>🚫 Pourquoi ce nom est-il trompeur ?</h3>
+                <div class="info-box">
+                    <ul>
+                        <li>❌ Ce n'est <strong>PAS une île solide</strong> sur laquelle on peut marcher</li>
+                        <li>🌊 C'est une <strong>soupe de plastique</strong> dispersée dans l'eau</li>
+                        <li>🔬 Les déchets sont souvent <strong>microscopiques</strong> (micro-plastiques)</li>
+                        <li>👁️ Invisible depuis le ciel ou un bateau dans la plupart des zones</li>
+                        <li>📏 Sa taille varie selon les courants (estimée entre 700 000 km² et 1,6 millions de km²)</li>
+                    </ul>
+                </div>
+
+                <h3>🗺️ D'où viennent ces déchets ?</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Provenance</th>
+                            <th>Pourcentage</th>
+                            <th>Exemples</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>🏙️ <strong>Terre</strong></td>
+                            <td>80%</td>
+                            <td>Déchets jetés dans les rivières, bouteilles, sacs plastiques, emballages</td>
+                        </tr>
+                        <tr>
+                            <td>⚓ <strong>Activités maritimes</strong></td>
+                            <td>20%</td>
+                            <td>Filets de pêche abandonnés, déchets de bateaux</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>🌀 Qu'est-ce qu'un gyre océanique ?</h3>
+                <div class="planet-card">
+                    <h4>Définition</h4>
+                    <p>Un <strong>gyre océanique</strong> est un <strong>gigantesque tourbillon</strong> créé par les courants marins qui tournent en rond dans les océans.</p>
+                </div>
+
+                <div class="info-box">
+                    <strong>Comment fonctionne un gyre ?</strong>
+                    <ol>
+                        <li>Les courants marins tournent en cercle (sens horaire dans l'hémisphère Nord)</li>
+                        <li>Les déchets sont <strong>piégés</strong> au centre du tourbillon</li>
+                        <li>Les plastiques s'accumulent et se fragmentent en micro-plastiques</li>
+                        <li>Ils restent piégés pendant des années, voire des décennies</li>
+                    </ol>
+                </div>
+
+                <div class="warning-box">
+                    <strong>🌍 À savoir:</strong> Il existe <strong>5 gyres majeurs</strong> dans le monde :
+                    <ul>
+                        <li>Pacifique Nord (le plus connu = « 7ème continent »)</li>
+                        <li>Pacifique Sud</li>
+                        <li>Atlantique Nord</li>
+                        <li>Atlantique Sud</li>
+                        <li>Océan Indien</li>
+                    </ul>
+                </div>
+
+                <h3>🐠 Conséquences</h3>
+                <div class="interactive-list">
+                    <div class="list-item">
+                        🐢 Animaux marins qui ingèrent le plastique
+                    </div>
+                    <div class="list-item">
+                        🎣 Contamination de la chaîne alimentaire
+                    </div>
+                    <div class="list-item">
+                        ☠️ Mort de millions d'animaux chaque année
+                    </div>
+                    <div class="list-item">
+                        🌊 Pollution durable des océans
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 4: Continents et Océans -->
+            <div id="terre" class="section">
+                <h2>🌎 Les Continents et Océans de la Terre</h2>
+
+                <h3>🌊 Les 5 Océans</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Océan</th>
+                            <th>Position</th>
+                            <th>Caractéristique</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>🌊 <strong>Océan Pacifique</strong></td>
+                            <td>Entre l'Amérique et l'Asie</td>
+                            <td>Le plus grand océan du monde</td>
+                        </tr>
+                        <tr>
+                            <td>🌊 <strong>Océan Atlantique</strong></td>
+                            <td>Entre l'Amérique et l'Europe/Afrique</td>
+                            <td>Le 2ème plus grand</td>
+                        </tr>
+                        <tr>
+                            <td>🌊 <strong>Océan Indien</strong></td>
+                            <td>Au sud de l'Asie, entre l'Afrique et l'Australie</td>
+                            <td>Le 3ème plus grand</td>
+                        </tr>
+                        <tr>
+                            <td>🧊 <strong>Océan Arctique</strong></td>
+                            <td>Autour du pôle Nord</td>
+                            <td>Le plus petit, en grande partie gelé</td>
+                        </tr>
+                        <tr>
+                            <td>🐧 <strong>Océan Austral (Antarctique)</strong></td>
+                            <td>Autour de l'Antarctique (pôle Sud)</td>
+                            <td>Océan le plus froid</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>🗺️ Les 7 Continents</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Continent</th>
+                            <th>Position</th>
+                            <th>Particularité</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>🌏 <strong>Asie</strong></td>
+                            <td>À l'est de l'Europe</td>
+                            <td>Le plus grand continent, le plus peuplé</td>
+                        </tr>
+                        <tr>
+                            <td>🌍 <strong>Afrique</strong></td>
+                            <td>Au sud de l'Europe</td>
+                            <td>Le continent le plus chaud</td>
+                        </tr>
+                        <tr>
+                            <td>🌎 <strong>Amérique du Nord</strong></td>
+                            <td>Au nord-ouest</td>
+                            <td>USA, Canada, Mexique</td>
+                        </tr>
+                        <tr>
+                            <td>🌎 <strong>Amérique du Sud</strong></td>
+                            <td>Au sud-ouest</td>
+                            <td>Brésil, Argentine, Pérou...</td>
+                        </tr>
+                        <tr>
+                            <td>🧊 <strong>Antarctique</strong></td>
+                            <td>Pôle Sud</td>
+                            <td>Continent glacé, inhabité</td>
+                        </tr>
+                        <tr>
+                            <td>🏰 <strong>Europe</strong></td>
+                            <td>À l'ouest de l'Asie</td>
+                            <td>Notre continent (Suisse)</td>
+                        </tr>
+                        <tr>
+                            <td>🦘 <strong>Océanie</strong></td>
+                            <td>Au sud-est de l'Asie</td>
+                            <td>Australie, Nouvelle-Zélande, îles du Pacifique</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="success-box">
+                    <strong>✅ Astuce pour retenir les continents:</strong><br>
+                    <strong>A A A E O E A</strong> = Afrique - Amérique du Nord - Amérique du Sud - Europe - Océanie - Europe (erreur), Antarctique - Asie<br>
+                    Ou tout simplement: <strong>3A + 2A + E + O</strong> (Afrique, Amérique N, Amérique S, Antarctique, Asie, Europe, Océanie)
+                </div>
+
+                <div class="info-box">
+                    <strong>📌 Points de repère importants:</strong>
+                    <ul>
+                        <li><strong>Équateur:</strong> ligne imaginaire qui divise la Terre en deux hémisphères (Nord et Sud)</li>
+                        <li><strong>Pôle Nord:</strong> extrémité nord de la Terre (océan Arctique gelé)</li>
+                        <li><strong>Pôle Sud:</strong> extrémité sud de la Terre (continent Antarctique)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Section 5: Test -->
+            <div id="test" class="section">
+                <h2>🎯 Test de connaissances (20 points)</h2>
+
+                <div class="warning-box">
+                    <strong>📝 Instructions:</strong> Réponds aux 10 questions ci-dessous. Clique sur "Vérifier mes réponses" pour voir ton score !
+                </div>
+
+                <!-- Question 1 -->
+                <div class="question">
+                    <h4>Question 1 (2 points) - Cite les 8 planètes du système solaire dans l'ordre en partant du Soleil:</h4>
+                    <input type="text" class="answer-input" id="q1" placeholder="Écris les 8 planètes séparées par des virgules">
+                    <div class="result" id="r1"></div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="question">
+                    <h4>Question 2 (2 points) - Qu'est-ce qu'une planète tellurique ? Donne sa définition:</h4>
+                    <textarea class="answer-input" id="q2" rows="3" placeholder="Ta réponse..."></textarea>
+                    <div class="result" id="r2"></div>
+                </div>
+
+                <!-- Question 3 -->
+                <div class="question">
+                    <h4>Question 3 (2 points) - Cite les 4 planètes joviennes:</h4>
+                    <input type="text" class="answer-input" id="q3" placeholder="Écris les 4 planètes séparées par des virgules">
+                    <div class="result" id="r3"></div>
+                </div>
+
+                <!-- Question 4 -->
+                <div class="question">
+                    <h4>Question 4 (2 points) - Donne 3 caractéristiques des planètes joviennes:</h4>
+                    <textarea class="answer-input" id="q4" rows="4" placeholder="Liste 3 caractéristiques..."></textarea>
+                    <div class="result" id="r4"></div>
+                </div>
+
+                <!-- Question 5 -->
+                <div class="question">
+                    <h4>Question 5 (2 points) - D'où proviennent principalement les déchets du 7ème continent ? Donne le pourcentage:</h4>
+                    <input type="text" class="answer-input" id="q5" placeholder="Ta réponse...">
+                    <div class="result" id="r5"></div>
+                </div>
+
+                <!-- Question 6 -->
+                <div class="question">
+                    <h4>Question 6 (2 points) - Pourquoi le nom "7ème continent" est-il trompeur ? Explique:</h4>
+                    <textarea class="answer-input" id="q6" rows="3" placeholder="Ta réponse..."></textarea>
+                    <div class="result" id="r6"></div>
+                </div>
+
+                <!-- Question 7 -->
+                <div class="question">
+                    <h4>Question 7 (2 points) - Qu'est-ce qu'un gyre océanique ?</h4>
+                    <textarea class="answer-input" id="q7" rows="3" placeholder="Ta réponse..."></textarea>
+                    <div class="result" id="r7"></div>
+                </div>
+
+                <!-- Question 8 -->
+                <div class="question">
+                    <h4>Question 8 (2 points) - Nomme les 5 océans:</h4>
+                    <input type="text" class="answer-input" id="q8" placeholder="Écris les 5 océans séparés par des virgules">
+                    <div class="result" id="r8"></div>
+                </div>
+
+                <!-- Question 9 -->
+                <div class="question">
+                    <h4>Question 9 (2 points) - Cite 4 des 7 continents:</h4>
+                    <input type="text" class="answer-input" id="q9" placeholder="Écris 4 continents séparés par des virgules">
+                    <div class="result" id="r9"></div>
+                </div>
+
+                <!-- Question 10 -->
+                <div class="question">
+                    <h4>Question 10 (2 points) - Quel océan se trouve entre l'Amérique et l'Europe/Afrique ?</h4>
+                    <input type="text" class="answer-input" id="q10" placeholder="Ta réponse...">
+                    <div class="result" id="r10"></div>
+                </div>
+
+                <button class="check-btn" onclick="checkAnswers()">✅ Vérifier mes réponses</button>
+                <button class="reset-btn" onclick="resetQuiz()">🔄 Recommencer</button>
+
+                <div class="score-display" id="score"></div>
+
+                <div class="success-box" style="margin-top: 30px;">
+                    <strong>💡 Barème de notation:</strong>
+                    <ul>
+                        <li>18-20 points: Excellent ! 🌟</li>
+                        <li>16-17 points: Très bien ! 👏</li>
+                        <li>14-15 points: Bien ! 👍</li>
+                        <li>12-13 points: Assez bien ✓</li>
+                        <li>Moins de 12: Il faut revoir le cours 📚</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navigation entre sections
+        function showSection(sectionId) {
+            // Masquer toutes les sections
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Afficher la section sélectionnée
+            document.getElementById(sectionId).classList.add('active');
+
+            // Mettre à jour les boutons actifs
+            const buttons = document.querySelectorAll('.nav-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Scroll vers le haut
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Fonction de vérification des réponses
+        function checkAnswers() {
+            let totalScore = 0;
+            
+            // Q1: Les 8 planètes
+            const q1 = document.getElementById('q1').value.toLowerCase();
+            const planetes = ['mercure', 'vénus', 'venus', 'terre', 'mars', 'jupiter', 'saturne', 'uranus', 'neptune'];
+            let q1Score = 0;
+            planetes.forEach(planete => {
+                if (q1.includes(planete)) q1Score++;
+            });
+            if (q1Score >= 7) {
+                document.getElementById('r1').className = 'result correct';
+                document.getElementById('r1').innerHTML = '✅ Correct ! (2/2 points)';
+                totalScore += 2;
+            } else {
+                document.getElementById('r1').className = 'result incorrect';
+                document.getElementById('r1').innerHTML = '❌ Incomplet ou incorrect. Réponse attendue: Mercure, Vénus, Terre, Mars, Jupiter, Saturne, Uranus, Neptune (0/2 points)';
+            }
+
+            // Q2: Définition planète tellurique
+            const q2 = document.getElementById('q2').value.toLowerCase();
+            if (q2.includes('roche') || q2.includes('solide') || q2.includes('tellurique')) {
+                document.getElementById('r2').className = 'result correct';
+                document.getElementById('r2').innerHTML = '✅ Correct ! Une planète tellurique est une planète rocheuse avec une surface solide. (2/2 points)';
+                totalScore += 2;
+            } else {
+                document.getElementById('r2').className = 'result incorrect';
+                document.getElementById('r2').innerHTML = '❌ Réponse attendue: Une planète tellurique est une planète rocheuse avec une surface solide. (0/2 points)';
+            }
+
+            // Q3: 4 planètes joviennes
+            const q3 = document.getElementById('q3').value.toLowerCase();
+            const joviennes = ['jupiter', 'saturne', 'uranus', 'neptune'];
+            let q3Score = 0;
+            joviennes.forEach(planete => {
+                if (q3.includes(planete)) q3Score++;
+            });
+            if (q3Score === 4) {
+                document.getElementById('r3').className = 'result correct';
+                document.getElementById('r3').innerHTML = '✅ Correct ! Jupiter, Saturne, Uranus, Neptune (2/2 points)';
+                totalScore += 2;
+            } else {
+                document.getElementById('r3').className = 'result incorrect';
+                document.getElementById('r3').innerHTML = '❌ Incomplet ou incorrect. Réponse attendue: Jupiter, Saturne, Uranus, Neptune (0/2 points)';
+            }
+
+            // Q4: Caractéristiques planètes joviennes
+            const q4 = document.getElementById('q4').value.toLowerCase();
+            let q4Score = 0;
+            if (q4.includes('gaz')) q4Score++;
+            if (q4.includes('grand') || q4.includes('géant')) q4Score++;
+            if (q4.includes('anneau') || q4.includes('satellite') || q4.includes('lune') || q4.includes('solide') && q4.includes('pas')) q4Score++;
+            
+            if (q4Score >= 2) {
+                document.getElementById('r4').className = 'result correct';
+                document.getElementById('r4').innerHTML = '✅ Bien ! Caractéristiques attendues: composées de gaz, très grandes, pas de surface solide, présence d\'anneaux, nombreux satellites. (2/2 points)';
+                totalScore += 2;
+            } else {
+                document.getElementById('r4').className = 'result incorrect';
+                document.getElementById('r4').innerHTML = '❌ Réponse insuffisante. Caractéristiques attendues: composées de gaz, très grandes, pas de surface solide, présence d\'anneaux, nombreux satellites. (0/2 points)';
+            }
+
+            // Q5: Provenance déchets
+            const q5 = document.getElementById('q5').value.toLowerCase();
+            if ((q5.includes('80') || q5.includes('terre') || q5.includes('terrestre')) && (q5.includes('20') || q5.includes('mer') || q5.includes('maritime'))) {
+                document.getElementById('r5').className = 'result correct';
+                document.getElementById('r5').innerHTML = '✅ Correct ! 80% proviennent de la terre (rivières, déchets terrestres) et 20% des activités maritimes. (2/2 points)';
+                totalScore += 2;
+            } else {
+                document.getElementById('r5').className = 'result incorrect';
+                document.getElementById('r5').innerHTML = '❌ Réponse attendue: 80% proviennent de la terre et 20% des activités maritimes. (0/2 points)';
+            }
+
+            // Q6: Nom trompeur
+            const q6 = document.getElementById('q6').value.toLowerCase();
+            if ((q6.includes('pas') && q6.includes('île')) || (q6.includes('pas') && q6.includes('solide')) || q6.includes('soupe') || q6.includes('dispersé')) {
+                document.getElementById('r6').className = 'result correct';
+                document.getElementById('r6').innerHTML = '✅ Correct ! Ce n\'est pas une île solide mais une zone dispersée de déchets plastiques (soupe de plastique). (2/2 points)';
+                totalScore += 2;
+            } else {
+                document.getElementById('r6').className = 'result incorrect';
+                document.getElementById('r6').innerHTML = '❌ Réponse attendue: Ce n\'est pas une île solide mais une zone dispersée de déchets plastiques. (0/2 points)';
+            }
+
+            // Q7: Gyre océanique
+            const q7 = document.getElementById('q7').value.toLowerCase();
+            if ((q7.includes('tourbillon') || q7.includes('courant')) && (q7.includes('cercle') || q7.includes('rond') || q7.includes('piège'))) {
+                document.getElementById('r7').className = 'result correct';
+                document.getElementById('r7').innerHTML = '✅ Correct ! Un gyre océanique est un gigantesque tourbillon créé par les courants marins qui piègent les déchets. (2/2 points)';
+                totalScore += 2;
+            } else {
+                document.getElementById('r7').className = 'result incorrect';
+                document.getElementById('r7').innerHTML = '❌ Réponse attendue: Un gyre océanique est un gigantesque tourbillon créé par les courants marins. (0/2 points)';
+            }
+
+            // Q8: 5 océans
+            const q8 = document.getElementById('q8').value.toLowerCase();
+            const oceans = ['pacifique', 'atlantique', 'indien', 'arctique', 'austral', 'antarctique'];
+            let q8Score = 0;
+            oceans.forEach(ocean => {
+                if (q8.includes(ocean)) q8Score++;
+            });
+            if (q8Score >= 5) {
+                document.getElementById('r8').className = 'result correct';
+                document.getElementById('r8').innerHTML = '✅ Correct ! Pacifique, Atlantique, Indien, Arctique, Austral (ou Antarctique) (2/2 points)';
+                totalScore += 2;
+            } else {
+                document.getElementById('r8').className = 'result incorrect';
+                document.getElementById('r8').innerHTML = '❌ Incomplet. Réponse attendue: Pacifique, Atlantique, Indien, Arctique, Austral (2/2 points)';
+            }
+
+            // Q9: 4 continents
+            const q9 = document.getElementById('q9').value.toLowerCase();
+            const continents = ['asie', 'afrique', 'amérique', 'europe', 'océanie', 'antarctique'];
+            let q9Score = 0;
+            continents.forEach(continent => {
+                if (q9.includes(continent)) q9Score++;
+            });
+            if (q9Score >= 4) {
+                document.getElementById('r9').className = 'result correct';
+                document.getElementById('r9').innerHTML = '✅ Correct ! (2/2 points)';
+                totalScore += 2;
+            } else {
+                document.getElementById('r9').className = 'result incorrect';
+                document.getElementById('r9').innerHTML = '❌ Incomplet. Il faut nommer 4 continents parmi: Asie, Afrique, Amérique du Nord, Amérique du Sud, Europe, Océanie, Antarctique (0/2 points)';
+            }
+
+            // Q10: Océan entre Amérique et Europe
+            const q10 = document.getElementById('q10').value.toLowerCase();
+            if (q10.includes('atlantique')) {
+                document.getElementById('r10').className = 'result correct';
+                document.getElementById('r10').innerHTML = '✅ Correct ! L\'océan Atlantique (2/2 points)';
+                totalScore += 2;
+            } else {
+                document.getElementById('r10').className = 'result incorrect';
+                document.getElementById('r10').innerHTML = '❌ Réponse attendue: L\'océan Atlantique (0/2 points)';
+            }
+
+            // Afficher le score total
+            const scoreDiv = document.getElementById('score');
+            scoreDiv.style.display = 'block';
+            let appreciation = '';
+            if (totalScore >= 18) appreciation = '🌟 Excellent !';
+            else if (totalScore >= 16) appreciation = '👏 Très bien !';
+            else if (totalScore >= 14) appreciation = '👍 Bien !';
+            else if (totalScore >= 12) appreciation = '✓ Assez bien';
+            else appreciation = '📚 Il faut revoir le cours';
+
+            scoreDiv.innerHTML = `<h3>Score final: ${totalScore}/20</h3><p>${appreciation}</p>`;
+            
+            // Scroll vers le score
+            scoreDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // Fonction pour réinitialiser le quiz
+        function resetQuiz() {
+            // Réinitialiser tous les champs
+            for (let i = 1; i <= 10; i++) {
+                const input = document.getElementById('q' + i);
+                if (input) input.value = '';
+                const result = document.getElementById('r' + i);
+                if (result) {
+                    result.style.display = 'none';
+                    result.className = 'result';
+                }
+            }
+            
+            // Masquer le score
+            document.getElementById('score').style.display = 'none';
+            
+            // Scroll vers le haut
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
