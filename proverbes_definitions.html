@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Révision Proverbes Français</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .stats {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-around;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #e74c3c;
+        }
+
+        .stat-label {
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .controls {
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .btn-success {
+            background: #48bb78;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #38a169;
+        }
+
+        .btn-danger {
+            background: #f56565;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #e53e3e;
+        }
+
+        .progress-bar {
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .progress {
+            background: #eee;
+            border-radius: 10px;
+            height: 30px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #48bb78, #38a169);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .card.flipped {
+            background: #fff8e1;
+            border: 2px solid #e74c3c;
+        }
+
+        .card.known {
+            background: #d4edda;
+            border: 2px solid #48bb78;
+            opacity: 0.6;
+        }
+
+        .card.known:hover {
+            transform: none;
+            cursor: default;
+        }
+
+        .proverb {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #e74c3c;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .definition {
+            display: none;
+            color: #555;
+            line-height: 1.6;
+            font-size: 1em;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px dashed #e74c3c;
+        }
+
+        .card.flipped .definition {
+            display: block;
+        }
+
+        .known-badge {
+            display: none;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #48bb78;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .card.known .known-badge {
+            display: block;
+        }
+
+        .card-actions {
+            display: none;
+            margin-top: 15px;
+            gap: 10px;
+        }
+
+        .card.flipped:not(.known) .card-actions {
+            display: flex;
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 14px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            flex: 1;
+        }
+
+        .btn-know {
+            background: #48bb78;
+            color: white;
+        }
+
+        .btn-know:hover {
+            background: #38a169;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+
+        .hint {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #856404;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 Proverbes Français 📚</h1>
+
+        <div class="hint">
+            💡 Clique sur une carte pour voir la définition !
+        </div>
+
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number" id="total">0</div>
+                <div class="stat-label">Total</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="known">0</div>
+                <div class="stat-label">✅ Connus</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="remaining">0</div>
+                <div class="stat-label">📝 À réviser</div>
+            </div>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress">
+                <div class="progress-fill" id="progressFill">0%</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-primary" onclick="showAll()">👀 Tout afficher</button>
+            <button class="btn btn-primary" onclick="hideAll()">🙈 Tout cacher</button>
+            <button class="btn btn-primary" onclick="shuffle()">🔀 Mélanger</button>
+            <button class="btn btn-danger" onclick="resetProgress()">🔄 Recommencer</button>
+        </div>
+
+        <div class="cards-grid" id="cardsContainer"></div>
+    </div>
+
+    <script>
+        // 📚 LISTE DES PROVERBES
+        const proverbs = [
+            {
+                proverb: "L'appétit vient en mangeant.",
+                definition: "Plus on goûte à quelque chose, plus on en a envie — le désir ou la motivation naît souvent avec l'action."
+            },
+            {
+                proverb: "Qui va à la chasse perd sa place.",
+                definition: "Quand on s'absente, on risque de perdre ce qu'on occupait ou possédait."
+            },
+            {
+                proverb: "Qui vole un œuf vole un bœuf.",
+                definition: "Celui qui commet de petits vols est capable d'en faire de plus grands ; le mal commence petit."
+            },
+            {
+                proverb: "Un homme averti en vaut deux.",
+                definition: "Une personne prévenue ou informée est mieux préparée et donc plus efficace."
+            },
+            {
+                proverb: "Tant va la cruche à l'eau qu'à la fin elle se casse.",
+                definition: "À force de répéter une action risquée, on finit par avoir des ennuis."
+            },
+            {
+                proverb: "L'argent n'a pas d'odeur / ne fait pas le bonheur.",
+                definition: "Peu importe d'où vient l'argent, on l'accepte sans scrupule / la richesse ne garantit pas la joie."
+            },
+            {
+                proverb: "Les cordonniers sont les plus mal chaussés.",
+                definition: "Ceux qui rendent service aux autres négligent souvent leurs propres besoins."
+            },
+            {
+                proverb: "Qui dort dîne.",
+                definition: "Dormir fait oublier la faim ou les soucis ; le sommeil remplace temporairement le besoin de manger."
+            },
+            {
+                proverb: "Tel qui rit vendredi pleurera dimanche.",
+                definition: "La joie est parfois de courte durée ; la situation peut vite se renverser."
+            },
+            {
+                proverb: "La fin justifie les moyens.",
+                definition: "Pour atteindre un but, certains estiment que tous les moyens sont bons, même les plus discutables."
+            },
+            {
+                proverb: "Il n'y a pas de fumée sans feu.",
+                definition: "Une rumeur ou un soupçon cache souvent une part de vérité."
+            },
+            {
+                proverb: "L'habit ne fait pas le moine.",
+                definition: "Les apparences sont trompeuses : on ne doit pas juger quelqu'un à son apparence."
+            },
+            {
+                proverb: "Qui veut voyager loin ménage sa monture.",
+                definition: "Il faut savoir économiser ses forces ou ses ressources si l'on veut aller loin."
+            },
+            {
+                proverb: "La nuit porte conseil / tous les chats sont gris.",
+                definition: "Le repos aide à réfléchir / dans l'obscurité, les différences disparaissent."
+            },
+            {
+                proverb: "Loin des yeux, loin du cœur.",
+                definition: "L'absence fait souvent diminuer l'attachement ou l'amour."
+            },
+            {
+                proverb: "Les absents ont toujours tort.",
+                definition: "On critique ou on oublie facilement ceux qui ne sont pas là pour se défendre."
+            },
+            {
+                proverb: "Rien ne sert de courir, il faut partir à point.",
+                definition: "Il vaut mieux agir calmement et au bon moment que se précipiter inutilement."
+            },
+            {
+                proverb: "Qui sème le vent récolte la tempête.",
+                definition: "Les mauvaises actions entraînent de graves conséquences."
+            },
+            {
+                proverb: "L'union fait la force.",
+                definition: "Ensemble, on est plus fort que seul ; la solidarité rend plus efficace."
+            },
+            {
+                proverb: "Tel est pris qui croyait prendre.",
+                definition: "Celui qui voulait tromper se fait piéger à son tour."
+            },
+            {
+                proverb: "Rira bien qui rira le dernier.",
+                definition: "Celui qui triomphe à la fin a le dernier mot et peut se réjouir à juste titre."
+            },
+            {
+                proverb: "Un de perdu, dix de retrouvés.",
+                definition: "Une perte peut être compensée largement par la suite ; il ne faut pas désespérer."
+            },
+            {
+                proverb: "Qui se ressemble s'assemble.",
+                definition: "Les personnes qui ont des points communs s'attirent naturellement."
+            },
+            {
+                proverb: "Aide-toi, le ciel t'aidera.",
+                definition: "Il faut d'abord agir par soi-même pour mériter ou provoquer l'aide extérieure."
+            }
+        ];
+
+        let knownWords = new Set();
+
+        function createCard(item, index) {
+            return `
+                <div class="card" id="card-${index}" onclick="flipCard(${index})">
+                    <div class="known-badge">✅ Connu</div>
+                    <div class="proverb">${item.proverb}</div>
+                    <div class="definition">${item.definition}</div>
+                    <div class="card-actions">
+                        <button class="btn-small btn-know" onclick="markAsKnown(event, ${index})">
+                            ✅ Je connais !
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderCards() {
+            const container = document.getElementById('cardsContainer');
+            container.innerHTML = proverbs.map((item, index) => createCard(item, index)).join('');
+            updateStats();
+        }
+
+        function flipCard(index) {
+            const card = document.getElementById(`card-${index}`);
+            if (!card.classList.contains('known')) {
+                card.classList.toggle('flipped');
+            }
+        }
+
+        function markAsKnown(event, index) {
+            event.stopPropagation();
+            const card = document.getElementById(`card-${index}`);
+            card.classList.add('known');
+            knownWords.add(index);
+            updateStats();
+        }
+
+        function updateStats() {
+            const total = proverbs.length;
+            const known = knownWords.size;
+            const remaining = total - known;
+            const percentage = Math.round((known / total) * 100);
+
+            document.getElementById('total').textContent = total;
+            document.getElementById('known').textContent = known;
+            document.getElementById('remaining').textContent = remaining;
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('progressFill').textContent = percentage + '%';
+        }
+
+        function showAll() {
+            document.querySelectorAll('.card').forEach(card => {
+                if (!card.classList.contains('known')) {
+                    card.classList.add('flipped');
+                }
+            });
+        }
+
+        function hideAll() {
+            document.querySelectorAll('.card').forEach(card => {
+                card.classList.remove('flipped');
+            });
+        }
+
+        function shuffle() {
+            const array = [...proverbs];
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            proverbs.length = 0;
+            proverbs.push(...array);
+            renderCards();
+        }
+
+        function resetProgress() {
+            if (confirm('Es-tu sûr de vouloir recommencer ? Tu vas perdre ta progression.')) {
+                knownWords.clear();
+                document.querySelectorAll('.card').forEach(card => {
+                    card.classList.remove('flipped', 'known');
+                });
+                updateStats();
+            }
+        }
+
+        // Initialisation
+        renderCards();
+    </script>
+</body>
+</html>
