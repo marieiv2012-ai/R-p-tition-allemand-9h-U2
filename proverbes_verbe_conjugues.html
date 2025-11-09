@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Révision Verbes dans les Proverbes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .stats {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-around;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .controls {
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .btn-success {
+            background: #48bb78;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #38a169;
+        }
+
+        .btn-danger {
+            background: #f56565;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #e53e3e;
+        }
+
+        .progress-bar {
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .progress {
+            background: #eee;
+            border-radius: 10px;
+            height: 30px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #48bb78, #38a169);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            min-height: 220px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .card.flipped {
+            background: #fff9e6;
+            border: 3px solid #ffd700;
+        }
+
+        .card.known {
+            background: #d4edda;
+            border: 2px solid #48bb78;
+            opacity: 0.6;
+        }
+
+        .card.known:hover {
+            transform: none;
+            cursor: default;
+        }
+
+        .infinitive {
+            font-size: 1.3em;
+            color: #764ba2;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .tense {
+            font-size: 0.95em;
+            color: #666;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        .proverb-incomplete {
+            font-size: 1.1em;
+            color: #333;
+            line-height: 1.5;
+            margin-bottom: 15px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .stars {
+            color: #ff6b6b;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .click-hint {
+            text-align: center;
+            color: #999;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+
+        .answer-section {
+            display: none;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 3px dashed #ffd700;
+        }
+
+        .card.flipped .answer-section {
+            display: block;
+        }
+
+        .conjugated-verb {
+            font-size: 1.4em;
+            color: #dc3545;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #ffe6e6;
+            border-radius: 8px;
+        }
+
+        .proverb-complete {
+            font-size: 1.15em;
+            color: #333;
+            line-height: 1.6;
+            padding: 15px;
+            background: #ffff99;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        .known-badge {
+            display: none;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #48bb78;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .card.known .known-badge {
+            display: block;
+        }
+
+        .card-actions {
+            display: none;
+            margin-top: 15px;
+            gap: 10px;
+        }
+
+        .card.flipped:not(.known) .card-actions {
+            display: flex;
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 14px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            flex: 1;
+        }
+
+        .btn-know {
+            background: #48bb78;
+            color: white;
+        }
+
+        .btn-know:hover {
+            background: #38a169;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+
+        .hint {
+            background: #e0e7ff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #4c51bf;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 Conjugaison des Proverbes 📚</h1>
+
+        <div class="hint">
+            💡 Trouve le verbe conjugué dans le proverbe ! Clique sur la carte pour voir la réponse.
+        </div>
+
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number" id="total">0</div>
+                <div class="stat-label">Total</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="known">0</div>
+                <div class="stat-label">✅ Maîtrisés</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="remaining">0</div>
+                <div class="stat-label">📝 À réviser</div>
+            </div>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress">
+                <div class="progress-fill" id="progressFill">0%</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-primary" onclick="showAll()">👀 Tout afficher</button>
+            <button class="btn btn-primary" onclick="hideAll()">🙈 Tout cacher</button>
+            <button class="btn btn-primary" onclick="shuffle()">🔀 Mélanger</button>
+            <button class="btn btn-danger" onclick="resetProgress()">🔄 Recommencer</button>
+        </div>
+
+        <div class="cards-grid" id="cardsContainer"></div>
+    </div>
+
+    <script>
+        // 📚 LISTE DES PROVERBES AVEC CONJUGAISONS
+        const proverbs = [
+            {
+                infinitive: "venir",
+                tense: "Présent de l'indicatif (3ᵉ personne du singulier)",
+                conjugated: "vient",
+                proverbIncomplete: "L'appétit *** en mangeant.",
+                proverbComplete: "L'appétit vient en mangeant."
+            },
+            {
+                infinitive: "aller",
+                tense: "Présent de l'indicatif (3ᵉ personne du singulier)",
+                conjugated: "va",
+                proverbIncomplete: "Qui *** à la chasse perd sa place.",
+                proverbComplete: "Qui va à la chasse perd sa place."
+            },
+            {
+                infinitive: "voler",
+                tense: "Présent de l'indicatif (3ᵉ personne du singulier)",
+                conjugated: "vole",
+                proverbIncomplete: "Qui *** un œuf *** un bœuf.",
+                proverbComplete: "Qui vole un œuf vole un bœuf."
+            },
+            {
+                infinitive: "valoir",
+                tense: "Présent de l'indicatif (3ᵉ personne du singulier)",
+                conjugated: "vaut",
+                proverbIncomplete: "Un homme averti en *** deux.",
+                proverbComplete: "Un homme averti en vaut deux."
+            },
+            {
+                infinitive: "aller",
+                tense: "Présent de l'indicatif (3ᵉ personne du singulier)",
+                conjugated: "va",
+                proverbIncomplete: "Tant *** la cruche à l'eau qu'à la fin elle se casse.",
+                proverbComplete: "Tant va la cruche à l'eau qu'à la fin elle se casse."
+            },
+            {
+                infinitive: "avoir",
+                tense: "Présent de l'indicatif (3ᵉ personne du singulier)",
+                conjugated: "a",
+                proverbIncomplete: "L'argent n'*** pas d'odeur.",
+                proverbComplete: "L'argent n'a pas d'odeur."
+            },
+            {
+                infinitive: "faire",
+                tense: "Présent de l'indicatif (3ᵉ personne du singulier)",
+                conjugated: "fait",
+                proverbIncomplete: "L'argent ne *** pas le bonheur.",
+                proverbComplete: "L'argent ne fait pas le bonheur."
+            },
+            {
+                infinitive: "être",
+                tense: "Présent de l'indicatif (3ᵉ personne du pluriel)",
+                conjugated: "sont",
+                proverbIncomplete: "Les cordonniers *** les plus mal chaussés.",
+                proverbComplete: "Les cordonniers sont les plus mal chaussés."
+            },
+            {
+                infinitive: "dormir",
+                tense: "Présent de l'indicatif (3ᵉ personne du singulier)",
+                conjugated: "dort",
+                proverbIncomplete: "Qui *** dîne.",
+                proverbComplete: "Qui dort dîne."
+            },
+            {
+                infinitive: "rire",
+                tense: "Présent de l'indicatif (3ᵉ personne du singulier)",
+                conjugated: "rit",
+                proverbIncomplete: "Tel qui *** vendredi pleurera dimanche.",
+                proverbComplete: "Tel qui rit vendredi pleurera dimanche."
+            },
+            {
+                infinitive: "pleurer",
+                tense: "Futur simple (3ᵉ personne du singulier)",
+                conjugated: "pleurera",
+                proverbIncomplete: "Tel qui rit vendredi *** dimanche.",
+                proverbComplete: "Tel qui rit vendredi pleurera dimanche."
+            },
+            {
+                infinitive: "justifier",
+                tense: "Présent de l'indicatif (3ᵉ personne du singulier)",
+                conjugated: "justifie",
+                proverbIncomplete: "La fin *** les moyens.",
+                proverbComplete: "La fin justifie les moyens."
+            },
+            {
+                infinitive: "avoir",
+                tense: "Présent de l'indicatif (3ᵉ personne du singulier)",
+                conjugated: "a",
+                proverbIncomplete: "Il n'y *** pas de fumée sans feu.",
+                proverbComplete: "Il n'y a pas de fumée sans feu."
+            },
+            {
+                infinitive: "faire",
+                tense: "Présent de l'indicatif (3ᵉ personne du singulier)",
+                conjugated: "fait",
+                proverbIncomplete: "L'habit ne *** pas le moine.",
+                proverbComplete: "L'habit ne fait pas le moine."
+            },
+            {
+                infinitive: "vouloir",
+                tense: "Présent de l'indicatif (3ᵉ personne du singulier)",
+                conjugated: "veut",
+                proverbIncomplete: "Qui *** voyager loin ménage sa monture.",
+                proverbComplete: "Qui veut voyager loin ménage sa monture."
+            },
+            {
+                infinitive: "ménager",
+                tense: "Présent de l'indicatif (3ᵉ personne du singulier)",
+                conjugated: "ménage",
+                proverbIncomplete: "Qui veut voyager loin *** sa monture.",
+                proverbComplete: "Qui veut voyager loin ménage sa monture."
+            },
+            {
+                infinitive: "porter",
+                tense: "Présent de l'indicatif (3ᵉ personne du singulier)",
+                conjugated: "porte",
+                proverbIncomplete: "La nuit *** conseil.",
+                proverbComplete: "La nuit porte conseil."
+            },
+            {
+                infinitive: "être",
+                tense: "Présent de l'indicatif (3ᵉ personne du pluriel)",
+                conjugated: "sont",
+                proverbIncomplete: "La nuit, tous les chats *** gris.",
+                proverbComplete: "La nuit, tous les chats sont gris."
+            },
+            {
+                infinitive: "avoir",
+                tense: "Présent de l'indicatif (3ᵉ personne du pluriel)",
+                conjugated: "ont",
+                proverbIncomplete: "Les absents *** toujours tort.",
+                proverbComplete: "Les absents ont toujours tort."
+            },
+            {
+                infinitive: "servir",
+                tense: "Présent de l'indicatif (3ᵉ personne du singulier)",
+                conjugated: "sert",
+                proverbIncomplete: "Rien ne *** de courir, il faut partir à point.",
+                proverbComplete: "Rien ne sert de courir, il faut partir à point."
+            },
+            {
+                infinitive: "falloir",
+                tense: "Présent de l'indicatif (3ᵉ personne du singulier)",
+                conjugated: "faut",
+                proverbIncomplete: "Rien ne sert de courir, il *** partir à point.",
+                proverbComplete: "Rien ne sert de courir, il faut partir à point."
+            },
+            {
+                infinitive: "semer",
+                tense: "Présent de l'indicatif (3ᵉ personne du singulier)",
+                conjugated: "sème",
+                proverbIncomplete: "Qui *** le vent récolte la tempête.",
+                proverbComplete: "Qui sème le vent récolte la tempête."
+            },
+            {
+                infinitive: "récolter",
+                tense: "Présent de l'indicatif (3ᵉ personne du singulier)",
+                conjugated: "récolte",
+                proverbIncomplete: "Qui sème le vent *** la tempête.",
+                proverbComplete: "Qui sème le vent récolte la tempête."
+            },
+            {
+                infinitive: "faire",
+                tense: "Présent de l'indicatif (3ᵉ personne du singulier)",
+                conjugated: "fait",
+                proverbIncomplete: "L'union *** la force.",
+                proverbComplete: "L'union fait la force."
+            },
+            {
+                infinitive: "être",
+                tense: "Participe passé (masculin singulier)",
+                conjugated: "pris",
+                proverbIncomplete: "Tel est *** qui croyait prendre.",
+                proverbComplete: "Tel est pris qui croyait prendre."
+            },
+            {
+                infinitive: "croire",
+                tense: "Imparfait de l'indicatif (3ᵉ personne du singulier)",
+                conjugated: "croyait",
+                proverbIncomplete: "Tel est pris qui *** prendre.",
+                proverbComplete: "Tel est pris qui croyait prendre."
+            },
+            {
+                infinitive: "rire",
+                tense: "Futur simple (3ᵉ personne du singulier)",
+                conjugated: "rira",
+                proverbIncomplete: "*** bien qui *** le dernier.",
+                proverbComplete: "Rira bien qui rira le dernier."
+            },
+            {
+                infinitive: "ressembler",
+                tense: "Présent de l'indicatif (3ᵉ personne du singulier)",
+                conjugated: "ressemble",
+                proverbIncomplete: "Qui se *** s'assemble.",
+                proverbComplete: "Qui se ressemble s'assemble."
+            },
+            {
+                infinitive: "assembler",
+                tense: "Présent de l'indicatif (3ᵉ personne du singulier)",
+                conjugated: "assemble",
+                proverbIncomplete: "Qui se ressemble s'***.",
+                proverbComplete: "Qui se ressemble s'assemble."
+            },
+            {
+                infinitive: "aider (s'aider)",
+                tense: "Impératif présent (2ᵉ personne du singulier)",
+                conjugated: "Aide-toi",
+                proverbIncomplete: "***, le ciel t'aidera.",
+                proverbComplete: "Aide-toi, le ciel t'aidera."
+            },
+            {
+                infinitive: "aider",
+                tense: "Futur simple (3ᵉ personne du singulier)",
+                conjugated: "aidera",
+                proverbIncomplete: "Aide-toi, le ciel t'***.",
+                proverbComplete: "Aide-toi, le ciel t'aidera."
+            }
+        ];
+
+        let knownWords = new Set();
+
+        function createCard(item, index) {
+            return `
+                <div class="card" id="card-${index}" onclick="flipCard(${index})">
+                    <div class="known-badge">✅ Maîtrisé</div>
+                    
+                    <div>
+                        <div class="infinitive">🔹 ${item.infinitive}</div>
+                        <div class="tense">${item.tense}</div>
+                        <div class="proverb-incomplete">
+                            ${item.proverbIncomplete.replace(/\*\*\*/g, '<span class="stars">***</span>')}
+                        </div>
+                        <div class="click-hint">👆 Clique pour voir la réponse</div>
+                    </div>
+
+                    <div class="answer-section">
+                        <div class="conjugated-verb">➡️ ${item.conjugated}</div>
+                        <div class="proverb-complete">${item.proverbComplete}</div>
+                        <div class="card-actions">
+                            <button class="btn-small btn-know" onclick="markAsKnown(event, ${index})">
+                                ✅ Je maîtrise !
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderCards() {
+            const container = document.getElementById('cardsContainer');
+            container.innerHTML = proverbs.map((item, index) => createCard(item, index)).join('');
+            updateStats();
+        }
+
+        function flipCard(index) {
+            const card = document.getElementById(`card-${index}`);
+            if (!card.classList.contains('known')) {
+                card.classList.toggle('flipped');
+            }
+        }
+
+        function markAsKnown(event, index) {
+            event.stopPropagation();
+            const card = document.getElementById(`card-${index}`);
+            card.classList.add('known');
+            knownWords.add(index);
+            updateStats();
+        }
+
+        function updateStats() {
+            const total = proverbs.length;
+            const known = knownWords.size;
+            const remaining = total - known;
+            const percentage = Math.round((known / total) * 100);
+
+            document.getElementById('total').textContent = total;
+            document.getElementById('known').textContent = known;
+            document.getElementById('remaining').textContent = remaining;
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('progressFill').textContent = percentage + '%';
+        }
+
+        function showAll() {
+            document.querySelectorAll('.card').forEach(card => {
+                if (!card.classList.contains('known')) {
+                    card.classList.add('flipped');
+                }
+            });
+        }
+
+        function hideAll() {
+            document.querySelectorAll('.card').forEach(card => {
+                card.classList.remove('flipped');
+            });
+        }
+
+        function shuffle() {
+            const array = [...proverbs];
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            proverbs.length = 0;
+            proverbs.push(...array);
+            knownWords.clear();
+            renderCards();
+        }
+
+        function resetProgress() {
+            if (confirm('Es-tu sûr de vouloir recommencer ? Tu vas perdre ta progression.')) {
+                knownWords.clear();
+                document.querySelectorAll('.card').forEach(card => {
+                    card.classList.remove('flipped', 'known');
+                });
+                updateStats();
+            }
+        }
+
+        // Initialisation
+        renderCards();
+    </script>
+</body>
+</html>
