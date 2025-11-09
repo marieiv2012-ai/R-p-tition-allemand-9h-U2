@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Révision Allemand - Magasins et École</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Comic Sans MS', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .stats {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 10px;
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card.flipped {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .category {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        .word {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .card.flipped .word {
+            color: white;
+        }
+        
+        .translation {
+            font-size: 1.8em;
+            color: white;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn-know {
+            background: #48bb78;
+            color: white;
+        }
+        
+        .btn-know:hover {
+            background: #38a169;
+            transform: scale(1.05);
+        }
+        
+        .btn-unknown {
+            background: #f56565;
+            color: white;
+        }
+        
+        .btn-unknown:hover {
+            background: #e53e3e;
+            transform: scale(1.05);
+        }
+        
+        .btn-reset {
+            background: #4299e1;
+            color: white;
+            display: block;
+            margin: 20px auto;
+        }
+        
+        .btn-reset:hover {
+            background: #3182ce;
+            transform: scale(1.05);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .tip {
+            background: #fef3c7;
+            border-left: 5px solid #f59e0b;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+        }
+        
+        .tip strong {
+            color: #b45309;
+        }
+        
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .word {
+                font-size: 2em;
+            }
+            
+            .translation {
+                font-size: 1.5em;
+            }
+            
+            .btn {
+                padding: 12px 20px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🇩🇪 Révision Allemand - Magasins et École 🇩🇪</h1>
+        
+        <div class="tip">
+            <strong>💡 Astuce :</strong> Clique sur la carte pour voir la traduction. Essaie de te rappeler avant de cliquer !
+        </div>
+        
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number" id="totalCards">15</div>
+                <div class="stat-label">Total</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="knownCards">0</div>
+                <div class="stat-label">✅ Je sais</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="unknownCards">0</div>
+                <div class="stat-label">❌ À revoir</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="remainingCards">15</div>
+                <div class="stat-label">📚 Restant</div>
+            </div>
+        </div>
+        
+        <div id="cardsContainer"></div>
+        
+        <button class="btn btn-reset" onclick="resetProgress()">🔄 Recommencer</button>
+    </div>
+
+    <script>
+        const vocabulary = [
+            {french: "la poste", german: "die Post", category: "Lieux"},
+            {french: "la pharmacie", german: "die Apotheke", category: "Lieux"},
+            {french: "la banque", german: "die Bank", category: "Lieux"},
+            {french: "le grand magasin", german: "das Kaufhaus", category: "Lieux"},
+            {french: "le magasin", german: "das Geschäft", category: "Lieux"},
+            {french: "faire les courses", german: "einkaufen", category: "Actions"},
+            {french: "payer", german: "bezahlen", category: "Actions"},
+            {french: "Je paie à la caisse", german: "Ich bezahle an der Kasse", category: "Phrases"},
+            {french: "le cahier", german: "das Heft", category: "École"},
+            {french: "le stylo", german: "der Kuli", category: "École"},
+            {french: "le crayon gris", german: "der Bleistift", category: "École"},
+            {french: "la gomme", german: "der Radiergummi", category: "École"},
+            {french: "Que se passe-t-il ?", german: "Was ist los?", category: "Phrases"},
+            {french: "avoir de la chance", german: "Glück haben", category: "Expressions"},
+            {french: "La batterie est vide", german: "Der Akku ist leer", category: "Phrases"}
+        ];
+
+        let knownWords = new Set();
+        let unknownWords = new Set();
+        
+        function createCard(word, index) {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.id = `card-${index}`;
+            
+            card.innerHTML = `
+                <div class="category">${word.category}</div>
+                <div class="card-content">
+                    <div class="word" id="word-${index}">${word.french}</div>
+                    <div class="translation hidden" id="translation-${index}">${word.german}</div>
+                </div>
+                <div class="buttons hidden" id="buttons-${index}">
+                    <button class="btn btn-know" onclick="markAsKnown(${index})">✅ Je sais !</button>
+                    <button class="btn btn-unknown" onclick="markAsUnknown(${index})">❌ À revoir</button>
+                </div>
+            `;
+            
+            card.addEventListener('click', function(e) {
+                if (!e.target.classList.contains('btn')) {
+                    flipCard(index);
+                }
+            });
+            
+            return card;
+        }
+        
+        function flipCard(index) {
+            const card = document.getElementById(`card-${index}`);
+            const word = document.getElementById(`word-${index}`);
+            const translation = document.getElementById(`translation-${index}`);
+            const buttons = document.getElementById(`buttons-${index}`);
+            
+            if (card.classList.contains('flipped')) {
+                card.classList.remove('flipped');
+                word.classList.remove('hidden');
+                translation.classList.add('hidden');
+                buttons.classList.add('hidden');
+            } else {
+                card.classList.add('flipped');
+                word.classList.add('hidden');
+                translation.classList.remove('hidden');
+                buttons.classList.remove('hidden');
+            }
+        }
+        
+        function markAsKnown(index) {
+            knownWords.add(index);
+            unknownWords.delete(index);
+            updateStats();
+            const card = document.getElementById(`card-${index}`);
+            card.style.opacity = '0.5';
+            card.style.border = '3px solid #48bb78';
+        }
+        
+        function markAsUnknown(index) {
+            unknownWords.add(index);
+            knownWords.delete(index);
+            updateStats();
+            const card = document.getElementById(`card-${index}`);
+            card.style.opacity = '0.5';
+            card.style.border = '3px solid #f56565';
+        }
+        
+        function updateStats() {
+            document.getElementById('knownCards').textContent = knownWords.size;
+            document.getElementById('unknownCards').textContent = unknownWords.size;
+            document.getElementById('remainingCards').textContent = 
+                vocabulary.length - knownWords.size - unknownWords.size;
+        }
+        
+        function resetProgress() {
+            knownWords.clear();
+            unknownWords.clear();
+            updateStats();
+            renderCards();
+        }
+        
+        function renderCards() {
+            const container = document.getElementById('cardsContainer');
+            container.innerHTML = '';
+            
+            vocabulary.forEach((word, index) => {
+                container.appendChild(createCard(word, index));
+            });
+        }
+        
+        renderCards();
+    </script>
+</body>
+</html>
