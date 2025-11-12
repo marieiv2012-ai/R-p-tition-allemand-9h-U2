@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎓 Conjugaison Express : TikTok vs Passé Simple</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+            color: #333333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 25px;
+            text-align: center;
+        }
+
+        h1, h2, h3 {
+            color: #0066cc;
+            font-weight: bold;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #0066cc;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 22px;
+            color: #008000;
+            margin: 25px 0 15px 0;
+        }
+
+        .story {
+            background-color: white;
+            border: 2px solid #0066cc;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: left;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        button {
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 15px 10px;
+            display: inline-block;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #004d99;
+        }
+
+        .quiz {
+            background-color: #fffde7;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #ff9800;
+        }
+
+        .astuce {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #2196f3;
+        }
+
+        .reponse {
+            display: none;
+            margin-top: 10px;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        .correct {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .incorrect {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+
+        input[type="text"] {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            width: 150px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .meme {
+            max-width: 300px;
+            margin: 15px auto;
+            display: block;
+            border-radius: 8px;
+        }
+
+        blockquote {
+            background-color: #f5f5f5;
+            padding: 12px;
+            border-left: 4px solid #0066cc;
+            margin: 10px 0;
+            font-style: italic;
+        }
+
+        ul {
+            margin: 10px 0 10px 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .diplome {
+            background-color: white;
+            border: 2px solid #0066cc;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 500px;
+            text-align: center;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎓 CONJUGAISON EXPRESS : TIKTOK VS PASSÉ SIMPLE</h1>
+
+    <p style="font-size: 18px; font-weight: bold;">Une méthode <strong>ultra-rapide</strong> pour maîtriser les verbes <strong>être, avoir, dire, suivre</strong> sans se prendre la tête !</p>
+
+    <!-- Histoire interactive -->
+    <div class="story">
+        <h2>📖 L'HISTOIRE DE LÉO</h2>
+        <p>Léo, 15 ans, <strong>finit</strong> son entraînement de foot à 20h, épuisé. Il <strong>ouvrit</strong> Snapchat et <strong>vit</strong> que son pote Max <strong>venait de poster</strong> une story :</p>
+
+        <blockquote>"Qui veut mon compte TikTok ? J'ai plus le temps, je suis en mode révisions..."</blockquote>
+
+        <p><strong>Que fait Léo ?</strong></p>
+
+        <button onclick="showNext(1)">➡️ "Je prends le compte et je poste des vidéos de foot !"</button>
+        <button onclick="showNext(2)">➡️ "Je relève le défi du prof pour avoir 20/20 !"</button>
+
+        <div id="part1" class="hidden incorrect">
+            <p>❌ <strong>Mauvaise idée !</strong></p>
+            <p>Léo <strong>eut</strong> 1000 vues mais 0 en conjugaison... Son prof lui <strong>dit</strong> :</p>
+            <blockquote>"Si tu <strong>suivais</strong> mes conseils, tu <strong>aurais</strong> la moyenne !"</blockquote>
+            <button onclick="showNext(2)">➡️ Recommencer (et choisir l'option 2 !)</button>
+        </div>
+
+        <div id="part2" class="hidden correct">
+            <p>✅ <strong>Bon choix !</strong></p>
+            <p>Léo <strong>accepta</strong> le défi de M. Dupont :</p>
+            <blockquote>"Si tu <strong>créais</strong> une vidéo TikTok sur le passé simple, je te <strong>mettrais</strong> 20/20 !"</blockquote>
+            <p>Il <strong>alluma</strong> son téléphone et <strong>se filma</strong>...</p>
+            <button onclick="showVideo()">➡️ Voir sa vidéo (et les règles)</button>
+        </div>
+    </div>
+
+    <!-- La vidéo de Léo (explication) -->
+    <div id="videoSection" class="hidden">
+        <h2>🎥 LA VIDÉO VIRALE DE LÉO</h2>
+
+        <div style="background-color: #f5f5f5; padding: 15px; border-radius: 8px; text-align: center;">
+            <p><strong>Léo (en mode prof)</strong> :</p>
+            <p style="font-size: 18px; color: #0066cc;">"Yo les gars ! Aujourd'hui, on <strong>apprit</strong> le passé simple !"</p>
+
+            <div style="text-align: left; margin: 15px 0;">
+                <p>👉 <strong>Charlemagne fut</strong> le premier à <strong>avoir</strong> des followers...</p>
+                <p>👉 Si vous <strong>suiviez</strong> Cléopâtre, elle <strong>aurait</strong> un filtre 'reine' !</p>
+            </div>
+
+            <p style="font-style: italic; color: #008000;">✅ Résultat : 1M de vues et 20/20 !</p>
+        </div>
+
+        <div class="astuce">
+            <h3>💡 LES RÈGLES EN 30 SECONDES</h3>
+            <p><strong>Passé simple</strong> = actions terminées :</p>
+            <ul>
+                <li><strong>Être</strong> : je <strong>fus</strong>, tu <strong>fus</strong>, il <strong>fut</strong></li>
+                <li><strong>Avoir</strong> : j'<strong>eus</strong>, tu <strong>eus</strong>, il <strong>eut</strong></li>
+                <li><strong>Dire</strong> : je <strong>dis</strong>, tu <strong>dis</strong>, il <strong>dit</strong></li>
+                <li><strong>Suivre</strong> : je <strong>suivis</strong>, tu <strong>suivis</strong>, il <strong>suivit</strong></li>
+            </ul>
+
+            <p><strong>Conditionnel</strong> = "si..." + terminaison en <strong>-rais</strong> :</p>
+            <ul>
+                <li>Si tu <strong>suivrais</strong>, tu <strong>aurais</strong> des likes !</li>
+            </ul>
+        </div>
+
+        <button onclick="showQuiz()">➡️ Tester tes connaissances (Quiz Express)</button>
+    </div>
+
+    <!-- Quiz interactif -->
+    <div id="quizSection" class="hidden">
+        <h2>📝 QUIZ EXPRESS : 3 QUESTIONS POUR VALIDER</h2>
+
+        <div class="quiz">
+            <p><strong>1.</strong> Complète :</p>
+            <p>"Hier, je <input type="text" id="q1" placeholder="... (avoir)"> 100 likes sur ma vidéo."</p>
+            <button onclick="checkQ1()">Vérifier</button>
+            <div id="r1" class="reponse">✅ "eus" – Bravo ! "J'<strong>eus</strong> 100 likes" (passé simple de <strong>avoir</strong>).</div>
+        </div>
+
+        <div class="quiz">
+            <p><strong>2.</strong> Trouve l'erreur :</p>
+            <p>"Si tu <strong>seras</strong> sage, tu <strong>auras</strong> une récompense."</p>
+            <button onclick="showQ2()">Voir la réponse</button>
+            <div id="r2" class="reponse">❌ La bonne version : "Si tu <strong>étais</strong> sage, tu <strong>aurais</strong> une récompense." (conditionnel = <strong>-rais</strong> !).</div>
+        </div>
+
+        <div class="quiz">
+            <p><strong>3.</strong> Conjugue au passé simple :</p>
+            <p>"Léo (suivre) <input type="text" id="q3" placeholder="..."> les conseils du prof."</p>
+            <button onclick="checkQ3()">Vérifier</button>
+            <div id="r3" class="reponse">✅ "suivit" – Top ! "Léo <strong>suivit</strong> les conseils."</div>
+        </div>
+
+        <button onclick="showTips()">➡️ Besoin d'astuces pour retenir ?</button>
+    </div>
+
+    <!-- Astuces pour sport-études -->
+    <div id="tipsSection" class="hidden">
+        <h2>🚀 ASTUCES POUR RÉVISER (MÊME FATIGUÉ)</h2>
+
+        <div class="astuce">
+            <h3>1. Réviser en 2 minutes chrono</h3>
+            <p><strong>Dans les vestiaires</strong> : Invente une phrase avec 3 verbes au passé simple.</p>
+            <p>Exemple : "Hier, je <strong>courus</strong>, je <strong>marquai</strong>, et j'<strong>eus</strong> soif !"</p>
+        </div>
+
+        <div class="astuce">
+            <h3>2. Snapchat = Révision</h3>
+            <p>Envoie une story avec :</p>
+            <blockquote>"Si j'<strong>étais</strong> [un roi/un influenceur], je <strong>ferais</strong>..."</blockquote>
+            <p>→ <strong>Conditionnel obligatoire</strong> !</p>
+        </div>
+
+        <div class="astuce">
+            <h3>3. Podcast + Étirements</h3>
+            <p>Écoute un résumé d'histoire (ex: "Les pires fails des rois") <strong>pendant tes étirements</strong>.</p>
+        </div>
+
+        <img src="https://media.giphy.com/media/3o7TKSQ5rRQXuQjJ3a/giphy.gif" alt="Réviser en s'étirant" class="meme">
+
+        <button onclick="showEnd()">➡️ Voir ton score final</button>
+    </div>
+
+    <!-- Fin et diplôme -->
+    <div id="endSection" class="hidden">
+        <h2>🏆 RÉSULTAT : TU ES UN·E PRO !</h2>
+
+        <div class="diplome">
+            <h3>📜 TON DIPLÔME (à partager sur Snap !)</h3>
+            <p>"Je soussigné·e, [Ton Prénom],</p>
+            <p>✔️ <strong>Survis</strong> au passé simple,</p>
+            <p>✔️ <strong>Eus</strong> 100% au quiz,</p>
+            <p>✔️ <strong>Dis</strong> bye-bye aux mauvaises notes !"</p>
+            <p><strong>Signé</strong> : Prof. TikTok 📱✍️</p>
+        </div>
+
+        <p style="font-size: 18px; margin-top: 20px;">💡 <strong>Prochaine étape</strong> : Veux-tu la suite avec <strong>pouvoir/devoir/vouloir</strong> en mode "Et si les réseaux existaient au Moyen Âge ?"</p>
+
+        <button onclick="window.location.reload()">➡️ Recommencer l'aventure</button>
+    </div>
+
+    <script>
+        function showNext(choice) {
+            if (choice === 1) {
+                document.getElementById('part1').style.display = 'block';
+            } else {
+                document.getElementById('part2').style.display = 'block';
+            }
+            window.scrollBy(0, 200);
+        }
+
+        function showVideo() {
+            document.getElementById('videoSection').style.display = 'block';
+            window.scrollBy(0, 300);
+        }
+
+        function showQuiz() {
+            document.getElementById('quizSection').style.display = 'block';
+            window.scrollBy(0, 400);
+        }
+
+        function checkQ1() {
+            const answer = document.getElementById('q1').value.toLowerCase().trim();
+            const reponseDiv = document.getElementById('r1');
+            if (answer === 'eus') {
+                reponseDiv.className = 'reponse correct';
+                reponseDiv.innerHTML = '✅ "eus" – Bravo ! "J\'<strong>eus</strong> 100 likes" (passé simple de <strong>avoir</strong>).';
+            } else {
+                reponseDiv.className = 'reponse incorrect';
+                reponseDiv.innerHTML = `❌ La réponse était "eus". Retente ta chance !`;
+            }
+            reponseDiv.style.display = 'block';
+        }
+
+        function showQ2() {
+            document.getElementById('r2').style.display = 'block';
+        }
+
+        function checkQ3() {
+            const answer = document.getElementById('q3').value.toLowerCase().trim();
+            const reponseDiv = document.getElementById('r3');
+            if (answer === 'suivit') {
+                reponseDiv.className = 'reponse correct';
+                reponseDiv.innerHTML = '✅ "suivit" – Parfait ! "Léo <strong>suivit</strong> les conseils."';
+            } else {
+                reponseDiv.className = 'reponse incorrect';
+                reponseDiv.innerHTML = `❌ La réponse était "suivit". Le passé simple de <strong>suivre</strong> se termine par -it à la 3e personne.`;
+            }
+            reponseDiv.style.display = 'block';
+        }
+
+        function showTips() {
+            document.getElementById('tipsSection').style.display = 'block';
+            window.scrollBy(0, 500);
+        }
+
+        function showEnd() {
+            document.getElementById('endSection').style.display = 'block';
+            window.scrollBy(0, 600);
+        }
+    </script>
+</body>
+</html>
