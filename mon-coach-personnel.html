@@ -1,0 +1,2394 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Coach Personnel - Planning de Vie</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .nav-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .tab-button {
+            background: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .tab-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+
+        .tab-button.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            animation: fadeIn 0.5s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+        }
+
+        h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+
+        h3 {
+            color: #764ba2;
+            margin: 20px 0 10px 0;
+            font-size: 1.3em;
+        }
+
+        .schedule-day {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .day-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .day-type {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        .day-free {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .day-work {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .time-slot {
+            display: flex;
+            margin: 10px 0;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            align-items: center;
+        }
+
+        .time {
+            font-weight: bold;
+            color: #667eea;
+            min-width: 120px;
+            font-size: 1.1em;
+        }
+
+        .activity {
+            flex: 1;
+            padding-left: 15px;
+            border-left: 3px solid #667eea;
+        }
+
+        .task-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .task-item {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .task-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .task-checkbox {
+            width: 25px;
+            height: 25px;
+            margin-right: 15px;
+            cursor: pointer;
+        }
+
+        .priority-high {
+            border-left: 5px solid #dc3545;
+        }
+
+        .priority-medium {
+            border-left: 5px solid #ffc107;
+        }
+
+        .priority-low {
+            border-left: 5px solid #28a745;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .info-box h3 {
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 10px 0;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .recipe-card {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .recipe-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .recipe-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .recipe-time {
+            background: #d4edda;
+            padding: 5px 15px;
+            border-radius: 20px;
+            color: #155724;
+            font-weight: 600;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            color: #856404;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            border-left: 5px solid #17a2b8;
+            color: #0c5460;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            color: #155724;
+        }
+
+        .laundry-tracker {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .laundry-day {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .laundry-day h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .laundry-count {
+            font-size: 2em;
+            font-weight: bold;
+            color: #764ba2;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .icon {
+            margin-right: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .laundry-tracker {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .day-header {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 Mon Coach Personnel - Planning de Vie</h1>
+            <p class="subtitle">Organisation optimisée pour atteindre tous mes objectifs</p>
+        </header>
+
+        <div class="nav-tabs">
+            <button class="tab-button active" onclick="showTab('vue-ensemble')">📊 Vue d'ensemble</button>
+            <button class="tab-button" onclick="showTab('planning-semaine')">📅 Planning hebdomadaire</button>
+            <button class="tab-button" onclick="showTab('taches-quotidiennes')">✅ Tâches quotidiennes</button>
+            <button class="tab-button" onclick="showTab('lessive-vaisselle')">🧺 Lessive & Vaisselle</button>
+            <button class="tab-button" onclick="showTab('repas')">🍽️ Repas rapides</button>
+            <button class="tab-button" onclick="showTab('emploi')">💼 Recherche emploi</button>
+            <button class="tab-button" onclick="showTab('revision-fils')">📚 Révisions fils</button>
+            <button class="tab-button" onclick="showTab('desencombrement')">🏠 Désencombrement</button>
+            <button class="tab-button" onclick="showTab('anniversaire')">🎉 Anniversaire</button>
+        </div>
+
+        <!-- VUE D'ENSEMBLE -->
+        <div id="vue-ensemble" class="tab-content active">
+            <div class="section">
+                <h2>📊 Vue d'ensemble de ta vie</h2>
+                
+                <div class="alert alert-success">
+                    <span class="icon">✨</span>
+                    <strong>Bienvenue dans ton système d'organisation personnalisé !</strong> Tout est pensé pour maximiser ton efficacité tout en préservant ton équilibre.
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Temps disponible</div>
+                        <div class="stat-number">~38h</div>
+                        <div class="stat-label">par semaine</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Heures de sommeil</div>
+                        <div class="stat-number">7h</div>
+                        <div class="stat-label">objectif par nuit</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Recherches emploi</div>
+                        <div class="stat-number">2</div>
+                        <div class="stat-label">par semaine (8/mois)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Machines lessive</div>
+                        <div class="stat-number">5-7</div>
+                        <div class="stat-label">par semaine</div>
+                    </div>
+                </div>
+
+                <h3>🎯 Tes priorités hiérarchisées</h3>
+                <div class="task-list">
+                    <div class="task-item priority-high">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>1. SANTÉ</strong> : Sommeil 7h (coucher 22h20 max !)</div>
+                    </div>
+                    <div class="task-item priority-high">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>2. EMPLOI</strong> : 8 recherches/mois (2h/semaine)</div>
+                    </div>
+                    <div class="task-item priority-high">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>3. ÉDUCATION FILS</strong> : Prompts HTML révision (2-3h/semaine)</div>
+                    </div>
+                    <div class="task-item priority-medium">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>4. MAISON</strong> : Désencombrement/rangement (3-4h/semaine)</div>
+                    </div>
+                    <div class="task-item priority-medium">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>5. QUOTIDIEN</strong> : Lessive (5-7/semaine) + Vaisselle (1/jour)</div>
+                    </div>
+                    <div class="task-item priority-low">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>6. PROJET</strong> : Anniversaire fille (1h/semaine)</div>
+                    </div>
+                </div>
+
+                <h3>⏰ Horaires fixes NON NÉGOCIABLES</h3>
+                <div class="info-box">
+                    <h3>🚨 Règles d'or pour ta réussite</h3>
+                    <ul style="list-style: none; padding-left: 0;">
+                        <li>✅ <strong>Réveil : 5h20</strong> (lun-ven) / 8h30 (sam) / Naturel (dim)</li>
+                        <li>✅ <strong>Coucher : 22h20 MAXIMUM</strong> (alarme 21h30)</li>
+                        <li>✅ <strong>Travail :</strong> Mar/Jeu/Ven (départ 6h45)</li>
+                        <li>✅ <strong>Promenade chien :</strong> 1h15 chaque jour (45min téléphone OK)</li>
+                        <li>✅ <strong>Repas principal :</strong> Préparation quotidienne (pas de batch cooking)</li>
+                    </ul>
+                </div>
+
+                <h3>📋 Contraintes hebdomadaires incompressibles</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Activité</th>
+                            <th>Fréquence</th>
+                            <th>Temps/semaine</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>🐕 Promenade chien</td>
+                            <td>7 jours × 1h15</td>
+                            <td>8h45</td>
+                        </tr>
+                        <tr>
+                            <td>🍳 Préparation repas</td>
+                            <td>7 jours × 45min-1h</td>
+                            <td>~6h</td>
+                        </tr>
+                        <tr>
+                            <td>🛒 Courses</td>
+                            <td>2-3 fois</td>
+                            <td>2-3h</td>
+                        </tr>
+                        <tr>
+                            <td>🧺 Lessive (laver + pendre)</td>
+                            <td>5-7 machines</td>
+                            <td>3-4h</td>
+                        </tr>
+                        <tr>
+                            <td>🍽️ Lave-vaisselle</td>
+                            <td>7 jours</td>
+                            <td>1h45 (15min/jour)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>TOTAL</strong></td>
+                            <td></td>
+                            <td><strong>~22-24h</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="alert alert-info">
+                    <span class="icon">💡</span>
+                    <strong>Temps restant pour tes objectifs :</strong> 38h - 24h = <strong>~14h/semaine disponibles</strong> pour recherche emploi, révisions fils, désencombrement et projets persos.
+                </div>
+            </div>
+        </div>
+
+        <!-- PLANNING HEBDOMADAIRE -->
+        <div id="planning-semaine" class="tab-content">
+            <div class="section">
+                <h2>📅 Planning hebdomadaire détaillé</h2>
+
+                <div class="alert alert-warning">
+                    <span class="icon">⚠️</span>
+                    <strong>Jours critiques :</strong> Mardis & Jeudis (seulement 4h30 entre retour travail et coucher). Repas ultra-rapides obligatoires !
+                </div>
+
+                <!-- LUNDI -->
+                <div class="schedule-day">
+                    <div class="day-header">
+                        <div class="day-title">LUNDI</div>
+                        <span class="day-type day-free">Journée libre</span>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">9h00 - 10h30</div>
+                        <div class="activity">🏠 <strong>Désencombrement zone ciblée</strong> (1h30)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">10h30 - 12h30</div>
+                        <div class="activity">💼 <strong>RECHERCHES EMPLOI</strong> → 2 candidatures complètes (2h)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">12h30 - 13h30</div>
+                        <div class="activity">🍽️ Préparation & repas midi</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">13h30 - 15h30</div>
+                        <div class="activity">📚 <strong>Création prompts HTML révision fils</strong> (2h)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">15h30 - 16h45</div>
+                        <div class="activity">🐕 Promenade chien + écoute podcast/formation (1h15)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">17h00 - 18h00</div>
+                        <div class="activity">🛒 Courses alimentaires</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">18h00 - 19h00</div>
+                        <div class="activity">🍳 Préparation repas du soir</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">19h00 - 21h00</div>
+                        <div class="activity">👨‍👩‍👧‍👦 Temps famille / détente</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">21h00 - 21h30</div>
+                        <div class="activity">🌙 Routine du soir</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">22h20</div>
+                        <div class="activity">🛏️ <strong>COUCHER (NON NÉGOCIABLE)</strong></div>
+                    </div>
+                </div>
+
+                <!-- MARDI -->
+                <div class="schedule-day">
+                    <div class="day-header">
+                        <div class="day-title">MARDI</div>
+                        <span class="day-type day-work">⚠️ Jour travaillé - CRITIQUE</span>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">5h20 - 6h30</div>
+                        <div class="activity">☀️ Routine matinale + petit-déj + <strong>préparer ingrédients repas soir</strong></div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">6h45 - 17h50</div>
+                        <div class="activity">💼 TRAVAIL</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">17h50 - 18h15</div>
+                        <div class="activity">🚗 Retour + décompression (25min - RESPIRE !)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">18h15 - 19h30</div>
+                        <div class="activity">🐕 Promenade chien (1h15)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">19h30 - 20h15</div>
+                        <div class="activity">🍳 <strong>REPAS RAPIDE</strong> (45min MAX - voir recettes express)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">20h15 - 20h45</div>
+                        <div class="activity">🍽️ Repas (30min)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">20h45 - 21h30</div>
+                        <div class="activity">👨‍👩‍👧‍👦 Temps famille / détente (45min)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">21h30 - 22h20</div>
+                        <div class="activity">🌙 Routine du soir</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">22h20</div>
+                        <div class="activity">🛏️ <strong>COUCHER</strong></div>
+                    </div>
+                </div>
+
+                <!-- MERCREDI -->
+                <div class="schedule-day">
+                    <div class="day-header">
+                        <div class="day-title">MERCREDI</div>
+                        <span class="day-type day-free">Journée libre</span>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">9h00 - 9h30</div>
+                        <div class="activity">📋 <strong>Planification repas semaine + liste courses</strong> (30min)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">9h30 - 10h30</div>
+                        <div class="activity">🏠 Désencombrement (1h)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">10h30 - 12h30</div>
+                        <div class="activity">📚 Suite prompts HTML révision fils (2h)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">12h30 - 13h30</div>
+                        <div class="activity">🍽️ Préparation & repas midi</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">13h30 - 15h30</div>
+                        <div class="activity">🎉 Projet anniversaire fille OU rattrapage tâches (2h)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">15h30 - 16h45</div>
+                        <div class="activity">🐕 Promenade chien + appels administratifs (1h15)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">17h00 - 18h00</div>
+                        <div class="activity">🛒 Courses (si nécessaire)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">18h00 - 19h00</div>
+                        <div class="activity">🍳 Préparation repas du soir</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">19h00 - 21h00</div>
+                        <div class="activity">👨‍👩‍👧‍👦 Temps famille / loisirs</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">21h00 - 21h30</div>
+                        <div class="activity">🌙 Routine du soir</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">22h20</div>
+                        <div class="activity">🛏️ <strong>COUCHER</strong></div>
+                    </div>
+                </div>
+
+                <!-- JEUDI -->
+                <div class="schedule-day">
+                    <div class="day-header">
+                        <div class="day-title">JEUDI</div>
+                        <span class="day-type day-work">⚠️ Jour travaillé - CRITIQUE</span>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">5h20 - 6h30</div>
+                        <div class="activity">☀️ Routine matinale + petit-déj + <strong>préparer ingrédients repas soir</strong></div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">6h45 - 17h50</div>
+                        <div class="activity">💼 TRAVAIL</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">17h50 - 18h15</div>
+                        <div class="activity">🚗 Retour + décompression (25min - RESPIRE !)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">18h15 - 19h30</div>
+                        <div class="activity">🐕 Promenade chien (1h15)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">19h30 - 20h15</div>
+                        <div class="activity">🍳 <strong>REPAS RAPIDE</strong> (45min MAX - voir recettes express)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">20h15 - 20h45</div>
+                        <div class="activity">🍽️ Repas (30min)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">20h45 - 21h30</div>
+                        <div class="activity">👨‍👩‍👧‍👦 Temps famille / détente (45min)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">21h30 - 22h20</div>
+                        <div class="activity">🌙 Routine du soir</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">22h20</div>
+                        <div class="activity">🛏️ <strong>COUCHER</strong></div>
+                    </div>
+                </div>
+
+                <!-- VENDREDI -->
+                <div class="schedule-day">
+                    <div class="day-header">
+                        <div class="day-title">VENDREDI</div>
+                        <span class="day-type day-work">✅ Retour 16h45 - Plus facile</span>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">5h20 - 6h30</div>
+                        <div class="activity">☀️ Routine matinale + petit-déj</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">6h45 - 16h45</div>
+                        <div class="activity">💼 TRAVAIL</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">16h45 - 17h00</div>
+                        <div class="activity">🚗 Retour + décompression</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">17h00 - 18h15</div>
+                        <div class="activity">🐕 Promenade chien (1h15)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">18h15 - 18h45</div>
+                        <div class="activity">🛒 Courses rapides (si nécessaire)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">18h45 - 19h45</div>
+                        <div class="activity">🍳 Préparation repas (1h - plus de temps !)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">19h45 - 20h30</div>
+                        <div class="activity">🍽️ Repas</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">20h30 - 22h00</div>
+                        <div class="activity">👨‍👩‍👧‍👦 Temps famille / soirée détente (1h30)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">22h20</div>
+                        <div class="activity">🛏️ <strong>COUCHER</strong></div>
+                    </div>
+                </div>
+
+                <!-- SAMEDI -->
+                <div class="schedule-day">
+                    <div class="day-header">
+                        <div class="day-title">SAMEDI</div>
+                        <span class="day-type day-free">Weekend - Équilibre</span>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">8h30</div>
+                        <div class="activity">☀️ Réveil naturel</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">9h00 - 10h00</div>
+                        <div class="activity">☕ Petit-déjeuner tranquille + planification journée</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">10h00 - 11h15</div>
+                        <div class="activity">🐕 Promenade chien (1h15)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">11h15 - 13h00</div>
+                        <div class="activity">🏠 Grand désencombrement hebdomadaire (1h45)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">13h00 - 14h00</div>
+                        <div class="activity">🍽️ Préparation & repas midi</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">14h00 - 18h00</div>
+                        <div class="activity">🎯 Activités au choix : famille, sorties, courses importantes, projets persos</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">18h00 - 19h00</div>
+                        <div class="activity">🍳 Préparation repas du soir</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">19h00 - 22h00</div>
+                        <div class="activity">👨‍👩‍👧‍👦 Temps famille / loisirs / détente</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">22h20</div>
+                        <div class="activity">🛏️ <strong>COUCHER</strong></div>
+                    </div>
+                </div>
+
+                <!-- DIMANCHE -->
+                <div class="schedule-day">
+                    <div class="day-header">
+                        <div class="day-title">DIMANCHE</div>
+                        <span class="day-type day-free">Repos & Préparation</span>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">Réveil naturel</div>
+                        <div class="activity">☀️ Sans alarme - écoute ton corps</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">Matinée</div>
+                        <div class="activity">🐕 Promenade chien (1h15) + détente totale</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">17h00 - 18h00</div>
+                        <div class="activity">📋 <strong>BILAN DE LA SEMAINE + Planification semaine suivante</strong></div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">18h00 - 19h00</div>
+                        <div class="activity">🍳 Préparation repas</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">19h00 - 21h00</div>
+                        <div class="activity">👨‍👩‍👧‍👦 Temps famille</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">21h00 - 22h20</div>
+                        <div class="activity">🌙 Préparation semaine (affaires, vêtements) + routine du soir</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">22h20</div>
+                        <div class="activity">🛏️ <strong>COUCHER</strong></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TÂCHES QUOTIDIENNES -->
+        <div id="taches-quotidiennes" class="tab-content">
+            <div class="section">
+                <h2>✅ Tâches quotidiennes flexibles</h2>
+
+                <div class="alert alert-info">
+                    <span class="icon">💡</span>
+                    <strong>Principe :</strong> Coche au fur et à mesure. Ces tâches peuvent être faites à n'importe quel moment dans la journée selon tes créneaux libres.
+                </div>
+
+                <h3>📋 LUNDI (journée libre)</h3>
+                <div class="task-list">
+                    <div class="task-item priority-high">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>💼 Recherches emploi</strong> : 2 candidatures complètes (2h) - Plage horaire suggérée : 10h30-12h30</div>
+                    </div>
+                    <div class="task-item priority-high">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>📚 Prompts HTML fils</strong> : Création 2-3 prompts (2h) - Suggéré : 13h30-15h30</div>
+                    </div>
+                    <div class="task-item priority-medium">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🏠 Désencombrement</strong> : Zone ciblée (1h30) - Suggéré : 9h-10h30</div>
+                    </div>
+                    <div class="task-item priority-medium">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🧺 Lessive</strong> : Lancer 1 machine + étendre</div>
+                    </div>
+                    <div class="task-item priority-medium">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🧺 Plier/ranger</strong> : Linge sec de la veille</div>
+                    </div>
+                    <div class="task-item priority-low">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🍽️ Lave-vaisselle</strong> : Vider matin + Remplir soir</div>
+                    </div>
+                    <div class="task-item priority-low">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🛒 Courses</strong> : Alimentaires hebdomadaires (1h) - Suggéré : 17h-18h</div>
+                    </div>
+                    <div class="task-item priority-low">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🐕 Promenade chien</strong> : 1h15 (obligatoire)</div>
+                    </div>
+                    <div class="task-item priority-low">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🍳 Repas soir</strong> : Préparation 45-60min</div>
+                    </div>
+                </div>
+
+                <h3>📋 MARDI (jour travaillé - critique)</h3>
+                <div class="alert alert-warning">
+                    <span class="icon">⚠️</span>
+                    Journée serrée ! Minimum vital seulement.
+                </div>
+                <div class="task-list">
+                    <div class="task-item priority-high">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>⏰ Matin</strong> : Préparer ingrédients repas soir (10-15min dans routine matinale)</div>
+                    </div>
+                    <div class="task-item priority-medium">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🧺 Lessive</strong> : Lancer 1 machine AVANT de partir (programmée ou rapide matin)</div>
+                    </div>
+                    <div class="task-item priority-medium">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🧺 Étendre linge</strong> : En rentrant (5min) ou après promenade chien</div>
+                    </div>
+                    <div class="task-item priority-low">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🍽️ Lave-vaisselle</strong> : Vider matin (pendant petit-déj) + Remplir après repas soir</div>
+                    </div>
+                    <div class="task-item priority-low">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🐕 Promenade chien</strong> : 1h15 (18h15-19h30)</div>
+                    </div>
+                    <div class="task-item priority-low">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🍳 Repas RAPIDE</strong> : Max 45min (19h30-20h15) - recettes express uniquement</div>
+                    </div>
+                </div>
+
+                <h3>📋 MERCREDI (journée libre)</h3>
+                <div class="task-list">
+                    <div class="task-item priority-high">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>📋 Planification</strong> : Menus semaine + liste courses (30min) - Suggéré : 9h-9h30</div>
+                    </div>
+                    <div class="task-item priority-high">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>📚 Prompts HTML fils</strong> : Suite création (2h) - Suggéré : 10h30-12h30</div>
+                    </div>
+                    <div class="task-item priority-medium">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🏠 Désencombrement</strong> : 1h - Suggéré : 9h30-10h30</div>
+                    </div>
+                    <div class="task-item priority-medium">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🎉 Anniversaire fille</strong> : Avancer projet (1-2h) - Suggéré : 13h30-15h30</div>
+                    </div>
+                    <div class="task-item priority-medium">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🧺 Lessive</strong> : Lancer 1-2 machines + étendre</div>
+                    </div>
+                    <div class="task-item priority-medium">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🧺 Plier/ranger</strong> : Linge sec</div>
+                    </div>
+                    <div class="task-item priority-low">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🍽️ Lave-vaisselle</strong> : Vider + Remplir</div>
+                    </div>
+                    <div class="task-item priority-low">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🛒 Courses</strong> : Compléments si nécessaire</div>
+                    </div>
+                    <div class="task-item priority-low">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🐕 Promenade chien</strong> : 1h15 + appels admin possibles</div>
+                    </div>
+                    <div class="task-item priority-low">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🍳 Repas soir</strong> : Préparation 45-60min</div>
+                    </div>
+                </div>
+
+                <h3>📋 JEUDI (jour travaillé - critique)</h3>
+                <div class="alert alert-warning">
+                    <span class="icon">⚠️</span>
+                    Même contraintes que mardi !
+                </div>
+                <div class="task-list">
+                    <div class="task-item priority-high">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>⏰ Matin</strong> : Préparer ingrédients repas soir (10-15min)</div>
+                    </div>
+                    <div class="task-item priority-medium">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🧺 Lessive</strong> : Lancer 1 machine avant de partir</div>
+                    </div>
+                    <div class="task-item priority-medium">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🧺 Étendre linge</strong> : En rentrant ou après promenade</div>
+                    </div>
+                    <div class="task-item priority-low">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🍽️ Lave-vaisselle</strong> : Vider matin + Remplir soir</div>
+                    </div>
+                    <div class="task-item priority-low">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🐕 Promenade chien</strong> : 1h15 (18h15-19h30)</div>
+                    </div>
+                    <div class="task-item priority-low">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🍳 Repas RAPIDE</strong> : Max 45min - recettes express</div>
+                    </div>
+                </div>
+
+                <h3>📋 VENDREDI (retour 16h45)</h3>
+                <div class="task-list">
+                    <div class="task-item priority-medium">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🧺 Lessive</strong> : 1 machine (plus de temps le soir)</div>
+                    </div>
+                    <div class="task-item priority-medium">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🧺 Plier/ranger</strong> : Linge accumulé dans la semaine</div>
+                    </div>
+                    <div class="task-item priority-low">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🍽️ Lave-vaisselle</strong> : Vider + Remplir</div>
+                    </div>
+                    <div class="task-item priority-low">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🛒 Courses</strong> : Rapides si besoin (30min max)</div>
+                    </div>
+                    <div class="task-item priority-low">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🐕 Promenade chien</strong> : 1h15</div>
+                    </div>
+                    <div class="task-item priority-low">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🍳 Repas soir</strong> : Préparation plus détendue (1h OK)</div>
+                    </div>
+                </div>
+
+                <h3>📋 SAMEDI (weekend)</h3>
+                <div class="task-list">
+                    <div class="task-item priority-high">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🏠 Grand désencombrement</strong> : 1h45 (suggéré : 11h15-13h)</div>
+                    </div>
+                    <div class="task-item priority-medium">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🧺 Lessive draps/linge volumineux</strong> : Pendage collectif</div>
+                    </div>
+                    <div class="task-item priority-medium">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🧺 Plier/ranger</strong> : Tout le linge de la semaine</div>
+                    </div>
+                    <div class="task-item priority-low">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🍽️ Lave-vaisselle</strong> : Vider + Remplir</div>
+                    </div>
+                    <div class="task-item priority-low">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🛒 Grandes courses</strong> : Si nécessaire</div>
+                    </div>
+                    <div class="task-item priority-low">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🐕 Promenade chien</strong> : 1h15</div>
+                    </div>
+                    <div class="task-item priority-low">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🍳 Repas</strong> : Midi + soir</div>
+                    </div>
+                </div>
+
+                <h3>📋 DIMANCHE (repos)</h3>
+                <div class="task-list">
+                    <div class="task-item priority-high">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>📋 Bilan + Planification</strong> : Semaine suivante (1h) - Suggéré : 17h-18h</div>
+                    </div>
+                    <div class="task-item priority-medium">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🧺 Lessive</strong> : 1 dernière machine pour démarrer semaine</div>
+                    </div>
+                    <div class="task-item priority-medium">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>👔 Préparation</strong> : Vêtements + affaires semaine</div>
+                    </div>
+                    <div class="task-item priority-low">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🍽️ Lave-vaisselle</strong> : Vider + Remplir</div>
+                    </div>
+                    <div class="task-item priority-low">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🐕 Promenade chien</strong> : 1h15</div>
+                    </div>
+                    <div class="task-item priority-low">
+                        <input type="checkbox" class="task-checkbox">
+                        <div><strong>🍳 Repas</strong> : Préparation détendue</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LESSIVE & VAISSELLE -->
+        <div id="lessive-vaisselle" class="tab-content">
+            <div class="section">
+                <h2>🧺 Gestion Lessive & Vaisselle</h2>
+
+                <div class="alert alert-info">
+                    <span class="icon">💡</span>
+                    <strong>Objectif :</strong> 5-7 machines/semaine + 1 lave-vaisselle/jour sans que ça devienne ingérable.
+                </div>
+
+                <h3>🧺 Système Lessive Optimisé</h3>
+
+                <div class="info-box">
+                    <h3>📊 Répartition hebdomadaire intelligente</h3>
+                    <div class="laundry-tracker">
+                        <div class="laundry-day">
+                            <h4>LUN</h4>
+                            <div class="laundry-count">1</div>
+                            <p>Couleurs</p>
+                        </div>
+                        <div class="laundry-day">
+                            <h4>MAR</h4>
+                            <div class="laundry-count">1</div>
+                            <p>Blanc<br><small>(matin)</small></p>
+                        </div>
+                        <div class="laundry-day">
+                            <h4>MER</h4>
+                            <div class="laundry-count">1-2</div>
+                            <p>Mixte</p>
+                        </div>
+                        <div class="laundry-day">
+                            <h4>JEU</h4>
+                            <div class="laundry-count">1</div>
+                            <p>Couleurs<br><small>(matin)</small></p>
+                        </div>
+                        <div class="laundry-day">
+                            <h4>VEN</h4>
+                            <div class="laundry-count">1</div>
+                            <p>Soir détendu</p>
+                        </div>
+                        <div class="laundry-day">
+                            <h4>SAM</h4>
+                            <div class="laundry-count">1-2</div>
+                            <p>Draps<br>volumineux</p>
+                        </div>
+                        <div class="laundry-day">
+                            <h4>DIM</h4>
+                            <div class="laundry-count">1</div>
+                            <p>Préparation<br>semaine</p>
+                        </div>
+                    </div>
+                    <p><strong>TOTAL : 7-9 machines/semaine</strong> (marge confortable)</p>
+                </div>
+
+                <h3>⚙️ Stratégies par type de journée</h3>
+
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <div class="recipe-title">🟢 JOURS LIBRES (Lun, Mer, Weekend)</div>
+                        <span class="recipe-time">Flexibilité maximale</span>
+                    </div>
+                    <ul>
+                        <li><strong>Lancer :</strong> À n'importe quel moment (matin de préférence)</li>
+                        <li><strong>Étendre :</strong> Dès la fin du cycle</li>
+                        <li><strong>Plier :</strong> Le soir même ou lendemain</li>
+                        <li><strong>Conseil :</strong> Profiter pour faire 2 machines si nécessaire</li>
+                    </ul>
+                </div>
+
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <div class="recipe-title">🟠 JOURS TRAVAILLÉS (Mar, Jeu)</div>
+                        <span class="recipe-time">Mode "automatique"</span>
+                    </div>
+                    <ul>
+                        <li><strong>5h45 :</strong> Lancer machine AVANT de partir (cycle 1h30-2h max)</li>
+                        <li><strong>17h50 :</strong> En rentrant → étendre immédiatement (5min chrono)</li>
+                        <li><strong>Alternative :</strong> Après promenade chien (19h30)</li>
+                        <li><strong>Plier :</strong> Lendemain (jour libre)</li>
+                        <li><strong>⚠️ Important :</strong> Préparer panier linge sale la veille au soir</li>
+                    </ul>
+                </div>
+
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <div class="recipe-title">🟡 VENDREDI (retour 16h45)</div>
+                        <span class="recipe-time">Mode "rattrapage"</span>
+                    </div>
+                    <ul>
+                        <li><strong>Lancer :</strong> En rentrant (17h)</li>
+                        <li><strong>Étendre :</strong> Après promenade chien (19h30)</li>
+                        <li><strong>Plier :</strong> Tout le linge accumulé dans la semaine</li>
+                        <li><strong>Bonus :</strong> Plus de temps = ranger directement dans armoires</li>
+                    </ul>
+                </div>
+
+                <h3>🎯 Types de machines par jour</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Jour</th>
+                            <th>Type linge</th>
+                            <th>Programme</th>
+                            <th>Séchage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Lundi</strong></td>
+                            <td>Couleurs foncées</td>
+                            <td>30-40°C</td>
+                            <td>Pendage appart</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Mardi</strong></td>
+                            <td>Blanc/serviettes</td>
+                            <td>60°C</td>
+                            <td>Pendage appart</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Mercredi</strong></td>
+                            <td>Mixte + urgences</td>
+                            <td>40°C</td>
+                            <td>Pendage appart</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Jeudi</strong></td>
+                            <td>Couleurs claires</td>
+                            <td>30°C</td>
+                            <td>Pendage appart</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Vendredi</strong></td>
+                            <td>Sport/délicats</td>
+                            <td>30°C doux</td>
+                            <td>Pendage appart</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Samedi</strong></td>
+                            <td>Draps/couvertures</td>
+                            <td>60°C</td>
+                            <td>Pendage COLLECTIF</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Dimanche</strong></td>
+                            <td>Préparation semaine</td>
+                            <td>Variable</td>
+                            <td>Pendage appart</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>🍽️ Système Lave-Vaisselle Quotidien</h3>
+
+                <div class="info-box">
+                    <h3>⏰ Routine en 2 temps (15min/jour)</h3>
+                    <ul style="list-style: none; padding-left: 0;">
+                        <li><strong>☀️ MATIN (pendant petit-déj - 7min) :</strong></li>
+                        <li style="margin-left: 20px;">1. Vider lave-vaisselle propre de la veille</li>
+                        <li style="margin-left: 20px;">2. Ranger vaisselle (assiettes en premier, puis verres, couverts)</li>
+                        <li style="margin-left: 20px;">3. Y mettre vaisselle petit-déj</li>
+                        <li><br></li>
+                        <li><strong>🌙 SOIR (après repas - 8min) :</strong></li>
+                        <li style="margin-left: 20px;">1. Remplir avec vaisselle du repas + journée</li>
+                        <li style="margin-left: 20px;">2. Ajouter tablette</li>
+                        <li style="margin-left: 20px;">3. Lancer cycle nocturne (économique)</li>
+                        <li style="margin-left: 20px;">4. Vaisselle propre le lendemain matin ✨</li>
+                    </ul>
+                </div>
+
+                <div class="alert alert-success">
+                    <span class="icon">💡</span>
+                    <strong>Astuce jours travaillés :</strong> Vider lave-vaisselle pendant que café/thé coule. Remplir pendant que repas refroidit. = Zéro temps perdu !
+                </div>
+
+                <h3>🎯 Checklist hebdomadaire Lessive</h3>
+                <div class="task-list">
+                    <div class="task-item priority-high">
+                        <input type="checkbox" class="task-checkbox">
+                        <div>Machine 1 : Couleurs foncées (Lundi)</div>
+                    </div>
+                    <div class="task-item priority-high">
+                        <input type="checkbox" class="task-checkbox">
+                        <div>Machine 2 : Blanc/serviettes (Mardi matin)</div>
+                    </div>
+                    <div class="task-item priority-high">
+                        <input type="checkbox" class="task-checkbox">
+                        <div>Machine 3 : Mixte (Mercredi)</div>
+                    </div>
+                    <div class="task-item priority-high">
+                        <input type="checkbox" class="task-checkbox">
+                        <div>Machine 4 : Couleurs claires (Jeudi matin)</div>
+                    </div>
+                    <div class="task-item priority-high">
+                        <input type="checkbox" class="task-checkbox">
+                        <div>Machine 5 : Sport/délicats (Vendredi soir)</div>
+                    </div>
+                    <div class="task-item priority-medium">
+                        <input type="checkbox" class="task-checkbox">
+                        <div>Machine 6 : Draps (Samedi - pendage collectif)</div>
+                    </div>
+                    <div class="task-item priority-low">
+                        <input type="checkbox" class="task-checkbox">
+                        <div>Machine 7 : Optionnelle selon besoin (Weekend)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- REPAS RAPIDES -->
+        <div id="repas" class="tab-content">
+            <div class="section">
+                <h2>🍽️ Banque de repas rapides (< 45min)</h2>
+
+                <div class="alert alert-warning">
+                    <span class="icon">⚠️</span>
+                    <strong>Contrainte :</strong> Pas de batch cooking possible. Tout doit être cuisiné le jour même.
+                </div>
+
+                <h3>⚡ Menu semaine A (rotation 1)</h3>
+
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <div class="recipe-title">Lundi : Pâtes carbonara</div>
+                        <span class="recipe-time">30min</span>
+                    </div>
+                    <p><strong>Ingrédients :</strong> Pâtes, lardons, crème, parmesan, œufs</p>
+                    <p><strong>Préparation :</strong> Cuire pâtes (10min) → faire revenir lardons → mélanger avec crème-œufs → servir</p>
+                </div>
+
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <div class="recipe-title">Mardi : Poulet rôti + riz + légumes vapeur</div>
+                        <span class="recipe-time">40min</span>
+                    </div>
+                    <p><strong>Préparation MATIN :</strong> Sortir poulet du frigo, assaisonner</p>
+                    <p><strong>Soir :</strong> Four 200°C (30min) + riz cuit-vapeur micro-ondes + légumes surgelés vapeur</p>
+                </div>
+
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <div class="recipe-title">Mercredi : Omelette + salade composée</div>
+                        <span class="recipe-time">25min</span>
+                    </div>
+                    <p><strong>Ingrédients :</strong> Œufs, fromage, jambon, salade en sachet, tomates, concombre</p>
+                    <p><strong>Préparation :</strong> Omelette (10min) + découper légumes (15min) = rapide et équilibré</p>
+                </div>
+
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <div class="recipe-title">Jeudi : Poisson pané + purée + haricots verts</div>
+                        <span class="recipe-time">35min</span>
+                    </div>
+                    <p><strong>Préparation MATIN :</strong> Sortir poisson surgelé</p>
+                    <p><strong>Soir :</strong> Poisson au four (20min) + purée instantanée (5min) + haricots surgelés micro-ondes (8min)</p>
+                </div>
+
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <div class="recipe-title">Vendredi : Wraps poulet-crudités</div>
+                        <span class="recipe-time">30min</span>
+                    </div>
+                    <p><strong>Ingrédients :</strong> Tortillas, poulet (restes mardi ou dés frais), salade, tomates, sauce</p>
+                    <p><strong>Préparation :</strong> Cuire poulet si frais (15min) + assembler wraps (15min)</p>
+                </div>
+
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <div class="recipe-title">Samedi : Gratin de pâtes au thon</div>
+                        <span class="recipe-time">45min</span>
+                    </div>
+                    <p><strong>Ingrédients :</strong> Pâtes, thon, béchamel (brique), gruyère, tomates</p>
+                    <p><strong>Préparation :</strong> Cuire pâtes → mélanger avec thon-béchamel → four 20min = repas familial réconfortant</p>
+                </div>
+
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <div class="recipe-title">Dimanche : Plat plus élaboré OU restes + détente</div>
+                        <span class="recipe-time">Variable</span>
+                    </div>
+                    <p>Jour libre pour tester nouvelles recettes ou finir les restes de la semaine</p>
+                </div>
+
+                <h3>⚡ Menu semaine B (rotation 2)</h3>
+
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <div class="recipe-title">Lundi : Riz sauté aux légumes + œuf</div>
+                        <span class="recipe-time">30min</span>
+                    </div>
+                    <p><strong>Ingrédients :</strong> Riz (sachets micro-ondes 2min), légumes surgelés wok, œufs, sauce soja</p>
+                    <p><strong>Préparation :</strong> Faire sauter légumes (10min) + ajouter riz + œufs brouillés = ultra-rapide !</p>
+                </div>
+
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <div class="recipe-title">Mardi : Tacos viande hachée express</div>
+                        <span class="recipe-time">35min</span>
+                    </div>
+                    <p><strong>Préparation MATIN :</strong> Sortir viande hachée</p>
+                    <p><strong>Soir :</strong> Cuire viande + épices (15min) + préparer garnitures (salade, tomate, fromage râpé - 15min)</p>
+                </div>
+
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <div class="recipe-title">Mercredi : Quiche lorraine + salade</div>
+                        <span class="recipe-time">40min</span>
+                    </div>
+                    <p><strong>Ingrédients :</strong> Pâte brisée toute faite, lardons, crème, œufs, gruyère</p>
+                    <p><strong>Préparation :</strong> Étaler pâte → garnir (10min) → four 30min + salade en sachet = facile !</p>
+                </div>
+
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <div class="recipe-title">Jeudi : Saucisses + semoule + ratatouille</div>
+                        <span class="recipe-time">30min</span>
+                    </div>
+                    <p><strong>Préparation MATIN :</strong> Sortir saucisses</p>
+                    <p><strong>Soir :</strong> Saucisses poêle (15min) + semoule (5min) + ratatouille bocal réchauffée (10min)</p>
+                </div>
+
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <div class="recipe-title">Vendredi : Pizza maison rapide</div>
+                        <span class="recipe-time">35min</span>
+                    </div>
+                    <p><strong>Ingrédients :</strong> Pâte à pizza toute faite, sauce tomate, garniture au choix (jambon, fromage, olives...)</p>
+                    <p><strong>Préparation :</strong> Étaler + garnir (10min) → four 220°C (20min) = succès garanti !</p>
+                </div>
+
+                <h3>🆘 Menu URGENCE (jours critiques Mar/Jeu si débordée)</h3>
+
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <div class="recipe-title">Option 1 : Pâtes + sauce tomate + thon</div>
+                        <span class="recipe-time">15min</span>
+                    </div>
+                    <p>Cuire pâtes → réchauffer sauce bocal → ajouter thon = 15min chrono !</p>
+                </div>
+
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <div class="recipe-title">Option 2 : Œufs brouillés + pain + salade</div>
+                        <span class="recipe-time">10min</span>
+                    </div>
+                    <p>Œufs brouillés (5min) + pain grillé + salade sachet = ultra-rapide et nutritif</p>
+                </div>
+
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <div class="recipe-title">Option 3 : Poisson pané + légumes surgelés</div>
+                        <span class="recipe-time">20min</span>
+                    </div>
+                    <p>Four (15min) + micro-ondes légumes (5min) = zéro stress</p>
+                </div>
+
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <div class="recipe-title">Option 4 : Plat préparé qualité + complément</div>
+                        <span class="recipe-time">10min</span>
+                    </div>
+                    <p>Avoir 2-3 plats de secours au congélateur (lasagnes, couscous...) + ajouter salade fraîche</p>
+                </div>
+
+                <h3>🛒 Liste courses type par semaine</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Catégorie</th>
+                            <th>Produits essentiels</th>
+                            <th>Fréquence</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Féculents</strong></td>
+                            <td>Pâtes, riz (sachets 2min), semoule, pommes de terre</td>
+                            <td>1x/semaine</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Protéines</strong></td>
+                            <td>Poulet, viande hachée, poisson pané (surgelé), œufs, thon bocal</td>
+                            <td>2x/semaine</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Légumes</strong></td>
+                            <td>Surgelés (haricots, ratatouille, wok), salades sachet, tomates</td>
+                            <td>2x/semaine</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Produits laitiers</strong></td>
+                            <td>Crème, fromage râpé, parmesan, lait</td>
+                            <td>1x/semaine</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Basiques</strong></td>
+                            <td>Sauce tomate, béchamel, épices, huile, beurre</td>
+                            <td>Selon stock</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Dépannage</strong></td>
+                            <td>Pâtes brisées, tortillas, pain de mie, plats préparés</td>
+                            <td>Toujours en stock</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="alert alert-success">
+                    <span class="icon">💡</span>
+                    <strong>Astuce gain de temps :</strong> Faire les courses en ligne avec livraison ou drive = économie de 30-45min par semaine !
+                </div>
+            </div>
+        </div>
+
+        <!-- RECHERCHE EMPLOI -->
+        <div id="emploi" class="tab-content">
+            <div class="section">
+                <h2>💼 Stratégie recherche d'emploi</h2>
+
+                <div class="info-box">
+                    <h3>🎯 Objectif : 8 candidatures de qualité par mois</h3>
+                    <p><strong>Répartition :</strong> 2 candidatures/semaine × 4 semaines = 8/mois</p>
+                    <p><strong>Temps alloué :</strong> 2h/semaine (lundis 10h30-12h30 + mercredis si besoin)</p>
+                </div>
+
+                <h3>📋 Checklist par candidature (1h/candidature)</h3>
+
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <div class="recipe-title">Étape 1 : Recherche entreprise</div>
+                        <span class="recipe-time">15min</span>
+                    </div>
+                    <div class="task-list">
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>Lire annonce complète + noter mots-clés</div>
+                        </div>
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>Consulter site web entreprise</div>
+                        </div>
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>Vérifier LinkedIn/réseaux sociaux</div>
+                        </div>
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>Noter infos clés : valeurs, projets, culture</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <div class="recipe-title">Étape 2 : Adaptation CV</div>
+                        <span class="recipe-time">20min</span>
+                    </div>
+                    <div class="task-list">
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>Reprendre CV de base</div>
+                        </div>
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>Adapter titre selon poste</div>
+                        </div>
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>Mettre en avant compétences correspondantes</div>
+                        </div>
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>Utiliser mots-clés de l'annonce</div>
+                        </div>
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>Relecture (fautes = éliminatoire !)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <div class="recipe-title">Étape 3 : Lettre de motivation</div>
+                        <span class="recipe-time">20min</span>
+                    </div>
+                    <div class="task-list">
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>Utiliser template de base personnalisé</div>
+                        </div>
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>§1 : Pourquoi cette entreprise me plaît</div>
+                        </div>
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>§2 : Mes compétences pour ce poste (exemples concrets)</div>
+                        </div>
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>§3 : Ma motivation + disponibilité</div>
+                        </div>
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>Relecture attentive</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <div class="recipe-title">Étape 4 : Envoi + Suivi</div>
+                        <span class="recipe-time">5min</span>
+                    </div>
+                    <div class="task-list">
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>Envoyer candidature (mail ou plateforme)</div>
+                        </div>
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>Noter dans tableur : entreprise, poste, date, contact</div>
+                        </div>
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>Programmer rappel relance (J+7 à J+15)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>📊 Tableau de suivi (à créer Excel/Google Sheets)</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date envoi</th>
+                            <th>Entreprise</th>
+                            <th>Poste</th>
+                            <th>Contact</th>
+                            <th>Relance prévue</th>
+                            <th>Statut</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>01/01/2024</td>
+                            <td>Entreprise X</td>
+                            <td>Poste Y</td>
+                            <td>rh@entreprise.com</td>
+                            <td>08/01/2024</td>
+                            <td>En attente</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td colspan="7" style="text-align: center; color: #666;"><em>Ajouter tes candidatures au fur et à mesure...</em></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>🎯 Sources de recherche</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>🌐 Sites emploi</h3>
+                        <p>Indeed, Pôle Emploi, Monster, LinkedIn</p>
+                        <button class="btn">Créer alertes</button>
+                    </div>
+                    <div class="stat-card">
+                        <h3>🤝 Réseau</h3>
+                        <p>LinkedIn, contacts persos, alumni</p>
+                        <button class="btn">Activer profil</button>
+                    </div>
+                    <div class="stat-card">
+                        <h3>🎯 Candidatures spontanées</h3>
+                        <p>Entreprises ciblées de ton secteur</p>
+                        <button class="btn">Liste entreprises</button>
+                    </div>
+                </div>
+
+                <div class="alert alert-success">
+                    <span class="icon">✨</span>
+                    <strong>Conseil pro :</strong> Qualité > Quantité. 2 candidatures bien préparées valent mieux que 10 bâclées !
+                </div>
+            </div>
+        </div>
+
+        <!-- RÉVISIONS FILS -->
+        <div id="revision-fils" class="tab-content">
+            <div class="section">
+                <h2>📚 Système de révisions pour ton fils</h2>
+
+                <div class="info-box">
+                    <h3>🎯 Objectif : Créer des outils HTML interactifs pour réviser efficacement</h3>
+                    <p><strong>Temps alloué :</strong> Lundis 13h30-15h30 + Mercredis 10h30-12h30 = 4h/semaine</p>
+                    <p><strong>Production :</strong> 2-3 prompts/semaine = 8-12 outils/mois</p>
+                </div>
+
+                <div class="alert alert-info">
+                    <span class="icon">💡</span>
+                    <strong>Complète cette section :</strong> Pour personnaliser au mieux, j'ai besoin de savoir :
+                    <ul style="margin-top: 10px;">
+                        <li>✏️ Niveau scolaire de ton fils ? (collège, lycée, études sup)</li>
+                        <li>✏️ Ses 3 matières les plus difficiles ?</li>
+                        <li>✏️ Type d'exercices préférés ? (QCM, flashcards, exercices à trous...)</li>
+                        <li>✏️ Examens à venir ? (dates + matières prioritaires)</li>
+                    </ul>
+                </div>
+
+                <h3>📋 Planning création prompts</h3>
+
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <div class="recipe-title">Semaine 1 : Matière prioritaire #1</div>
+                        <span class="recipe-time">4h</span>
+                    </div>
+                    <div class="task-list">
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div><strong>Lundi 13h30-15h30 :</strong> Créer QCM interactif chapitre 1</div>
+                        </div>
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div><strong>Mercredi 10h30-12h30 :</strong> Créer flashcards animées + exercices</div>
+                        </div>
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div><strong>Weekend :</strong> Tester avec ton fils + ajustements</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <div class="recipe-title">Semaine 2 : Matière prioritaire #2</div>
+                        <span class="recipe-time">4h</span>
+                    </div>
+                    <div class="task-list">
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div><strong>Lundi :</strong> QCM + correction automatique</div>
+                        </div>
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div><strong>Mercredi :</strong> Fiches de révision interactives</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>🎨 Types de prompts HTML à créer</h3>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>📝 QCM Interactifs</h3>
+                        <p>Questions à choix multiples avec correction instantanée et score</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>🎴 Flashcards</h3>
+                        <p>Cartes recto-verso animées pour mémorisation</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>✏️ Exercices à trous</h3>
+                        <p>Textes avec zones à compléter + vérification</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>🎯 Mini-jeux</h3>
+                        <p>Glisser-déposer, associations, chronomètres</p>
+                    </div>
+                </div>
+
+                <h3>📊 Suivi des révisions</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Matière</th>
+                            <th>Chapitre</th>
+                            <th>Type outil</th>
+                            <th>Statut</th>
+                            <th>Score fils</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Maths</td>
+                            <td>Équations</td>
+                            <td>QCM</td>
+                            <td>✅ Terminé</td>
+                            <td>85%</td>
+                        </tr>
+                        <tr>
+                            <td>Français</td>
+                            <td>Figures de style</td>
+                            <td>Flashcards</td>
+                            <td>🔄 En cours</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" style="text-align: center; color: #666;"><em>À compléter au fur et à mesure...</em></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="alert alert-success">
+                    <span class="icon">🎓</span>
+                    <strong>Bénéfices :</strong> Ton fils révise de façon ludique + tu développes tes compétences en HTML = gagnant-gagnant !
+                </div>
+            </div>
+        </div>
+
+        <!-- DÉSENCOMBREMENT -->
+        <div id="desencombrement" class="tab-content">
+            <div class="section">
+                <h2>🏠 Plan de désencombrement systématique</h2>
+
+                <div class="info-box">
+                    <h3>🎯 Objectif : Maison organisée et apaisante</h3>
+                    <p><strong>Méthode :</strong> Zone par zone, sans pression, avec célébration des progrès</p>
+                    <p><strong>Temps alloué :</strong> 3-5h/semaine (Lun 9h-10h30 + Mer 9h30-10h30 + Sam 11h15-13h)</p>
+                </div>
+
+                <h3>📋 Ordre de désencombrement (du plus facile au plus difficile)</h3>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Semaine</th>
+                            <th>Zone</th>
+                            <th>Temps estimé</th>
+                            <th>Difficulté</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>1</strong></td>
+                            <td>🚪 Entrée + couloir</td>
+                            <td>3h</td>
+                            <td>⭐ Facile</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2</strong></td>
+                            <td>🍽️ Cuisine (placards alimentaires)</td>
+                            <td>4h</td>
+                            <td>⭐ Facile</td>
+                        </tr>
+                        <tr>
+                            <td><strong>3</strong></td>
+                            <td>🧴 Salle de bain</td>
+                            <td>2h</td>
+                            <td>⭐ Facile</td>
+                        </tr>
+                        <tr>
+                            <td><strong>4</strong></td>
+                            <td>🛋️ Salon (surfaces visibles)</td>
+                            <td>3h</td>
+                            <td>⭐⭐ Moyen</td>
+                        </tr>
+                        <tr>
+                            <td><strong>5</strong></td>
+                            <td>📺 Salon (meubles rangement)</td>
+                            <td>4h</td>
+                            <td>⭐⭐ Moyen</td>
+                        </tr>
+                        <tr>
+                            <td><strong>6</strong></td>
+                            <td>🛏️ Ta chambre (surfaces)</td>
+                            <td>3h</td>
+                            <td>⭐⭐ Moyen</td>
+                        </tr>
+                        <tr>
+                            <td><strong>7</strong></td>
+                            <td>👕 Ta chambre (armoire/vêtements)</td>
+                            <td>5h</td>
+                            <td>⭐⭐⭐ Difficile</td>
+                        </tr>
+                        <tr>
+                            <td><strong>8</strong></td>
+                            <td>👦 Chambre fils</td>
+                            <td>4h</td>
+                            <td>⭐⭐ Moyen</td>
+                        </tr>
+                        <tr>
+                            <td><strong>9</strong></td>
+                            <td>👧 Chambre fille</td>
+                            <td>4h</td>
+                            <td>⭐⭐ Moyen</td>
+                        </tr>
+                        <tr>
+                            <td><strong>10</strong></td>
+                            <td>📦 Cave/grenier/débarras</td>
+                            <td>6h</td>
+                            <td>⭐⭐⭐ Difficile</td>
+                        </tr>
+                        <tr>
+                            <td><strong>11-12</strong></td>
+                            <td>🔄 Maintenance + zones récalcitrantes</td>
+                            <td>Variable</td>
+                            <td>Variable</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>✅ Checklist par zone (méthode KonMari simplifiée)</h3>
+
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <div class="recipe-title">Étape 1 : Tout sortir</div>
+                        <span class="recipe-time">20min</span>
+                    </div>
+                    <p>Vider complètement la zone ciblée pour voir l'ampleur et nettoyer</p>
+                </div>
+
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <div class="recipe-title">Étape 2 : Tri en 4 catégories</div>
+                        <span class="recipe-time">60min</span>
+                    </div>
+                    <div class="task-list">
+                        <div class="task-item priority-high">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>✅ <strong>GARDER :</strong> Utilisé régulièrement + me plaît</div>
+                        </div>
+                        <div class="task-item priority-medium">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>♻️ <strong>DONNER :</strong> Bon état mais inutile pour moi</div>
+                        </div>
+                        <div class="task-item priority-low">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>🗑️ <strong>JETER :</strong> Cassé, abîmé, périmé</div>
+                        </div>
+                        <div class="task-item priority-low">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>❓ <strong>HÉSITATION :</strong> Carton à reconsidérer dans 6 mois</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <div class="recipe-title">Étape 3 : Ranger intelligemment</div>
+                        <span class="recipe-time">40min</span>
+                    </div>
+                    <ul>
+                        <li>📍 Chaque chose a UNE place précise</li>
+                        <li>👀 Objets fréquents = à hauteur des yeux</li>
+                        <li>📦 Boîtes/paniers pour catégoriser</li>
+                        <li>🏷️ Étiqueter si nécessaire</li>
+                    </ul>
+                </div>
+
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <div class="recipe-title">Étape 4 : Évacuer immédiatement</div>
+                        <span class="recipe-time">30min</span>
+                    </div>
+                    <ul>
+                        <li>🗑️ Jeter : Sortir poubelles tout de suite</li>
+                        <li>📦 Donner : Mettre dans le coffre de la voiture</li>
+                        <li>📸 Prendre photo avant/après (motivation !)</li>
+                    </ul>
+                </div>
+
+                <h3>🎯 Points de collecte permanents</h3>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>📦 Carton "DON"</h3>
+                        <p>Dans l'entrée, dès que plein → Emmaüs/associations</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>🗑️ Sac "JETER"</h3>
+                        <p>Poubelle dédiée, sortie chaque soir</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>❓ Carton "HÉSITATION"</h3>
+                        <p>Cave, date sur carton : si pas ouvert en 6 mois → don</p>
+                    </div>
+                </div>
+
+                <h3>📊 Tracker progrès</h3>
+
+                <div class="task-list">
+                    <div class="task-item">
+                        <input type="checkbox" class="task-checkbox">
+                        <div>Semaine 1 : Entrée + couloir</div>
+                    </div>
+                    <div class="task-item">
+                        <input type="checkbox" class="task-checkbox">
+                        <div>Semaine 2 : Cuisine (placards alimentaires)</div>
+                    </div>
+                    <div class="task-item">
+                        <input type="checkbox" class="task-checkbox">
+                        <div>Semaine 3 : Salle de bain</div>
+                    </div>
+                    <div class="task-item">
+                        <input type="checkbox" class="task-checkbox">
+                        <div>Semaine 4 : Salon (surfaces visibles)</div>
+                    </div>
+                    <div class="task-item">
+                        <input type="checkbox" class="task-checkbox">
+                        <div>Semaine 5 : Salon (meubles rangement)</div>
+                    </div>
+                    <div class="task-item">
+                        <input type="checkbox" class="task-checkbox">
+                        <div>Semaine 6 : Ta chambre (surfaces)</div>
+                    </div>
+                    <div class="task-item">
+                        <input type="checkbox" class="task-checkbox">
+                        <div>Semaine 7 : Ta chambre (armoire/vêtements)</div>
+                    </div>
+                    <div class="task-item">
+                        <input type="checkbox" class="task-checkbox">
+                        <div>Semaine 8 : Chambre fils</div>
+                    </div>
+                    <div class="task-item">
+                        <input type="checkbox" class="task-checkbox">
+                        <div>Semaine 9 : Chambre fille</div>
+                    </div>
+                    <div class="task-item">
+                        <input type="checkbox" class="task-checkbox">
+                        <div>Semaine 10 : Cave/grenier/débarras</div>
+                    </div>
+                </div>
+
+                <div class="alert alert-success">
+                    <span class="icon">🎉</span>
+                    <strong>Célébration :</strong> Après chaque zone terminée, prends une photo et félicite-toi ! Petit cadeau/plaisir chaque 3 zones complétées.
+                </div>
+            </div>
+        </div>
+
+        <!-- ANNIVERSAIRE -->
+        <div id="anniversaire" class="tab-content">
+            <div class="section">
+                <h2>🎉 Organisation anniversaire 18 ans (Février 2025)</h2>
+
+                <div class="info-box">
+                    <h3>🎯 Échéance : Février 2025</h3>
+                    <p><strong>Temps disponible :</strong> Environ 12-16 semaines</p>
+                    <p><strong>Temps alloué :</strong> 1-2h/semaine (mercredis 13h30-15h30)</p>
+                </div>
+
+                <div class="alert alert-info">
+                    <span class="icon">💡</span>
+                    <strong>Complète cette section :</strong> Pour t'aider efficacement, j'ai besoin de :
+                    <ul style="margin-top: 10px;">
+                        <li>🎊 Type de fête souhaité ? (soirée maison, restaurant, sortie, autre...)</li>
+                        <li>👥 Nombre d'invités approximatif ?</li>
+                        <li>💰 Budget envisagé ?</li>
+                        <li>🎨 Thème particulier ?</li>
+                        <li>🎁 Idée de cadeau principal déjà en tête ?</li>
+                    </ul>
+                </div>
+
+                <h3>📅 Rétroplanning type (à adapter selon tes réponses)</h3>
+
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <div class="recipe-title">Semaines -16 à -12 : Conception</div>
+                        <span class="recipe-time">Novembre</span>
+                    </div>
+                    <div class="task-list">
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>Discuter avec ta fille : ses souhaits</div>
+                        </div>
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>Définir budget global</div>
+                        </div>
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>Choisir type de fête</div>
+                        </div>
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>Liste invités provisoire</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <div class="recipe-title">Semaines -11 à -8 : Réservations</div>
+                        <span class="recipe-time">Décembre</span>
+                    </div>
+                    <div class="task-list">
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>Réserver lieu (si extérieur)</div>
+                        </div>
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>Commander gâteau/traiteur si besoin</div>
+                        </div>
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>Rechercher cadeau principal</div>
+                        </div>
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>Créer/choisir invitations</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <div class="recipe-title">Semaines -7 à -4 : Invitations & Organisation</div>
+                        <span class="recipe-time">Janvier</span>
+                    </div>
+                    <div class="task-list">
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>Envoyer invitations (papier ou numériques)</div>
+                        </div>
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>Commander déco si besoin</div>
+                        </div>
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>Acheter cadeau principal</div>
+                        </div>
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>Planifier menu (si maison)</div>
+                        </div>
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>Playlist musicale</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <div class="recipe-title">Semaines -3 à -1 : Finalisations</div>
+                        <span class="recipe-time">Mi-Février</span>
+                    </div>
+                    <div class="task-list">
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>Confirmer nombre d'invités</div>
+                        </div>
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>Courses (si maison)</div>
+                        </div>
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>Acheter/récupérer déco</div>
+                        </div>
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>Préparer activités/jeux</div>
+                        </div>
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>Emballer cadeau</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <div class="recipe-title">Jour J - 1 : Préparation intensive</div>
+                        <span class="recipe-time">Veille</span>
+                    </div>
+                    <div class="task-list">
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>Grand ménage/rangement</div>
+                        </div>
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>Installer déco</div>
+                        </div>
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>Préparer maximum en cuisine</div>
+                        </div>
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox">
+                            <div>Vérifier liste finale</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>💰 Budget type (à adapter)</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Poste</th>
+                            <th>Estimation basse</th>
+                            <th>Estimation haute</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>🎁 Cadeau principal</td>
+                            <td>100€</td>
+                            <td>300€</td>
+                        </tr>
+                        <tr>
+                            <td>🍰 Gâteau/pâtisserie</td>
+                            <td>40€</td>
+                            <td>100€</td>
+                        </tr>
+                        <tr>
+                            <td>🍕 Nourriture/boissons</td>
+                            <td>80€</td>
+                            <td>200€</td>
+                        </tr>
+                        <tr>
+                            <td>🎈 Décoration</td>
+                            <td>30€</td>
+                            <td>80€</td>
+                        </tr>
+                        <tr>
+                            <td>🎊 Activités/animations</td>
+                            <td>0€</td>
+                            <td>100€</td>
+                        </tr>
+                        <tr>
+                            <td>📍 Location lieu (si extérieur)</td>
+                            <td>0€</td>
+                            <td>200€</td>
+                        </tr>
+                        <tr>
+                            <td><strong>TOTAL</strong></td>
+                            <td><strong>250€</strong></td>
+                            <td><strong>980€</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>💡 Idées selon type de fête</h3>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>🏠 Soirée maison</h3>
+                        <p><strong>+</strong> Moins cher, plus intime</p>
+                        <p><strong>-</strong> Préparation/ménage</p>
+                        <p><em>Budget : 250-400€</em></p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>🍽️ Restaurant</h3>
+                        <p><strong>+</strong> Zéro stress cuisine</p>
+                        <p><strong>-</strong> Plus cher</p>
+                        <p><em>Budget : 400-800€</em></p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>🎳 Activité + repas</h3>
+                        <p><strong>+</strong> Original, animé</p>
+                        <p><strong>-</strong> Logistique</p>
+                        <p><em>Budget : 500-1000€</em></p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>🎉 Salle louée</h3>
+                        <p><strong>+</strong> Espace, liberté</p>
+                        <p><strong>-</strong> Location à prévoir</p>
+                        <p><em>Budget : 600-1200€</em></p>
+                    </div>
+                </div>
+
+                <div class="alert alert-success">
+                    <span class="icon">🎂</span>
+                    <strong>L'essentiel :</strong> Que ta fille se sente aimée et entourée. Le reste est secondaire ! ❤️
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function showTab(tabId) {
+            // Masquer tous les contenus
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+
+            // Désactiver tous les boutons
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(button => button.classList.remove('active'));
+
+            // Activer le contenu et bouton sélectionné
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+
+            // Sauvegarder l'onglet actif dans localStorage
+            localStorage.setItem('activeTab', tabId);
+        }
+
+        // Restaurer l'onglet actif au chargement
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTab = localStorage.getItem('activeTab');
+            if (savedTab) {
+                const tabButton = Array.from(document.querySelectorAll('.tab-button'))
+                    .find(btn => btn.textContent.includes(getTabName(savedTab)));
+                if (tabButton) {
+                    tabButton.click();
+                }
+            }
+        });
+
+        function getTabName(tabId) {
+            const names = {
+                'vue-ensemble': '📊 Vue d\'ensemble',
+                'planning-semaine': '📅 Planning',
+                'taches-quotidiennes': '✅ Tâches',
+                'lessive-vaisselle': '🧺 Lessive',
+                'repas': '🍽️ Repas',
+                'emploi': '💼 Recherche',
+                'revision-fils': '📚 Révisions',
+                'desencombrement': '🏠 Désencombrement',
+                'anniversaire': '🎉 Anniversaire'
+            };
+            return names[tabId] || '';
+        }
+
+        // Sauvegarder l'état des checkboxes
+        document.addEventListener('change', (e) => {
+            if (e.target.type === 'checkbox') {
+                const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                const states = Array.from(checkboxes).map(cb => cb.checked);
+                localStorage.setItem('checkboxStates', JSON.stringify(states));
+            }
+        });
+
+        // Restaurer l'état des checkboxes
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedStates = localStorage.getItem('checkboxStates');
+            if (savedStates) {
+                const states = JSON.parse(savedStates);
+                const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                checkboxes.forEach((cb, index) => {
+                    if (states[index] !== undefined) {
+                        cb.checked = states[index];
+                    }
+                });
+            }
+        });
+
+        // Bouton reset (optionnel)
+        function resetAllCheckboxes() {
+            if (confirm('Réinitialiser toutes les cases cochées ?')) {
+                document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+                localStorage.removeItem('checkboxStates');
+            }
+        }
+    </script>
+
+    <!-- Bouton reset flottant (optionnel) -->
+    <button onclick="resetAllCheckboxes()" style="
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 15px 25px;
+        border-radius: 50px;
+        cursor: pointer;
+        font-weight: 600;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        z-index: 1000;
+    ">
+        🔄 Reset tout
+    </button>
+
+</body>
+</html>
