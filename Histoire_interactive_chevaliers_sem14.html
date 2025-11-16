@@ -1,0 +1,801 @@
+Prompt histoire de verbes 
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L'Aventure du Chevalier Mystérieux</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #667eea;
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .story-section {
+            display: none;
+            animation: fadeIn 0.6s ease-in;
+        }
+        
+        .story-section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .story-text {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .verb-highlight {
+            background: linear-gradient(120deg, #ffd700 0%, #ffed4e 100%);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+            color: #333;
+            cursor: help;
+            position: relative;
+        }
+        
+        .verb-highlight:hover::after {
+            content: attr(data-info);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            white-space: nowrap;
+            font-size: 14px;
+            z-index: 100;
+            margin-bottom: 5px;
+        }
+        
+        .choices {
+            display: grid;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .choice-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 18px 25px;
+            font-size: 17px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            font-family: Arial, sans-serif;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .choice-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        
+        .choice-btn:active {
+            transform: translateY(-1px);
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+        
+        .chapter-title {
+            color: #764ba2;
+            font-size: 24px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .restart-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-family: Arial, sans-serif;
+        }
+        
+        .restart-btn:hover {
+            background: #ff5252;
+        }
+
+        .recap-box {
+            background: #e8f4f8;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .recap-title {
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏰 L'Aventure du Chevalier Mystérieux 🗡️</h1>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress"></div>
+        </div>
+
+        <!-- CHAPITRE 1 -->
+        <div class="story-section active" id="chapter1">
+            <h2 class="chapter-title">Chapitre 1 : Le Message Secret</h2>
+            <div class="story-text">
+                <p>Tu <span class="verb-highlight" data-info="ÊTRE - Indicatif présent">es</span> un jeune apprenti chevalier dans le royaume de Valoria. Ce matin, alors que tu <span class="verb-highlight" data-info="SUIVRE - Indicatif imparfait">suivais</span> ton entraînement habituel, un corbeau <span class="verb-highlight" data-info="AVOIR - Passé simple">eut</span> un comportement étrange. Il <span class="verb-highlight" data-info="METTRE - Passé simple">mit</span> une lettre à tes pieds.</p>
+                
+                <p>Le message <span class="verb-highlight" data-info="DIRE - Indicatif imparfait">disait</span> : "Le royaume <span class="verb-highlight" data-info="ÊTRE - Indicatif présent">est</span> en danger. <span class="verb-highlight" data-info="SUIVRE - Impératif présent">Suis</span> le chemin des pierres anciennes si tu <span class="verb-highlight" data-info="AIMER - Indicatif présent">aimes</span> ta patrie. Tu <span class="verb-highlight" data-info="DEVOIR - Conditionnel présent">devrais</span> <span class="verb-highlight" data-info="FAIRE - Infinitif présent">faire</span> vite !"</p>
+            </div>
+            
+            <div class="choices">
+                <button class="choice-btn" onclick="goToChapter(2, 10)">
+                    🏃 Partir immédiatement en suivant les pierres
+                </button>
+                <button class="choice-btn" onclick="goToChapter(3, 10)">
+                    👨‍🏫 Aller demander conseil au vieux maître d'armes
+                </button>
+            </div>
+        </div>
+
+        <!-- CHAPITRE 2 -->
+        <div class="story-section" id="chapter2">
+            <h2 class="chapter-title">Chapitre 2 : Le Chemin Périlleux</h2>
+            <div class="story-text">
+                <p>Tu <span class="verb-highlight" data-info="ALLER - Passé simple">allas</span> directement vers la forêt. Les pierres anciennes <span class="verb-highlight" data-info="ÊTRE - Indicatif imparfait">étaient</span> recouvertes de mousse. Tu <span class="verb-highlight" data-info="SUIVRE - Indicatif présent">suis</span> le sentier quand soudain, trois chemins <span class="verb-highlight" data-info="APPARAÎTRE - Présent">apparaissent</span> devant toi.</p>
+                
+                <p>Sur chaque chemin, une inscription : "Pour que tu <span class="verb-highlight" data-info="SUIVRE - Subjonctif présent">suives</span> la bonne voie, il faut que tu <span class="verb-highlight" data-info="FAIRE - Subjonctif présent">fasses</span> le bon choix."</p>
+            </div>
+            
+            <div class="choices">
+                <button class="choice-btn" onclick="goToChapter(4, 20)">
+                    ⬅️ Le chemin de gauche (des cris étranges viennent de là)
+                </button>
+                <button class="choice-btn" onclick="goToChapter(5, 20)">
+                    ➡️ Le chemin de droite (une lumière douce brille au loin)
+                </button>
+                <button class="choice-btn" onclick="goToChapter(6, 20)">
+                    ⬆️ Le chemin du centre (tout semble calme)
+                </button>
+            </div>
+        </div>
+
+        <!-- CHAPITRE 3 -->
+        <div class="story-section" id="chapter3">
+            <h2 class="chapter-title">Chapitre 3 : La Sagesse du Maître</h2>
+            <div class="story-text">
+                <p>Le vieux maître <span class="verb-highlight" data-info="AVOIR - Indicatif imparfait">avait</span> l'air préoccupé. "Je <span class="verb-highlight" data-info="SAVOIR - Indicatif imparfait">savais</span> que ce jour <span class="verb-highlight" data-info="VENIR - Conditionnel présent">viendrait</span>", <span class="verb-highlight" data-info="DIRE - Passé simple">dit-il</span>.</p>
+                
+                <p>"<span class="verb-highlight" data-info="SUIVRE - Impératif présent">Suis</span> mes conseils : tu <span class="verb-highlight" data-info="AVOIR - Futur simple">auras</span> besoin de courage. Quand tu <span class="verb-highlight" data-info="ALLER - Futur simple">iras</span> dans la forêt, il faudra que tu <span class="verb-highlight" data-info="ÊTRE - Subjonctif présent">sois</span> prudent. <span class="verb-highlight" data-info="METTRE - Impératif présent">Mets</span> cette amulette, elle te protégera."</p>
+                
+                <p>Il te <span class="verb-highlight" data-info="DIRE - Indicatif présent">dit</span> encore : "Le dragon <span class="verb-highlight" data-info="FAIRE - Indicatif présent">fait</span> régner la terreur. Tu <span class="verb-highlight" data-info="DEVOIR - Conditionnel présent">devrais</span> <span class="verb-highlight" data-info="SUIVRE - Infinitif présent">suivre</span> le chemin des lumières."</p>
+            </div>
+            
+            <div class="choices">
+                <button class="choice-btn" onclick="goToChapter(5, 20)">
+                    ✨ Suivre le conseil : chercher le chemin des lumières
+                </button>
+                <button class="choice-btn" onclick="goToChapter(4, 20)">
+                    ⚔️ Ignorer le conseil et foncer vers les cris (le danger t'attire)
+                </button>
+            </div>
+        </div>
+
+        <!-- CHAPITRE 4 -->
+        <div class="story-section" id="chapter4">
+            <h2 class="chapter-title">Chapitre 4 : Le Piège des Ombres</h2>
+            <div class="story-text">
+                <p>Les cris <span class="verb-highlight" data-info="ÊTRE - Indicatif imparfait">étaient</span> un piège ! Des créatures de l'ombre te <span class="verb-highlight" data-info="SUIVRE - Indicatif présent">suivent</span> maintenant. Tu <span class="verb-highlight" data-info="AVOIR - Indicatif présent">as</span> peur mais tu <span class="verb-highlight" data-info="DEVOIR - Indicatif présent">dois</span> rester calme.</p>
+                
+                <p>Une voix mystérieuse te <span class="verb-highlight" data-info="DIRE - Indicatif présent">dit</span> : "Si tu <span class="verb-highlight" data-info="VOULOIR - Indicatif présent">veux</span> survivre, il faut que tu <span class="verb-highlight" data-info="DIRE - Subjonctif présent">dises</span> le mot de passe ancien. Il faut aussi que tu <span class="verb-highlight" data-info="METTRE - Subjonctif présent">mettes</span> ta main sur la pierre sacrée."</p>
+                
+                <p>Heureusement, tu <span class="verb-highlight" data-info="AVOIR - Indicatif présent">as</span> appris les légendes anciennes !</p>
+            </div>
+            
+            <div class="choices">
+                <button class="choice-btn" onclick="goToChapter(7, 35)">
+                    🗣️ Dire "Valoria Eternis" et toucher la pierre
+                </button>
+                <button class="choice-btn" onclick="goToChapter(8, 35)">
+                    🏃 Courir aussi vite que possible
+                </button>
+            </div>
+        </div>
+
+        <!-- CHAPITRE 5 -->
+        <div class="story-section" id="chapter5">
+            <h2 class="chapter-title">Chapitre 5 : Le Gardien de Lumière</h2>
+            <div class="story-text">
+                <p>La lumière te <span class="verb-highlight" data-info="MENER - Passé simple">mena</span> vers une clairière magique. Un vieil elfe <span class="verb-highlight" data-info="ÊTRE - Indicatif imparfait">était</span> là, gardien des secrets anciens.</p>
+                
+                <p>"Je <span class="verb-highlight" data-info="SUIVRE - Indicatif imparfait">suivais</span> ta progression", <span class="verb-highlight" data-info="DIRE - Passé simple">dit-il</span>. "Tu <span class="verb-highlight" data-info="AVOIR - Indicatif présent">as</span> <span class="verb-highlight" data-info="FAIRE - Participe passé">fait</span> preuve de sagesse. Le dragon <span class="verb-highlight" data-info="ÊTRE - Indicatif présent">est</span> en réalité ensorcelé. Il <span class="verb-highlight" data-info="SUIVRE - Indicatif imparfait">suivait</span> autrefois les lois du royaume avec honneur."</p>
+                
+                <p>"Pour le libérer, tu <span class="verb-highlight" data-info="DEVOIR - Futur simple">devras</span> <span class="verb-highlight" data-info="SUIVRE - Infinitif présent">suivre</span> ces instructions : tu <span class="verb-highlight" data-info="ALLER - Futur simple">iras</span> jusqu'à sa grotte, tu <span class="verb-highlight" data-info="METTRE - Futur simple">mettras</span> cette potion dans l'eau qu'il boit."</p>
+            </div>
+            
+            <div class="choices">
+                <button class="choice-btn" onclick="goToChapter(9, 50)">
+                    🧪 Accepter la mission et prendre la potion
+                </button>
+                <button class="choice-btn" onclick="goToChapter(10, 40)">
+                    🤔 Demander plus d'explications sur le sortilège
+                </button>
+            </div>
+        </div>
+
+        <!-- CHAPITRE 6 -->
+        <div class="story-section" id="chapter6">
+            <h2 class="chapter-title">Chapitre 6 : Le Calme Trompeur</h2>
+            <div class="story-text">
+                <p>Le chemin <span class="verb-highlight" data-info="ÊTRE - Indicatif imparfait">était</span> effectivement calme... trop calme. Tu <span class="verb-highlight" data-info="MARCHER - Indicatif imparfait">marchais</span> depuis une heure quand tu <span class="verb-highlight" data-info="ENTENDRE - Passé simple">entendis</span> un bruissement.</p>
+                
+                <p>Devant toi, une femme mystérieuse <span class="verb-highlight" data-info="APPARAÎTRE - Passé simple">apparut</span>. "Je <span class="verb-highlight" data-info="SUIVRE - Indicatif présent">suis</span> la messagère du dragon", <span class="verb-highlight" data-info="DIRE - Passé simple">dit-elle</span>. "Il <span class="verb-highlight" data-info="VOULOIR - Indicatif présent">veut</span> que tu <span class="verb-highlight" data-info="SAVOIR - Subjonctif présent">saches</span> la vérité. Il faut que tu <span class="verb-highlight" data-info="SUIVRE - Subjonctif présent">suives</span> ton cœur, pas les ordres."</p>
+                
+                <p>"Le dragon ne <span class="verb-highlight" data-info="ÊTRE - Indicatif présent">est</span> pas le vrai ennemi. Il <span class="verb-highlight" data-info="AVOIR - Indicatif présent">a</span> été ensorcelé par le conseiller du roi."</p>
+            </div>
+            
+            <div class="choices">
+                <button class="choice-btn" onclick="goToChapter(11, 45)">
+                    👂 Écouter son histoire complète
+                </button>
+                <button class="choice-btn" onclick="goToChapter(12, 45)">
+                    ⚠️ Rester méfiant et continuer prudemment
+                </button>
+            </div>
+        </div>
+
+        <!-- CHAPITRE 7 -->
+        <div class="story-section" id="chapter7">
+            <h2 class="chapter-title">Chapitre 7 : La Magie Ancienne</h2>
+            <div class="story-text">
+                <p>Dès que tu <span class="verb-highlight" data-info="DIRE - Passé simple">dis</span> les mots magiques, les créatures <span class="verb-highlight" data-info="DISPARAÎTRE - Passé simple">disparurent</span> ! La pierre <span class="verb-highlight" data-info="BRILLER - Passé simple">brilla</span> d'une lumière pure.</p>
+                
+                <p>Une vision <span class="verb-highlight" data-info="APPARAÎTRE - Passé simple">apparut</span> : "Tu <span class="verb-highlight" data-info="AVOIR - Indicatif présent">as</span> prouvé ta valeur. Tu <span class="verb-highlight" data-info="SUIVRE - Indicatif présent">suis</span> le vrai chemin du héros. Tu <span class="verb-highlight" data-info="DEVOIR - Futur simple">devras</span> <span class="verb-highlight" data-info="FAIRE - Infinitif présent">faire</span> un dernier choix difficile."</p>
+                
+                <p>Un portail magique <span class="verb-highlight" data-info="OUVRIR - Passé simple">ouvrit</span>. De l'autre côté, tu <span class="verb-highlight" data-info="VOIR - Indicatif présent">vois</span> deux destinations.</p>
+            </div>
+            
+            <div class="choices">
+                <button class="choice-btn" onclick="goToChapter(9, 50)">
+                    🐉 Le portail menant directement au dragon
+                </button>
+                <button class="choice-btn" onclick="goToChapter(13, 50)">
+                    🏰 Le portail menant au château (découvrir la vérité)
+                </button>
+            </div>
+        </div>
+
+        <!-- CHAPITRE 8 -->
+        <div class="story-section" id="chapter8">
+            <h2 class="chapter-title">Chapitre 8 : La Fuite Désespérée</h2>
+            <div class="story-text">
+                <p>Tu <span class="verb-highlight" data-info="COURIR - Passé simple">courus</span> de toutes tes forces ! Les créatures te <span class="verb-highlight" data-info="SUIVRE - Indicatif imparfait">suivaient</span> en hurlant. Tu <span class="verb-highlight" data-info="AVOIR - Indicatif imparfait">avais</span> le souffle court.</p>
+                
+                <p>Soudain, tu <span class="verb-highlight" data-info="VOIR - Passé simple">vis</span> une rivière. "<span class="verb-highlight" data-info="SUIVRE - Impératif présent">Suis</span> le courant !" te <span class="verb-highlight" data-info="DIRE - Passé simple">dit</span> une voix dans ta tête. Les créatures ne <span class="verb-highlight" data-info="POUVOIR - Indicatif présent">peuvent</span> pas traverser l'eau bénite.</p>
+                
+                <p>De l'autre côté de la rivière, tu <span class="verb-highlight" data-info="ÊTRE - Indicatif présent">es</span> enfin en sécurité. Tu <span class="verb-highlight" data-info="AVOIR - Indicatif présent">as</span> survécu, mais tu <span class="verb-highlight" data-info="AVOIR - Indicatif présent">as</span> perdu du temps précieux.</p>
+            </div>
+            
+            <div class="choices">
+                <button class="choice-btn" onclick="goToChapter(14, 60)">
+                    🗺️ Chercher un nouveau chemin vers le dragon
+                </button>
+                <button class="choice-btn" onclick="goToChapter(13, 55)">
+                    🏰 Retourner au château demander de l'aide
+                </button>
+            </div>
+        </div>
+
+        <!-- CHAPITRE 9 -->
+        <div class="story-section" id="chapter9">
+            <h2 class="chapter-title">Chapitre 9 : Face au Dragon</h2>
+            <div class="story-text">
+                <p>Tu <span class="verb-highlight" data-info="ARRIVER - Passé simple">arrivas</span> devant la grotte. Le dragon <span class="verb-highlight" data-info="ÊTRE - Indicatif imparfait">était</span> immense, magnifique et triste. Ses yeux <span class="verb-highlight" data-info="BRILLER - Indicatif imparfait">brillaient</span> d'une lumière étrange, signe du sortilège.</p>
+                
+                <p>"Qui <span class="verb-highlight" data-info="ÊTRE - Indicatif présent">es</span>-tu ?" <span class="verb-highlight" data-info="RUGIR - Passé simple">rugit-il</span>. "Pourquoi me <span class="verb-highlight" data-info="SUIVRE - Indicatif présent">suis</span>-tu jusqu'ici ? Je ne <span class="verb-highlight" data-info="VOULOIR - Indicatif présent">veux</span> faire de mal à personne, mais je ne <span class="verb-highlight" data-info="POUVOIR - Indicatif présent">peux</span> pas contrôler ma colère !"</p>
+                
+                <p>Tu <span class="verb-highlight" data-info="VOIR - Indicatif présent">vois</span> sa souffrance. Il faut que tu <span class="verb-highlight" data-info="AGIR - Subjonctif présent">agisses</span> vite.</p>
+            </div>
+            
+            <div class="choices">
+                <button class="choice-btn" onclick="goToChapter(15, 75)">
+                    💧 Verser discrètement la potion dans son eau
+                </button>
+                <button class="choice-btn" onclick="goToChapter(16, 70)">
+                    💬 Lui parler et lui expliquer que tu veux l'aider
+                </button>
+            </div>
+        </div>
+
+        <!-- CHAPITRE 10 -->
+        <div class="story-section" id="chapter10">
+            <h2 class="chapter-title">Chapitre 10 : Les Secrets Révélés</h2>
+            <div class="story-text">
+                <p>L'elfe <span class="verb-highlight" data-info="ÊTRE - Passé simple">fut</span> impressionné par ta prudence. "Tu <span class="verb-highlight" data-info="AVOIR - Indicatif présent">as</span> raison de vouloir comprendre", <span class="verb-highlight" data-info="DIRE - Passé simple">dit-il</span>.</p>
+                
+                <p>"Il y a longtemps, le dragon et le roi <span class="verb-highlight" data-info="ÊTRE - Indicatif imparfait">étaient</span> amis. Ils <span class="verb-highlight" data-info="SUIVRE - Indicatif imparfait">suivaient</span> ensemble le code de l'honneur. Mais le conseiller <span class="verb-highlight" data-info="VOULOIR - Passé simple">voulut</span> le pouvoir. Il <span class="verb-highlight" data-info="METTRE - Passé simple">mit</span> un sortilège sur le dragon pour qu'il <span class="verb-highlight" data-info="ATTAQUER - Subjonctif imparfait">attaquât</span> le royaume."</p>
+                
+                <p>"Cette potion <span class="verb-highlight" data-info="DEVOIR - Conditionnel présent">devrait</span> <span class="verb-highlight" data-info="BRISER - Infinitif présent">briser</span> le sortilège. Mais attention, si le dragon te <span class="verb-highlight" data-info="VOIR - Indicatif présent">voit</span>, il faudra que tu <span class="verb-highlight" data-info="ÊTRE - Subjonctif présent">sois</span> très rapide !"</p>
+            </div>
+            
+            <div class="choices">
+                <button class="choice-btn" onclick="goToChapter(9, 60)">
+                    🎯 Partir immédiatement accomplir la mission
+                </button>
+                <button class="choice-btn" onclick="goToChapter(17, 65)">
+                    🔍 Demander comment capturer le conseiller traître
+                </button>
+            </div>
+        </div>
+
+        <!-- CHAPITRE 11 -->
+        <div class="story-section" id="chapter11">
+            <h2 class="chapter-title">Chapitre 11 : L'Histoire Cachée</h2>
+            <div class="story-text">
+                <p>La femme commença son récit : "Autrefois, le dragon <span class="verb-highlight" data-info="SUIVRE - Indicatif imparfait">suivait</span> les ordres du roi avec loyauté. Ils <span class="verb-highlight" data-info="ÊTRE - Indicatif imparfait">étaient</span> les meilleurs alliés du royaume."</p>
+                
+                <p>"Le conseiller <span class="verb-highlight" data-info="VOULOIR - Passé simple">voulut</span> tout détruire. Il <span class="verb-highlight" data-info="FAIRE - Passé simple">fit</span> croire au roi que le dragon <span class="verb-highlight" data-info="DEVENIR - Indicatif imparfait">devenait</span> dangereux. Puis il <span class="verb-highlight" data-info="METTRE - Passé simple">mit</span> un sortilège pour que cela <span class="verb-highlight" data-info="DEVENIR - Subjonctif présent">devienne</span> réalité."</p>
+                
+                <p>"Maintenant, le dragon <span class="verb-highlight" data-info="DIRE - Indicatif présent">dit</span> toujours qu'il <span class="verb-highlight" data-info="VOULOIR - Indicatif présent">veut</span> <span class="verb-highlight" data-info="ÊTRE - Infinitif présent">être</span> libre, mais il ne <span class="verb-highlight" data-info="POUVOIR - Indicatif présent">peut</span> pas contrôler sa rage. Il faut que quelqu'un <span class="verb-highlight" data-info="ALLER - Subjonctif présent">aille</span> au château dénoncer le conseiller !"</p>
+            </div>
+            
+            <div class="choices">
+                <button class="choice-btn" onclick="goToChapter(13, 70)">
+                    🏰 Aller au château dénoncer le conseiller
+                </button>
+                <button class="choice-btn" onclick="goToChapter(9, 65)">
+                    🐉 Aller d'abord libérer le dragon du sortilège
+                </button>
+            </div>
+        </div>
+
+        <!-- CHAPITRE 12 -->
+        <div class="story-section" id="chapter12">
+            <h2 class="chapter-title">Chapitre 12 : La Prudence Récompensée</h2>
+            <div class="story-text">
+                <p>Tu <span class="verb-highlight" data-info="AVOIR - Passé simple">eus</span> raison d'<span class="verb-highlight" data-info="ÊTRE - Infinitif présent">être</span> prudent ! En continuant, tu <span class="verb-highlight" data-info="DÉCOUVRIR - Passé simple">découvris</span> que la femme <span class="verb-highlight" data-info="SUIVRE - Indicatif imparfait">suivait</span> effectivement les ordres du conseiller pour te piéger !</p>
+                
+                <p>Heureusement, tu ne <span class="verb-highlight" data-info="SUIVRE - Passé simple">suivis</span> pas ses conseils. Tu <span class="verb-highlight" data-info="TROUVER - Passé simple">trouvas</span> un parchemin tombé de sa poche. Il <span class="verb-highlight" data-info="DIRE - Indicatif imparfait">disait</span> : "Il faut que l'apprenti chevalier <span class="verb-highlight" data-info="ALLER - Subjonctif présent">aille</span> au château. Là, je <span class="verb-highlight" data-info="POUVOIR - Futur simple">pourrai</span> l'<span class="verb-highlight" data-info="ÉLIMINER - Infinitif présent">éliminer</span>."</p>
+                
+                <p>Maintenant tu <span class="verb-highlight" data-info="SAVOIR - Indicatif présent">sais</span> la vérité ! Le vrai ennemi <span class="verb-highlight" data-info="ÊTRE - Indicatif présent">est</span> le conseiller du roi.</p>
+            </div>
+            
+            <div class="choices">
+                <button class="choice-btn" onclick="goToChapter(18, 80)">
+                    🎭 Faire semblant de suivre le piège pour capturer le conseiller
+                </button>
+                <button class="choice-btn" onclick="goToChapter(9, 75)">
+                    🐉 Aller directement libérer le dragon avec ce que tu sais
+                </button>
+            </div>
+        </div>
+
+        <!-- CHAPITRE 13 -->
+        <div class="story-section" id="chapter13">
+            <h2 class="chapter-title">Chapitre 13 : L'Audience Royale</h2>
+            <div class="story-text">
+                <p>Tu <span class="verb-highlight" data-info="ARRIVER - Passé simple">arrivas</span> au château. Le roi <span class="verb-highlight" data-info="ÊTRE - Indicatif imparfait">était</span> en pleine audience. Le conseiller <span class="verb-highlight" data-info="ÊTRE - Indicatif imparfait">était</span> à ses côtés, souriant d'un air mauvais.</p>
+                
+                <p>"Sire", <span class="verb-highlight" data-info="DIRE - Passé simple">dis</span>-tu, "je <span class="verb-highlight" data-info="DEVOIR - Indicatif présent">dois</span> vous <span class="verb-highlight" data-info="DIRE - Infinitif présent">dire</span> quelque chose d'important. Le dragon ne <span class="verb-highlight" data-info="ÊTRE - Indicatif présent">est</span> pas l'ennemi ! Il <span class="verb-highlight" data-info="SUIVRE - Indicatif imparfait">suivait</span> vos ordres fidèlement avant d'<span class="verb-highlight" data-info="ÊTRE - Infinitif présent">être</span> ensorcelé !"</p>
+                
+                <p>Le conseiller <span class="verb-highlight" data-info="DEVENIR - Passé simple">devint</span> pâle. "Il faut que vous ne <span class="verb-highlight" data-info="ÉCOUTER - Subjonctif présent">écoutiez</span> pas cet enfant !" <span class="verb-highlight" data-info="DIRE - Passé simple">dit-il</span> nerveusement.</p>
+            </div>
+            
+            <div class="choices">
+                <button class="choice-btn" onclick="goToChapter(19, 90)">
+                    📜 Montrer les preuves que tu as trouvées
+                </button>
+                <button class="choice-btn" onclick="goToChapter(20, 85)">
+                    ⚔️ Défier le conseiller en duel pour prouver tes dires
+                </button>
+            </div>
+        </div>
+
+        <!-- CHAPITRE 14 -->
+        <div class="story-section" id="chapter14">
+            <h2 class="chapter-title">Chapitre 14 : Le Nouveau Départ</h2>
+            <div class="story-text">
+                <p>Après avoir traversé la rivière, tu <span class="verb-highlight" data-info="SUIVRE - Passé simple">suivis</span> un ancien sentier. Tu <span class="verb-highlight" data-info="ÊTRE - Indicatif imparfait">étais</span> fatigué mais déterminé.</p>
+                
+                <p>Un vieil ermite <span class="verb-highlight" data-info="APPARAÎTRE - Passé simple">apparut</span>. "Je <span class="verb-highlight" data-info="SUIVRE - Indicatif imparfait">suivais</span> ton périple", <span class="verb-highlight" data-info="DIRE - Passé simple">dit-il</span>. "Tu <span class="verb-highlight" data-info="AVOIR - Indicatif présent">as</span> survécu aux créatures d'ombre. Cela <span class="verb-highlight" data-info="MONTRER - Indicatif présent">montre</span> que tu <span class="verb-highlight" data-info="AVOIR - Indicatif présent">as</span> du potentiel."</p>
+                
+                <p>"<span class="verb-highlight" data-info="PRENDRE - Impératif présent">Prends</span> cette carte. Elle te <span class="verb-highlight" data-info="MENER - Futur simple">mènera</span> directement au dragon. Mais tu <span class="verb-highlight" data-info="DEVOIR - Futur simple">devras</span> <span class="verb-highlight" data-info="ÊTRE - Infinitif présent">être</span> malin pour le libérer."</p>
+            </div>
+            
+            <div class="choices">
+                <button class="choice-btn" onclick="goToChapter(9, 75)">
+                    🗺️ Suivre la carte vers le dragon
+                </button>
+                <button class="choice-btn" onclick="goToChapter(21, 70)">
+                    🧙 Demander à l'ermite de t'apprendre la magie
+                </button>
+            </div>
+        </div>
+
+        <!-- CHAPITRE 15 -->
+        <div class="story-section" id="chapter15">
+            <h2 class="chapter-title">Chapitre 15 : La Libération</h2>
+            <div class="story-text">
+                <p>Pendant que le dragon <span class="verb-highlight" data-info="DORMIR - Indicatif imparfait">dormait</span>, tu <span class="verb-highlight" data-info="VERSER - Passé simple">versas</span> discrètement la potion dans son eau. Ton cœur <span class="verb-highlight" data-info="BATTRE - Indicatif imparfait">battait</span> très fort.</p>
+                
+                <p>Soudain, le dragon <span class="verb-highlight" data-info="SE RÉVEILLER - Passé simple">se réveilla</span> ! Il <span class="verb-highlight" data-info="BOIRE - Passé simple">but</span> longuement. Ses yeux <span class="verb-highlight" data-info="CHANGER - Passé simple">changèrent</span> de couleur ! La lumière maléfique <span class="verb-highlight" data-info="DISPARAÎTRE - Passé simple">disparut</span>.</p>
+                
+                <p>"Que... que m'<span class="verb-highlight" data-info="ARRIVER - Indicatif présent">arrive</span>-t-il ? Je me <span class="verb-highlight" data-info="SENTIR - Indicatif présent">sens</span> libre !" <span class="verb-highlight" data-info="DIRE - Passé simple">dit</span> le dragon. "C'<span class="verb-highlight" data-info="ÊTRE - Indicatif présent">est</span> toi qui m'<span class="verb-highlight" data-info="AVOIR - Indicatif présent">as</span> sauvé ! Je te <span class="verb-highlight" data-info="SUIVRE - Futur simple">suivrai</span> partout maintenant. Que <span class="verb-highlight" data-info="VOULOIR - Subjonctif présent">veuilles</span>-tu <span class="verb-highlight" data-info="FAIRE - Infinitif présent">faire</span> ?"</p>
+            </div>
+            
+            <div class="choices">
+                <button class="choice-btn" onclick="goToChapter(22, 95)">
+                    🏰 Retourner ensemble au château révéler la vérité
+                </button>
+                <button class="choice-btn" onclick="goToChapter(23, 90)">
+                    🌅 Profiter d'abord de ce moment et faire connaissance
+                </button>
+            </div>
+        </div>
+
+        <!-- CHAPITRE 16 -->
+        <div class="story-section" id="chapter16">
+            <h2 class="chapter-title">Chapitre 16 : La Voie du Dialogue</h2>
+            <div class="story-text">
+                <p>"Dragon, je <span class="verb-highlight" data-info="VOULOIR - Indicatif présent">veux</span> t'<span class="verb-highlight" data-info="AIDER - Infinitif présent">aider</span>", <span class="verb-highlight" data-info="DIRE - Passé simple">dis</span>-tu courageusement. "Je <span class="verb-highlight" data-info="SAVOIR - Indicatif présent">sais</span> que tu <span class="verb-highlight" data-info="ÊTRE - Indicatif présent">es</span> ensorcelé. Ce n'<span class="verb-highlight" data-info="ÊTRE - Indicatif présent">est</span> pas ta faute !"</p>
+                
+                <p>Le dragon <span class="verb-highlight" data-info="S'ARRÊTER - Passé simple">s'arrêta</span>, surpris. "Comment <span class="verb-highlight" data-info="SAVOIR - Indicatif présent">sais</span>-tu cela ? Qui <span class="verb-highlight" data-info="ÊTRE - Indicatif présent">es</span>-tu vraiment ? Peu de gens <span class="verb-highlight" data-info="OSER - Indicatif présent">osent</span> me <span class="verb-highlight" data-info="PARLER - Infinitif présent">parler</span> ainsi."</p>
+                
+                <p>"J'<span class="verb-highlight" data-info="AVOIR - Indicatif présent">ai</span> une potion qui <span class="verb-highlight" data-info="POUVOIR - Conditionnel présent">pourrait</span> te <span class="verb-highlight" data-info="LIBÉRER - Infinitif présent">libérer</span>. Il faudrait que tu me <span class="verb-highlight" data-info="FAIRE - Subjonctif présent">fasses</span> confiance. Il faudrait aussi que tu la <span class="verb-highlight" data-info="BOIRE - Subjonctif présent">boives</span>."</p>
+            </div>
+            
+            <div class="choices">
+                <button class="choice-btn" onclick="goToChapter(15, 85)">
+                    🤝 Le dragon accepte ! Lui donner la potion
+                </button>
+                <button class="choice-btn" onclick="goToChapter(24, 80)">
+                    📖 D'abord lui raconter toute l'histoire du sortilège
+                </button>
+            </div>
+        </div>
+
+        <!-- CHAPITRE 17 -->
+        <div class="story-section" id="chapter17">
+            <h2 class="chapter-title">Chapitre 17 : Le Plan Parfait</h2>
+            <div class="story-text">
+                <p>"Excellente question !" <span class="verb-highlight" data-info="DIRE - Passé simple">dit</span> l'elfe. "Il faudra que tu <span class="verb-highlight" data-info="ÊTRE - Subjonctif présent">sois</span> malin. Le conseiller <span class="verb-highlight" data-info="AVOIR - Indicatif présent">a</span> une faiblesse : son orgueil."</p>
+                
+                <p>"Une fois que le dragon <span class="verb-highlight" data-info="ÊTRE - Futur simple">sera</span> libre, il faudra qu'il te <span class="verb-highlight" data-info="SUIVRE - Subjonctif présent">suive</span> au château. Là, devant tout le monde, le conseiller ne <span class="verb-highlight" data-info="POUVOIR - Futur simple">pourra</span> pas <span class="verb-highlight" data-info="NIER - Infinitif présent">nier</span> ses crimes."</p>
+                
+                <p>"Le dragon <span class="verb-highlight" data-info="DEVOIR - Conditionnel présent">devrait</span> <span class="verb-highlight" data-info="DIRE - Infinitif présent">dire</span> devant tous qu'il <span class="verb-highlight" data-info="SUIVRE - Indicatif imparfait">suivait</span> autrefois le code de l'honneur. Le conseiller <span class="verb-highlight" data-info="RÉAGIR - Futur simple">réagira</span> et se trahira lui-même !"</p>
+            </div>
+            
+            <div class="choices">
+                <button class="choice-btn" onclick="goToChapter(9, 70)">
+                    ✅ Parfait ! Aller libérer le dragon maintenant
+                </button>
+                <button class="choice-btn" onclick="goToChapter(25, 75)">
+                    🛡️ Demander une protection magique supplémentaire
+                </button>
+            </div>
+        </div>
+
+        <!-- CHAPITRE 18 -->
+        <div class="story-section" id="chapter18">
+            <h2 class="chapter-title">Chapitre 18 : Le Piège Retourné</h2>
+            <div class="story-text">
+                <p>Tu <span class="verb-highlight" data-info="DÉCIDER - Passé simple">décidas</span> d'<span class="verb-highlight" data-info="ÊTRE - Infinitif présent">être</span> plus malin que le conseiller. Tu <span class="verb-highlight" data-info="FAIRE - Passé simple">fis</span> semblant de <span class="verb-highlight" data-info="SUIVRE - Infinitif présent">suivre</span> le plan de la messagère.</p>
+                
+                <p>Au château, le conseiller t'<span class="verb-highlight" data-info="ATTENDRE - Indicatif imparfait">attendait</span>. "Ah ! Tu <span class="verb-highlight" data-info="ÊTRE - Indicatif présent">es</span> venu !" <span class="verb-highlight" data-info="DIRE - Passé simple">dit-il</span> avec un sourire mauvais. "Je <span class="verb-highlight" data-info="SUIVRE - Indicatif imparfait">suivais</span> ta progression. Il faut maintenant que tu <span class="verb-highlight" data-info="MOURIR - Subjonctif présent">meures</span> !"</p>
+                
+                <p>Mais tu <span class="verb-highlight" data-info="AVOIR - Indicatif imparfait">avais</span> préparé ton piège ! Des gardes loyaux que tu <span class="verb-highlight" data-info="AVOIR - Indicatif imparfait">avais</span> prévenus <span class="verb-highlight" data-info="SURGIR - Passé simple">surgirent</span> et l'<span class="verb-highlight" data-info="ENTOURER - Passé simple">entourèrent</span>.</p>
+            </div>
+            
+            <div class="choices">
+                <button class="choice-btn" onclick="goToChapter(26, 95)">
+                    👑 Le présenter au roi avec les preuves
+                </button>
+                <button class="choice-btn" onclick="goToChapter(27, 90)">
+                    💬 Le faire avouer publiquement ses crimes
+                </button>
+            </div>
+        </div>
+
+        <!-- CHAPITRE 19 -->
+        <div class="story-section" id="chapter19">
+            <h2 class="chapter-title">Chapitre 19 : Les Preuves Accablantes</h2>
+            <div class="story-text">
+                <p>Tu <span class="verb-highlight" data-info="SORTIR - Passé simple">sortis</span> les parchemins que tu <span class="verb-highlight" data-info="AVOIR - Indicatif imparfait">avais</span> trouvés. "Ces documents <span class="verb-highlight" data-info="DIRE - Indicatif présent">disent</span> tout ! Le conseiller <span class="verb-highlight" data-info="AVOIR - Passé simple">eut</span> un plan pour <span class="verb-highlight" data-info="DÉTRUIRE - Infinitif présent">détruire</span> l'alliance entre vous et le dragon."</p>
+                
+                <p>Le roi <span class="verb-highlight" data-info="LIRE - Passé simple">lut</span> attentivement. Son visage <span class="verb-highlight" data-info="DEVENIR - Passé simple">devint</span> de plus en plus sombre. "Ces écrits <span class="verb-highlight" data-info="ÊTRE - Indicatif présent">sont</span> de ta main !" <span class="verb-highlight" data-info="DIRE - Passé simple">dit-il</span> au conseiller.</p>
+                
+                <p>"Il faut que tu <span class="verb-highlight" data-info="DIRE - Subjonctif présent">dises</span> la vérité ! Tu <span class="verb-highlight" data-info="SUIVRE - Indicatif imparfait">suivais</span> un plan diabolique. Tu <span class="verb-highlight" data-info="METTRE - Passé simple">mis</span> un sortilège sur notre plus fidèle allié !"</p>
+            </div>
+            
+            <div class="choices">
+                <button class="choice-btn" onclick="goToChapter(28, 100)">
+                    ⚖️ Le conseiller avoue tout !
+                </button>
+            </div>
+        </div>
+
+        <!-- CHAPITRE 20 -->
+        <div class="story-section" id="chapter20">
+            <h2 class="chapter-title">Chapitre 20 : Le Duel d'Honneur</h2>
+            <div class="story-text">
+                <p>"Je te défie en duel !" <span class="verb-highlight" data-info="DIRE - Passé simple">dis</span>-tu au conseiller. "Si tu <span class="verb-highlight" data-info="ÊTRE - Indicatif présent">es</span> innocent, tu <span class="verb-highlight" data-info="DEVOIR - Conditionnel présent">devrais</span> <span class="verb-highlight" data-info="ACCEPTER - Infinitif présent">accepter</span> !"</p>
+                
+                <p>Le conseiller <span class="verb-highlight" data-info="NE POUVOIR PAS - Passé simple">ne put</span> refuser devant toute la cour. Le combat <span class="verb-highlight" data-info="COMMENCER - Passé simple">commença</span>. Tu te <span class="verb-highlight" data-info="BATTRE - Indicatif imparfait">battais</span> avec courage.</p>
+                
+                <p>Soudain, dans sa rage, le conseiller <span class="verb-highlight" data-info="UTILISER - Passé simple">utilisa</span> de la magie noire ! "Tu <span class="verb-highlight" data-info="VOIR - Indicatif présent">vois</span> !" <span class="verb-highlight" data-info="DIRE - Passé simple">dis</span>-tu au roi. "Il <span class="verb-highlight" data-info="SUIVRE - Indicatif présent">suit</span> la voie interdite de la magie noire ! C'<span class="verb-highlight" data-info="ÊTRE - Indicatif présent">est</span> la preuve de sa trahison !"</p>
+            </div>
+            
+            <div class="choices">
+                <button class="choice-btn" onclick="goToChapter(28, 100)">
+                    👑 Le roi comprend la vérité !
+                </button>
+            </div>
+        </div>
+
+        <!-- CHAPITRE 21 -->
+        <div class="story-section" id="chapter21">
+            <h2 class="chapter-title">Chapitre 21 : L'Apprentissage Magique</h2>
+            <div class="story-text">
+                <p>"Tu <span class="verb-highlight" data-info="VOULOIR - Indicatif présent">veux</span> apprendre la magie ?" <span class="verb-highlight" data-info="DIRE - Passé simple">dit</span> l'ermite. "C'<span class="verb-highlight" data-info="ÊTRE - Indicatif présent">est</span> sage. La magie <span class="verb-highlight" data-info="POUVOIR - Futur simple">pourra</span> t'<span class="verb-highlight" data-info="AIDER - Infinitif présent">aider</span> face au dragon."</p>
+                
+                <p>Il t'<span class="verb-highlight" data-info="ENSEIGNER - Passé simple">enseigna</span> un sortilège de protection et un de communication. "Ces sorts te <span class="verb-highlight" data-info="PERMETTRE - Futur simple">permettront</span> de <span class="verb-highlight" data-info="PARLER - Infinitif présent">parler</span> avec le dragon sans danger. Il faudra que tu <span class="verb-highlight" data-info="DIRE - Subjonctif présent">dises</span> les mots justes : 'Dracos Amicus'."</p>
+                
+                <p>"Avec ce sortilège, le dragon <span class="verb-highlight" data-info="COMPRENDRE - Futur simple">comprendra</span> que tu <span class="verb-highlight" data-info="VOULOIR - Indicatif présent">veux</span> <span class="verb-highlight" data-info="ÊTRE - Infinitif présent">être</span> son ami, pas son ennemi."</p>
+            </div>
+            
+            <div class="choices">
+                <button class="choice-btn" onclick="goToChapter(16, 85)">
+                    🐉 Parfait ! Aller voir le dragon avec cette nouvelle magie
+                </button>
+            </div>
+        </div>
+
+        <!-- CHAPITRE 22 -->
+        <div class="story-section" id="chapter22">
+            <h2 class="chapter-title">Chapitre 22 : Le Retour Triomphal</h2>
+            <div class="story-text">
+                <p>Toi et le dragon <span class="verb-highlight" data-info="VOLER - Passé simple">volâtes</span> ensemble vers le château. Les gens <span class="verb-highlight" data-info="AVOIR - Indicatif imparfait">avaient</span> peur au début, mais le dragon <span class="verb-highlight" data-info="DIRE - Passé simple">dit</span> d'une voix douce : "N'<span class="verb-highlight" data-info="AVOIR - Impératif présent">ayez</span> pas peur ! Je <span class="verb-highlight" data-info="ÊTRE - Indicatif présent">suis</span> libre maintenant !"</p>
+                
+                <p>Au château, le conseiller <span class="verb-highlight" data-info="DEVENIR - Passé simple">devint</span> blanc comme un linge. "Non ! Il <span class="verb-highlight" data-info="ÊTRE - Indicatif présent">est</span> impossible que le sortilège <span class="verb-highlight" data-info="ÊTRE - Subjonctif présent">soit</span> brisé !" <span class="verb-highlight" data-info="S'ÉCRIER - Passé simple">s'écria</span>-t-il.</p>
+                
+                <p>"Tu <span class="verb-highlight" data-info="VENIR - Indicatif présent">viens</span> d'<span class="verb-highlight" data-info="AVOUER - Infinitif présent">avouer</span> ton crime !" <span class="verb-highlight" data-info="DIRE - Passé simple">dit</span> le roi. "C'<span class="verb-highlight" data-info="ÊTRE - Indicatif imparfait">était</span> donc bien toi qui <span class="verb-highlight" data-info="AVOIR - Indicatif imparfait">avais</span> <span class="verb-highlight" data-info="METTRE - Participe passé">mis</span> ce sortilège !"</p>
+            </div>
+            
+            <div class="choices">
+                <button class="choice-btn" onclick="goToChapter(28, 100)">
+                    🎉 La vérité éclate au grand jour !
+                </button>
+            </div>
+        </div>
+
+        <!-- CHAPITRE 23 -->
+        <div class="story-section" id="chapter23">
+            <h2 class="chapter-title">Chapitre 23 : Une Nouvelle Amitié</h2>
+            <div class="story-text">
+                <p>"Je <span class="verb-highlight" data-info="VOULOIR - Indicatif présent">veux</span> te connaître", <span class="verb-highlight" data-info="DIRE - Passé simple">dis</span>-tu au dragon. "Pendant toutes ces années, tu <span class="verb-highlight" data-info="ÊTRE - Indicatif imparfait">étais</span> prisonnier du sortilège. Il faut maintenant que tu <span class="verb-highlight" data-info="REPRENDRE - Subjonctif présent">reprennes</span> ta vraie vie."</p>
+                
+                <p>Le dragon te <span class="verb-highlight" data-info="RACONTER - Passé simple">raconta</span> son histoire. "Autrefois, je <span class="verb-highlight" data-info="SUIVRE - Indicatif imparfait">suivais</span> le roi dans toutes ses batailles. Nous <span class="verb-highlight" data-info="ÊTRE - Indicatif imparfait">étions</span> comme des frères. Je ne <span class="verb-highlight" data-info="COMPRENDRE - Passé simple">compris</span> jamais pourquoi je <span class="verb-highlight" data-info="DEVENIR - Passé simple">devins</span> violent..."</p>
+                
+                <p>"Maintenant je <span class="verb-highlight" data-info="SAVOIR - Indicatif présent">sais</span> que ce n'<span class="verb-highlight" data-info="ÊTRE - Indicatif imparfait">était</span> pas ma faute. <span class="verb-highlight" data-info="ALLER - Impératif présent">Allons</span> ensemble voir le roi. Il faut qu'il <span class="verb-highlight" data-info="SAVOIR - Subjonctif présent">sache</span> la vérité !"</p>
+            </div>
+            
+            <div class="choices">
+                <button class="choice-btn" onclick="goToChapter(22, 95)">
+                    🏰 Partir ensemble vers le château
+                </button>
+            </div>
+        </div>
+
+        <!-- CHAPITRE 24 -->
+        <div class="story-section" id="chapter24">
+            <h2 class="chapter-title">Chapitre 24 : Le Récit Complet</h2>
+            <div class="story-text">
+                <p>Tu <span class="verb-highlight" data-info="RACONTER - Passé simple">racontas</span> toute l'histoire au dragon : comment le conseiller <span class="verb-highlight" data-info="VOULOIR - Passé simple">voulut</span> le pouvoir, comment il <span class="verb-highlight" data-
+info="METTRE - Passé simple">mit</span> le sortilège.</p>
+                
+                <p>Le dragon t'<span class="verb-highlight" data-info="ÉCOUTER - Passé simple">écouta</span> attentivement. Des larmes <span class="verb-highlight" data-info="COULER - Passé simple">coulèrent</span> de ses yeux. "Je <span class="verb-highlight" data-info="COMPRENDRE - Indicatif présent">comprends</span> maintenant ! Pendant toutes ces années, je <span class="verb-highlight" data-info="SUIVRE - Indicatif imparfait">suivais</span> des ordres qui n'<span class="verb-highlight" data-info="ÊTRE - Indicatif imparfait">étaient</span> pas les miens."</p>
+                
+                <p>"Je te <span class="verb-highlight" data-info="FAIRE - Indicatif présent">fais</span> confiance", <span class="verb-highlight" data-info="DIRE - Passé simple">dit</span>-il. "<span class="verb-highlight" data-info="DONNER - Impératif présent">Donne</span>-moi cette potion. Il faut que je <span class="verb-highlight" data-info="REDEVENIR - Subjonctif présent">redevienne</span> moi-même !"</p>
+            </div>
+            
+            <div class="choices">
+                <button class="choice-btn" onclick="goToChapter(15, 90)">
+                    🧪 Lui donner la potion libératrice
+                </button>
+            </div>
+        </div>
+
+        <!-- CHAPITRE 25 -->
+        <div class="story-section" id="chapter25">
+            <h2 class="chapter-title">Chapitre 25 : Le Bouclier Magique</h2>
+            <div class="story-text">
+                <p>"Sage décision !" <span class="verb-highlight" data-info="DIRE - Passé simple">dit</span> l'elfe. "Le conseiller <span class="verb-highlight" data-info="ÊTRE - Indicatif présent">est</span> puissant. Il <span class="verb-highlight" data-info="AVOIR - Indicatif présent">a</span> des sortilèges de défense. Il faudra que tu <span class="verb-highlight" data-info="AVOIR - Subjonctif présent">aies</span> cette protection."</p>
+                
+                <p>Il te <span class="verb-highlight" data-info="DONNER - Passé simple">donna</span> un médaillon brillant. "Ce bouclier magique te <span class="verb-highlight" data-info="PROTÉGER - Futur simple">protégera</span> contre ses attaques. Quand tu <span class="verb-highlight" data-info="ÊTRE - Futur simple">seras</span> face à lui, il faut que tu <span class="verb-highlight" data-info="METTRE - Subjonctif présent">mettes</span> ta main dessus et que tu <span class="verb-highlight" data-info="DIRE - Subjonctif présent">dises</span> 'Protego Veritas'."</p>
+                
+                <p>"Maintenant tu <span class="verb-highlight" data-info="AVOIR - Indicatif présent">as</span> tout ce qu'il te faut. <span class="verb-highlight" data-info="ALLER - Impératif présent">Va</span>, et que la justice <span class="verb-highlight" data-info="ÊTRE - Subjonctif présent">soit</span> faite !"</p>
+            </div>
+            
+            <div class="choices">
+                <button class="choice-btn" onclick="goToChapter(9, 80)">
+                    🐉 Partir vers le dragon avec confiance
+                </button>
+            </div>
+        </div>
+
+        <!-- CHAPITRE 26 -->
+        <div class="story-section" id="chapter26">
+            <h2 class="chapter-title">Chapitre 26 : La Justice Royale</h2>
+            <div class="story-text">
+                <p>Le roi <span class="verb-highlight" data-info="EXAMINER - Passé simple">examina</span> toutes les preuves que tu <span class="verb-highlight" data-info="AVOIR - Indicatif imparfait">avais</span> rassemblées. Son visage <span class="verb-highlight" data-info="DEVENIR - Passé simple">devint</span> grave.</p>
+                
+                <p>"Conseiller, tu <span class="verb-highlight" data-info="AVOIR - Indicatif présent">as</span> trahi ma confiance", <span class="verb-highlight" data-info="DIRE - Passé simple">dit-il</span> solennellement. "Tu <span class="verb-highlight" data-info="SUIVRE - Indicatif imparfait">suivais</span> un plan pour <span class="verb-highlight" data-info="DÉTRUIRE - Infinitif présent">détruire</span> notre royaume. Tu <span class="verb-highlight" data-info="METTRE - Passé simple">mis</span> un sortilège sur mon plus fidèle ami."</p>
+                
+                <p>"Je <span class="verb-highlight" data-info="VOULOIR - Indicatif imparfait">voulais</span> juste le pouvoir !" <span class="verb-highlight" data-info="AVOUER - Passé simple">avoua</span> finalement le conseiller. "Et toi, jeune héros, tu <span class="verb-highlight" data-info="AVOIR - Indicatif présent">as</span> tout gâché !"</p>
+            </div>
+            
+            <div class="choices">
+                <button class="choice-btn" onclick="goToChapter(28, 100)">
+                    ⚖️ Le conseiller est condamné !
+                </button>
+            </div>
+        </div>
+
+        <!-- CHAPITRE 27 -->
+        <div class="story-section" id="chapter27">
+            <h2 class="chapter-title">Chapitre 27 : L'Aveu Public</h2>
+            <div class="story-text">
+                <p>Devant toute la cour réunie, le conseiller <span class="verb-highlight" data-info="NE POUVOIR PAS - Passé simple">ne put</span> continuer à <span class="verb-highlight" data-info="MENTIR - Infinitif présent">mentir</span>. Trop de preuves l'<span class="verb-highlight" data-info="ACCABLER - Indicatif imparfait">accablaient</span>.</p>
+                
+                <p>"Oui ! C'<span class="verb-highlight" data-info="ÊTRE - Indicatif présent">est</span> moi !" <span class="verb-highlight" data-info="CRIER - Passé simple">cria</span>-t-il. "Je <span class="verb-highlight" data-info="METTRE - Passé simple">mis</span> ce sortilège sur le dragon ! Je <span class="verb-highlight" data-info="VOULOIR - Indicatif imparfait">voulais</span> que le royaume <span class="verb-highlight" data-info="AVOIR - Subjonctif imparfait">eût</span> besoin de moi ! Je <span class="verb-highlight" data-info="SUIVRE - Indicatif imparfait">suivais</span> mon propre plan pour <span class="verb-highlight" data-info="DEVENIR - Infinitif présent">devenir</span> indispensable !"</p>
+                
+                <p>Un silence profond <span class="verb-highlight" data-info="RÉGNER - Passé simple">régna</span> dans la salle. Tout le monde <span class="verb-highlight" data-info="AVOIR - Indicatif imparfait">avait</span> entendu son aveu.</p>
+            </div>
+            
+            <div class="choices">
+                <button class="choice-btn" onclick="goToChapter(28, 100)">
+                    👑 La justice triomphe !
+                </button>
+            </div>
+        </div>
+
+        <!-- CHAPITRE 28 - FINAL -->
+        <div class="story-section" id="chapter28">
+            <h2 class="chapter-title">🎉 Chapitre Final : Le Héros de Valoria 🎉</h2>
+            <div class="story-text">
+                <p>Le roi te <span class="verb-highlight" data-info="REGARDER - Passé simple">regarda</span> avec fierté. "Tu <span class="verb-highlight" data-info="AVOIR - Indicatif présent">as</span> sauvé notre royaume ! Tu <span class="verb-highlight" data-info="SUIVRE - Passé simple">suivis</span> ton cœur et ta sagesse. Tu <span class="verb-highlight" data-info="FAIRE - Passé simple">fis</span> preuve d'un courage exceptionnel."</p>
+                
+                <p>Le dragon <span class="verb-highlight" data-info="S'APPROCHER - Passé simple">s'approcha</span> et <span class="verb-highlight" data-info="DIRE - Passé simple">dit</span> : "Je te <span class="verb-highlight" data-info="SUIVRE - Futur simple">suivrai</span> toujours, mon ami. Tu m'<span class="verb-highlight" data-info="AVOIR - Indicatif présent">as</span> rendu ma liberté. Nous <span class="verb-highlight" data-info="ÊTRE - Indicatif présent">sommes</span> maintenant liés par une amitié éternelle."</p>
+                
+                <p>"À partir d'aujourd'hui", <span class="verb-highlight" data-info="DÉCLARER - Passé simple">déclara</span> le roi, "tu <span class="verb-highlight" data-info="ÊTRE - Futur simple">seras</span> le Chevalier Protecteur du royaume ! Tu <span class="verb-highlight" data-info="AVOIR - Futur simple">auras</span> l'honneur de <span class="verb-highlight" data-info="SUIVRE - Infinitif présent">suivre</span> la voie des héros légendaires. Que ton nom <span class="verb-highlight" data-info="ÊTRE - Subjonctif présent">soit</span> chanté dans tout le royaume !"</p>
+                
+                <p>Le peuple <span class="verb-highlight" data-info="ACCLAMER - Passé simple">acclama</span> ton nom. Tu <span class="verb-highlight" data-info="AVOIR - Indicatif imparfait">avais</span> réussi ta mission. Le royaume <span class="verb-highlight" data-info="ÊTRE - Indicatif imparfait">était</span> sauvé, le dragon <span class="verb-highlight" data-info="ÊTRE - Indicatif imparfait">était</span> libre, et une nouvelle ère de paix <span class="verb-highlight" data-info="COMMENCER - Passé simple">commença</span>.</p>
+            </div>
+
+            <div class="recap-box">
+                <div class="recap-title">🌟 Félicitations ! Tu as terminé l'aventure ! 🌟</div>
+                <p><strong>Ce que tu as appris :</strong></p>
+                <ul style="margin: 10px 0; padding-left: 25px;">
+                    <li>Les conjugaisons de <strong>SUIVRE</strong> et <strong>DIRE</strong> dans tous les temps</li>
+                    <li>Les conjugaisons d'<strong>ÊTRE</strong>, <strong>AVOIR</strong>, <strong>ALLER</strong>, <strong>AIMER</strong>, <strong>METTRE</strong> et <strong>FAIRE</strong></li>
+                    <li>L'utilisation naturelle de ces verbes dans des phrases complètes</li>
+                    <li>Les temps : présent, imparfait, passé simple, futur, conditionnel, subjonctif, impératif</li>
+                </ul>
+                <p style="margin-top: 15px;"><strong>💡 Astuce :</strong> Rejoue l'histoire en faisant d'autres choix pour réviser encore plus !</p>
+            </div>
+            
+            <button class="restart-btn" onclick="restartStory()">🔄 Recommencer l'aventure</button>
+        </div>
+
+    </div>
+
+    <script>
+        let currentProgress = 0;
+
+        function goToChapter(chapterNum, progress) {
+            // Cacher toutes les sections
+            const sections = document.querySelectorAll('.story-section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Afficher la nouvelle section
+            const newSection = document.getElementById('chapter' + chapterNum);
+            newSection.classList.add('active');
+            
+            // Mettre à jour la barre de progression
+            currentProgress = progress;
+            document.getElementById('progress').style.width = progress + '%';
+            
+            // Scroll vers le haut
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function restartStory() {
+            goToChapter(1, 0);
+        }
+
+        // Animation au survol des verbes
+        document.addEventListener('DOMContentLoaded', function() {
+            const highlights = document.querySelectorAll('.verb-highlight');
+            highlights.forEach(highlight => {
+                highlight.addEventListener('click', function() {
+                    this.style.transform = 'scale(1.1)';
+                    setTimeout(() => {
+                        this.style.transform = 'scale(1)';
+                    }, 200);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
