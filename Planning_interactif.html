@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mon Planning Hebdomadaire</title>
+    <style>
+        body { font-family: Arial; margin: 20px; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+        th { background-color: #4CAF50; color: white; }
+        .time { background-color: #f2f2f2; }
+        .task { cursor: pointer; }
+        .task:hover { background-color: #e6f7ff; }
+        .done { background-color: #d4edda; }
+    </style>
+</head>
+<body>
+    <h1>Mon Planning - Semaine du <span id="weekDate"></span></h1>
+    <table id="planning">
+        <tr>
+            <th class="time">Heure</th>
+            <th>Lundi</th>
+            <th>Mardi</th>
+            <th>Mercredi</th>
+            <th>Jeudi</th>
+            <th>Vendredi</th>
+            <th>Samedi</th>
+            <th>Dimanche</th>
+        </tr>
+        <!-- Les lignes seront ajoutées par JavaScript -->
+    </table>
+    <button onclick="addTask()">Ajouter une tâche</button>
+    <div id="taskForm" style="display: none; margin-top: 20px;">
+        <input type="text" id="newTask" placeholder="Nouvelle tâche">
+        <select id="daySelect">
+            <option value="0">Lundi</option>
+            <option value="1">Mardi</option>
+            <option value="2">Mercredi</option>
+            <option value="3">Jeudi</option>
+            <option value="4">Vendredi</option>
+            <option value="5">Samedi</option>
+            <option value="6">Dimanche</option>
+        </select>
+        <input type="time" id="timeSelect">
+        <button onclick="saveTask()">Enregistrer</button>
+    </div>
+
+    <script>
+        // Générer le planning vide
+        const hours = ["5h00", "6h00", "7h00", "17h00", "18h00", "19h00", "20h00", "21h00", "22h00"];
+        const days = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"];
+        let planning = Array(7).fill().map(() => Array(hours.length).fill(""));
+
+        // Exemple de tâches pré-remplies (à adapter)
+        planning[1][1] = "Promener chien (5h20-6h35)"; // Mardi 6h00
+        planning[0][7] = "Recherche emploi (19h30-20h30)"; // Lundi 20h00
+        planning[6][3] = "Batch cooking (14h-16h)"; // Dimanche 15h00
+
+        // Afficher le planning
+        function renderPlanning() {
+            const table = document.getElementById("planning");
+            // En-tête
+            let header = "<tr><th class='time'>Heure</th>";
+            days.forEach(day => header += `<th>${day}</th>`);
+            header += "</tr>";
+            table.innerHTML = header;
+
+            // Lignes horaires
+            hours.forEach((hour, hIndex) => {
+                let row = `<tr><td class='time'>${hour}</td>`;
+                days.forEach((_, dIndex) => {
+                    const task = planning[dIndex][hIndex];
+                    row += `<td class='task ${task.includes("(done)") ? "done" : ""}'
+                            onclick='toggleTask(${dIndex}, ${hIndex})'>${task.replace("(done)", "")}</td>`;
+                });
+                row += "</tr>";
+                table.innerHTML += row;
+            });
+        }
+
+        // Basculer tâche faite/non faite
+        function toggleTask(day, hour) {
+            if (planning[day][hour].includes("(done)")) {
+                planning[day][hour] = planning[day][hour].replace("(done)", "");
+            } else if (planning[day][hour]) {
+                planning[day][hour] += " (done)";
+            }
+            renderPlanning();
+        }
+
+        // Ajouter une tâche
+        function addTask() {
+            document.getElementById("taskForm").style.display = "block";
+        }
+
+        // Sauvegarder une tâche
+        function saveTask() {
+            const task = document.getElementById("newTask").value;
+            const day = parseInt(document.getElementById("daySelect").value);
+            const time = document.getElementById("timeSelect").value;
+            const hourIndex = hours.findIndex(h => h.startsWith(time.split(":")[0] + "h"));
+
+            if (hourIndex !== -1) {
+                planning[day][hourIndex] = task;
+                renderPlanning();
+                document.getElementById("taskForm").style.display = "none";
+                document.getElementById("newTask").value = "";
+            }
+        }
+
+        // Afficher la date de la semaine
+        function getWeekDate() {
+            const now = new Date();
+            const start = new Date(now);
+            start.setDate(now.getDate() - now.getDay() + (now.getDay() === 0 ? -6 : 1));
+            const end = new Date(start);
+            end.setDate(start.getDate() + 6);
+            return `${start.toLocaleDateString()} au ${end.toLocaleDateString()}`;
+        }
+
+        document.getElementById("weekDate").textContent = getWeekDate();
+        renderPlanning();
+    </script>
+</body>
+</html>
