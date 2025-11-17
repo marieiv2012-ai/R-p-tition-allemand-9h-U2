@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Coach Personnel IA - Organisateur de Vie</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --text-color: #333;
+            --bg-color-light: #f4f7f6;
+            --bg-color-dark: #2c2c2c;
+            --card-bg-light: #ffffff;
+            --card-bg-dark: #3a3a3a;
+            --header-bg-light: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --header-bg-dark: linear-gradient(135deg, #333d7a 0%, #4a337a 100%);
+            --border-color-light: #e0e0e0;
+            --border-color-dark: #555;
+            --shadow-light: 0 10px 30px rgba(0,0,0,0.1);
+            --shadow-dark: 0 10px 30px rgba(0,0,0,0.4);
+            --red-alert: #ff6b6b;
+            --green-success: #28a745;
+            --yellow-warning: #ffc107;
+            --blue-info: #17a2b8;
+            --work-day-bg: #ffebeb; /* Light red for work days */
+            --free-day-bg: #ebffeb; /* Light green for free days */
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color-light);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode {
+            background-color: var(--bg-color-dark);
+            color: #f4f7f6;
+        }
+        body.dark-mode .container,
+        body.dark-mode .header,
+        body.dark-mode .nav-tabs button,
+        body.dark-mode .card,
+        body.dark-mode .schedule-day,
+        body.dark-mode .time-slot,
+        body.dark-mode table,
+        body.dark-mode th,
+        body.dark-mode td,
+        body.dark-mode .task-item,
+        body.dark-mode .info-box,
+        body.dark-mode .alert {
+            background-color: var(--card-bg-dark);
+            color: #f4f7f6;
+            border-color: var(--border-color-dark);
+        }
+        body.dark-mode .header {
+            background: var(--header-bg-dark);
+        }
+        body.dark-mode .nav-tabs button.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        body.dark-mode .nav-tabs button:hover {
+            background-color: #5a4b7f;
+        }
+        body.dark-mode .task-item div strong {
+            color: var(--primary-color);
+        }
+        body.dark-mode .day-title, body.dark-mode .section-title {
+            color: var(--primary-color);
+        }
+        body.dark-mode h1, body.dark-mode h2, body.dark-mode h3 {
+            color: var(--primary-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: var(--card-bg-light);
+            border-radius: 15px;
+            box-shadow: var(--shadow-light);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .header {
+            background: var(--header-bg-light);
+            color: white;
+            padding: 40px 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-light);
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5em;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+
+        .dark-mode-toggle:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .nav-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+
+        .nav-tabs button {
+            background-color: #e0e0e0;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s;
+            color: var(--text-color);
+            flex-grow: 1;
+            max-width: 220px;
+        }
+
+        .nav-tabs button:hover {
+            background-color: #cfcfcf;
+            transform: translateY(-2px);
+        }
+
+        .nav-tabs button.active {
+            background: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .section-title {
+            font-size: 2em;
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            text-align: center;
+            font-weight: 700;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: var(--secondary-color);
+            border-radius: 2px;
+        }
+
+        /* Planning Hebdomadaire */
+        .planning-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .schedule-day {
+            background-color: var(--card-bg-light);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border: 1px solid var(--border-color-light);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .schedule-day:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color-light);
+        }
+
+        .day-title {
+            font-size: 1.6em;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .day-type {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            font-weight: 600;
+            color: white;
+        }
+
+        .day-work {
+            background-color: var(--red-alert);
+        }
+
+        .day-free {
+            background-color: var(--green-success);
+        }
+
+        .time-slot {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 10px;
+            padding: 8px 0;
+            border-bottom: 1px dotted rgba(0,0,0,0.1);
+        }
+        body.dark-mode .time-slot {
+            border-bottom: 1px dotted rgba(255,255,255,0.2);
+        }
+
+        .time {
+            font-weight: 600;
+            min-width: 80px;
+            color: #555;
+            font-size: 0.9em;
+        }
+        body.dark-mode .time {
+            color: #ccc;
+        }
+
+        .activity {
+            flex-grow: 1;
+            padding-left: 10px;
+            position: relative;
+        }
+
+        .activity strong {
+            color: var(--primary-color);
+        }
+        .activity.flexible {
+            opacity: 0.8;
+            font-style: italic;
+            color: #666;
+        }
+        body.dark-mode .activity.flexible {
+            color: #aaa;
+        }
+        .activity.dog-walk::before {
+            content: "🐕 ";
+        }
+        .activity.work::before {
+            content: "💼 ";
+        }
+        .activity.house::before {
+            content: "🏠 ";
+        }
+        .activity.meal::before {
+            content: "🍽️ ";
+        }
+        .activity.robot::before {
+            content: "🤖 ";
+        }
+        .activity.study::before {
+            content: "📚 ";
+        }
+        .activity.personal::before {
+            content: "🧘 ";
+        }
+        .activity.shopping::before {
+            content: "🛒 ";
+        }
+        .activity.anniv::before {
+            content: "🎂 ";
+        }
+        .activity.ai::before {
+            content: "🧠 ";
+        }
+
+        /* Règles d'Or */
+        .rules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background-color: var(--card-bg-light);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border: 1px solid var(--border-color-light);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+
+        .card h3 {
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+            font-size: 1.4em;
+            display: flex;
+            align-items: center;
+        }
+        .card h3 .icon {
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        .checklist ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .checklist li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 0.95em;
+        }
+
+        .checklist input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+            accent-color: var(--primary-color);
+        }
+
+        /* Suivi Candidatures */
+        .candidatures-section {
+            margin-top: 20px;
+        }
+        .candidatures-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .candidatures-header .objective, .candidatures-header .counter {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+        .candidatures-header .objective span, .candidatures-header .counter span {
+            font-size: 1.2em;
+            margin-left: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: var(--card-bg-light);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-light);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color-light);
+        }
+        body.dark-mode th, body.dark-mode td {
+            border-bottom: 1px solid var(--border-color-dark);
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 600;
+        }
+        body.dark-mode th {
+            background-color: #5a4b7f;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f8f8;
+        }
+        body.dark-mode tr:nth-child(even) {
+            background-color: #4a4a4a;
+        }
+
+        .status-tag {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: 600;
+            color: white;
+        }
+        .status-attente { background-color: var(--blue-info); }
+        .status-relance { background-color: var(--yellow-warning); }
+        .status-refus { background-color: var(--red-alert); }
+        .status-entretien { background-color: var(--green-success); }
+
+        .add-row-btn {
+            background-color: var(--green-success);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 1em;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        .add-row-btn:hover {
+            background-color: #218838;
+        }
+
+        /* Projets Personnels */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .project-card {
+            background-color: var(--card-bg-light);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border: 1px solid var(--border-color-light);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .project-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+        .project-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+        }
+        .project-card h3 .icon {
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+        .project-card ul {
+            list-style: none;
+            padding-left: 20px;
+            margin-top: 10px;
+        }
+        .project-card ul li {
+            margin-bottom: 8px;
+            position: relative;
+        }
+        .project-card ul li::before {
+            content: "•";
+            color: var(--secondary-color);
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            margin-left: -1em;
+        }
+        .project-card .progress-bar {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            height: 15px;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+        .project-card .progress {
+            height: 100%;
+            background-color: var(--green-success);
+            width: 0%;
+            border-radius: 10px;
+            transition: width 0.5s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 5px;
+            color: white;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        body.dark-mode .project-card .progress-bar {
+            background-color: #555;
+        }
+
+        /* Bonus Features */
+        .bonus-features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .feature-card {
+            background-color: var(--card-bg-light);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border: 1px solid var(--border-color-light);
+            text-align: center;
+        }
+        .feature-card h4 {
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+        .pomodoro-timer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 15px;
+        }
+        .timer-display {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+        .timer-controls button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            margin: 0 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s;
+        }
+        .timer-controls button:hover {
+            background-color: #5a4b7f;
+        }
+        .notes-area {
+            width: 100%;
+            min-height: 100px;
+            border: 1px solid var(--border-color-light);
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 15px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9em;
+            resize: vertical;
+            background-color: #fcfcfc;
+            color: var(--text-color);
+        }
+        body.dark-mode .notes-area {
+            background-color: #4a4a4a;
+            border-color: var(--border-color-dark);
+            color: #f4f7f6;
+        }
+        .action-button {
+            background-color: var(--blue-info);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 15px;
+            font-size: 1em;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        .action-button:hover {
+            background-color: #138496;
+        }
+
+        /* Info boxes & Alerts */
+        .info-box, .alert {
+            background-color: #e6f7ff;
+            border-left: 5px solid var(--blue-info);
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        .info-box .icon, .alert .icon {
+            font-size: 1.5em;
+            color: var(--blue-info);
+        }
+        .alert-info {
+            background-color: #e6f7ff;
+            border-color: var(--blue-info);
+            color: #0056b3;
+        }
+        .alert-success {
+            background-color: #d4edda;
+            border-color: var(--green-success);
+            color: #155724;
+        }
+        .alert-warning {
+            background-color: #fff3cd;
+            border-color: var(--yellow-warning);
+            color: #856404;
+        }
+        .alert-danger {
+            background-color: #f8d7da;
+            border-color: var(--red-alert);
+            color: #721c24;
+        }
+        body.dark-mode .info-box, body.dark-mode .alert {
+            background-color: #2b3a4a;
+            border-color: var(--blue-info);
+            color: #b3e0ff;
+        }
+        body.dark-mode .alert-info { background-color: #2b3a4a; border-color: var(--blue-info); color: #b3e0ff; }
+        body.dark-mode .alert-success { background-color: #2d4a32; border-color: var(--green-success); color: #c3e6cb; }
+        body.dark-mode .alert-warning { background-color: #4a422b; border-color: var(--yellow-warning); color: #ffeeba; }
+        body.dark-mode .alert-danger { background-color: #4a2d2f; border-color: var(--red-alert); color: #f5c6cb; }
+
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+            .header h1 {
+                font-size: 2em;
+            }
+            .header .subtitle {
+                font-size: 1em;
+            }
+            .nav-tabs {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .nav-tabs button {
+                max-width: 100%;
+            }
+            .section-title {
+                font-size: 1.8em;
+            }
+            .planning-grid, .rules-grid, .projects-grid, .bonus-features-grid {
+                grid-template-columns: 1fr;
+            }
+            .day-title {
+                font-size: 1.4em;
+            }
+            th, td {
+                padding: 8px 10px;
+                font-size: 0.9em;
+            }
+            .candidatures-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <button class="dark-mode-toggle" id="darkModeToggle">🌓</button>
+            <h1>Votre Co-Pilote de Vie 🚀</h1>
+            <p class="subtitle">Analyse, Organisation & Progrès. Atteignons vos objectifs ensemble !</p>
+        </div>
+
+        <nav class="nav-tabs">
+            <button class="tab-button active" data-tab="planning">🗓️ Planning Hebdomadaire</button>
+            <button class="tab-button" data-tab="rules">✨ Règles d'Or</button>
+            <button class="tab-button" data-tab="candidatures">💼 Suivi Candidatures</button>
+            <button class="tab-button" data-tab="projects">🎯 Projets Personnels</button>
+            <button class="tab-button" data-tab="stats">📊 Statistiques & Motivation</button>
+        </nav>
+
+        <div id="planning" class="tab-content active">
+            <h2 class="section-title">🗓️ Votre Semaine Optimisée</h2>
+            <p style="text-align: center; margin-bottom: 20px; font-style: italic; color: #666;">Les jours de travail sont en rouge clair, les jours libres en vert clair.</p>
+
+            <div class="planning-grid">
+                <!-- LUNDI -->
+                <div class="schedule-day" style="background-color: var(--free-day-bg);">
+                    <div class="day-header">
+                        <div class="day-title">LUNDI</div>
+                        <span class="day-type day-free">Journée Libre</span>
+                    </div>
+                    <div class="time-slot"><div class="time">05h20-05h30</div><div class="activity house">Réveil, préparation départ fille 👧</div></div>
+                    <div class="time-slot"><div class="time">05h30-06h45</div><div class="activity dog-walk">🐕 Promenade chien (1h15) - <strong>Écoute podcasts emploi (45min)</strong></div></div>
+                    <div class="time-slot"><div class="time">06h45-07h30</div><div class="activity personal">Petit-déjeuner, douche</div></div>
+                    <div class="time-slot"><div class="time">07h30-08h30</div><div class="activity work">💼 <strong>Candidatures emploi (1h)</strong> : 2-3 envois ciblés</div></div>
+                    <div class="time-slot"><div class="time">08h30-10h00</div><div class="activity house">🏠 <strong>Désencombrement / Rangement</strong> (1h30) - Zone ciblée (ex: 1 tiroir, 1 étagère)</div></div>
+                    <div class="time-slot"><div class="time">10h00-11h30</div><div class="activity study">📚 <strong>Création prompts HTML fils</strong> (1h30)</div></div>
+                    <div class="time-slot"><div class="time">11h30-12h30</div><div class="activity shopping">🛒 <strong>Courses complémentaires</strong> (30min trajet + 30min courses)</div></div>
+                    <div class="time-slot"><div class="time">12h30-13h30</div><div class="activity meal">🍽️ Repas midi rapide (restes ou préparation simple)</div></div>
+                    <div class="time-slot"><div class="time">13h30-15h00</div><div class="activity anniv">🎂 Projet Anniversaire fille (1h30) : Idées, liste invités</div></div>
+                    <div class="time-slot"><div class="time">15h00-16h00</div><div class="activity ai">🧠 Apprentissage IA (1h) : Lecture article / Tutoriel</div></div>
+                    <div class="time-slot"><div class="time">16h00-17h00</div><div class="activity house">🏠 Tâches ménagères légères / Flex</div></div>
+                    <div class="time-slot"><div class="time">17h00-18h00</div><div class="activity meal">🍽️ Préparation repas principal du soir</div></div>
+                    <div class="time-slot"><div class="time">18h00-19h00</div><div class="activity meal">🍽️ Repas en famille</div></div>
+                    <div class="time-slot"><div class="time">19h00-21h30</div><div class="activity personal">Temps libre / Détente en famille</div></div>
+                    <div class="time-slot"><div class="time">21h30-22h30</div><div class="activity personal">Routine sommeil (iPhone, séries, planification lendemain)</div></div>
+                </div>
+
+                <!-- MARDI -->
+                <div class="schedule-day" style="background-color: var(--work-day-bg);">
+                    <div class="day-header">
+                        <div class="day-title">MARDI</div>
+                        <span class="day-type day-work">Journée Travail</span>
+                    </div>
+                    <div class="time-slot"><div class="time">05h20-05h30</div><div class="activity house">Réveil, préparation départ fille 👧</div></div>
+                    <div class="time-slot"><div class="time">05h30-06h30</div><div class="activity dog-walk">🐕 Promenade chien (1h)</div></div>
+                    <div class="time-slot"><div class="time">06h30-06h45</div><div class="activity personal">Préparation départ travail</div></div>
+                    <div class="time-slot"><div class="time">06h45-07h45</div><div class="activity work">💼 Trajet travail (Train)</div></div>
+                    <div class="time-slot"><div class="time">07h45-12h30</div><div class="activity work">💼 TRAVAIL</div></div>
+                    <div class="time-slot"><div class="time">12h30-13h30</div><div class="activity work">💼 Pause déjeuner (extérieur)</div></div>
+                    <div class="time-slot"><div class="time">13h30-17h50</div><div class="activity work">💼 TRAVAIL</div></div>
+                    <div class="time-slot"><div class="time">17h50-18h15</div><div class="activity house">🏠 Retour maison</div></div>
+                    <div class="time-slot"><div class="time">18h15-18h30</div><div class="activity dog-walk">🐕 Promenade chien rapide (15min)</div></div>
+                    <div class="time-slot"><div class="time">18h30-19h00</div><div class="activity meal">🍽️ Préparation repas principal du soir</div></div>
+                    <div class="time-slot"><div class="time">19h00-20h00</div><div class="activity meal">🍽️ Repas en famille</div></div>
+                    <div class="time-slot"><div class="time">20h00-21h30</div><div class="activity personal">Temps libre / Détente</div></div>
+                    <div class="time-slot"><div class="time">21h30-22h30</div><div class="activity personal">Routine sommeil (iPhone, séries, planification lendemain)</div></div>
+                     <div class="info-box"><span class="icon">💡</span> Le robot 🤖 aspire/lave cuisine/SDB/couloirs pendant votre absence.</div>
+                </div>
+
+                <!-- MERCREDI -->
+                <div class="schedule-day" style="background-color: var(--free-day-bg);">
+                    <div class="day-header">
+                        <div class="day-title">MERCREDI</div>
+                        <span class="day-type day-free">Journée Libre</span>
+                    </div>
+                    <div class="time-slot"><div class="time">05h20-05h30</div><div class="activity house">Réveil, préparation départ fille 👧</div></div>
+                    <div class="time-slot"><div class="time">05h30-06h45</div><div class="activity dog-walk">🐕 Promenade chien (1h15) - <strong>Écoute podcasts emploi (45min)</strong></div></div>
+                    <div class="time-slot"><div class="time">06h45-07h30</div><div class="activity personal">Petit-déjeuner, douche</div></div>
+                    <div class="time-slot"><div class="time">07h30-08h30</div><div class="activity work">💼 <strong>Candidatures emploi (1h)</strong> : 2-3 envois ciblés</div></div>
+                    <div class="time-slot"><div class="time">08h30-10h00</div><div class="activity house">🏠 <strong>Désencombrement / Rangement</strong> (1h30) - Zone ciblée (ex: armoire salle de bain)</div></div>
+                    <div class="time-slot"><div class="time">10h00-11h30</div><div class="activity study">📚 <strong>Création prompts HTML fils</strong> (1h30)</div></div>
+                    <div class="time-slot"><div class="time">11h30-12h30</div><div class="activity shopping">🛒 <strong>Courses complémentaires</strong> (30min trajet + 30min courses)</div></div>
+                    <div class="time-slot"><div class="time">12h30-13h30</div><div class="activity meal">🍽️ Repas midi fils & moi (simple)</div></div>
+                    <div class="time-slot"><div class="time">13h30-15h00</div><div class="activity anniv">🎂 Projet Anniversaire fille (1h30) : Réservation lieu / prestataires</div></div>
+                    <div class="time-slot"><div class="time">15h00-16h00</div><div class="activity ai">🧠 Apprentissage IA (1h) : Pratique avec un outil</div></div>
+                    <div class="time-slot"><div class="time">16h00-17h00</div><div class="activity house">🏠 Tâches ménagères légères / Flex</div></div>
+                    <div class="time-slot"><div class="time">17h00-18h00</div><div class="activity meal">🍽️ Préparation repas principal du soir</div></div>
+                    <div class="time-slot"><div class="time">18h00-19h00</div><div class="activity meal">🍽️ Repas en famille</div></div>
+                    <div class="time-slot"><div class="time">19h00-21h30</div><div class="activity personal">Temps libre / Détente en famille</div></div>
+                    <div class="time-slot"><div class="time">21h30-22h30</div><div class="activity personal">Routine sommeil (iPhone, séries, planification lendemain)</div></div>
+                </div>
+
+                <!-- JEUDI -->
+                <div class="schedule-day" style="background-color: var(--work-day-bg);">
+                    <div class="day-header">
+                        <div class="day-title">JEUDI</div>
+                        <span class="day-type day-work">Journée Travail</span>
+                    </div>
+                    <div class="time-slot"><div class="time">05h20-05h30</div><div class="activity house">Réveil, préparation départ fille 👧</div></div>
+                    <div class="time-slot"><div class="time">05h30-06h30</div><div class="activity dog-walk">🐕 Promenade chien (1h)</div></div>
+                    <div class="time-slot"><div class="time">06h30-06h45</div><div class="activity personal">Préparation départ travail</div></div>
+                    <div class="time-slot"><div class="time">06h45-07h45</div><div class="activity work">💼 Trajet travail (Train)</div></div>
+                    <div class="time-slot"><div class="time">07h45-12h30</div><div class="activity work">💼 TRAVAIL</div></div>
+                    <div class="time-slot"><div class="time">12h30-13h30</div><div class="activity work">💼 Pause déjeuner (extérieur)</div></div>
+                    <div class="time-slot"><div class="time">13h30-17h50</div><div class="activity work">💼 TRAVAIL</div></div>
+                    <div class="time-slot"><div class="time">17h50-18h15</div><div class="activity house">🏠 Retour maison</div></div>
+                    <div class="time-slot"><div class="time">18h15-18h30</div><div class="activity dog-walk">🐕 Promenade chien rapide (15min)</div></div>
+                    <div class="time-slot"><div class="time">18h30-19h00</div><div class="activity meal">🍽️ Préparation repas principal du soir</div></div>
+                    <div class="time-slot"><div class="time">19h00-20h00</div><div class="activity meal">🍽️ Repas en famille</div></div>
+                    <div class="time-slot"><div class="time">20h00-21h30</div><div class="activity personal">Temps libre / Détente</div></div>
+                    <div class="time-slot"><div class="time">21h30-22h30</div><div class="activity personal">Routine sommeil (iPhone, séries, planification lendemain)</div></div>
+                    <div class="info-box"><span class="icon">💡</span> Le robot 🤖 aspire/lave cuisine/SDB/couloirs pendant votre absence.</div>
+                </div>
+
+                <!-- VENDREDI -->
+                <div class="schedule-day" style="background-color: var(--work-day-bg);">
+                    <div class="day-header">
+                        <div class="day-title">VENDREDI</div>
+                        <span class="day-type day-work">Journée Travail</span>
+                    </div>
+                    <div class="time-slot"><div class="time">05h20-05h30</div><div class="activity house">Réveil, préparation départ fille 👧</div></div>
+                    <div class="time-slot"><div class="time">05h30-06h30</div><div class="activity dog-walk">🐕 Promenade chien (1h)</div></div>
+                    <div class="time-slot"><div class="time">06h30-06h45</div><div class="activity personal">Préparation départ travail</div></div>
+                    <div class="time-slot"><div class="time">06h45-07h45</div><div class="activity work">💼 Trajet travail (Train)</div></div>
+                    <div class="time-slot"><div class="time">07h45-12h30</div><div class="activity work">💼 TRAVAIL</div></div>
+                    <div class="time-slot"><div class="time">12h30-13h30</div><div class="activity work">💼 Pause déjeuner (extérieur)</div></div>
+                    <div class="time-slot"><div class="time">13h30-16h50</div><div class="activity work">💼 TRAVAIL</div></div>
+                    <div class="time-slot"><div class="time">16h50-17h15</div><div class="activity house">🏠 Retour maison</div></div>
+                    <div class="time-slot"><div class="time">17h15-17h30</div><div class="activity dog-walk">🐕 Promenade chien rapide (15min)</div></div>
+                    <div class="time-slot"><div class="time">17h30-18h00</div><div class="activity meal">🍽️ Préparation repas principal du soir</div></div>
+                    <div class="time-slot"><div class="time">18h00-19h00</div><div class="activity meal">🍽️ Repas en famille</div></div>
+                    <div class="time-slot"><div class="time">19h00-21h30</div><div class="activity personal">Temps libre (début de weekend !)</div></div>
+                    <div class="time-slot"><div class="time">21h30-22h30</div><div class="activity personal">Routine sommeil (iPhone, séries, planification lendemain)</div></div>
+                    <div class="info-box"><span class="icon">💡</span> Le robot 🤖 aspire/lave cuisine/SDB/couloirs pendant votre absence.</div>
+                </div>
+
+                <!-- SAMEDI -->
+                <div class="schedule-day" style="background-color: var(--free-day-bg);">
+                    <div class="day-header">
+                        <div class="day-title">SAMEDI</div>
+                        <span class="day-type day-free">Weekend</span>
+                    </div>
+                    <div class="time-slot"><div class="time">07h30-08h30</div><div class="activity personal">Réveil (Matchs de foot)</div></div>
+                    <div class="time-slot"><div class="time">08h30-09h45</div><div class="activity dog-walk">🐕 Promenade chien (1h15)</div></div>
+                    <div class="time-slot"><div class="time">09h45-10h30</div><div class="activity personal">Petit-déjeuner, douche</div></div>
+                    <div class="time-slot"><div class="time">10h30-12h30</div><div class="activity shopping">🛒 <strong>Grande course principale</strong> (1h courses + 30min trajet A/R)</div></div>
+                    <div class="time-slot"><div class="time">12h30-13h30</div><div class="activity meal">🍽️ Repas midi</div></div>
+                    <div class="time-slot"><div class="time">13h30-15h30</div><div class="activity house">🏠 <strong>Désencombrement / Nettoyage chambres/salon</strong> (robot aussi) (2h)</div></div>
+                    <div class="time-slot"><div class="time">15h30-17h00</div><div class="activity study">📚 <strong>Création prompts HTML fils</strong> (1h30) ou 💼 Recherches emploi</div></div>
+                    <div class="time-slot"><div class="time">17h00-18h00</div><div class="activity meal">🍽️ Préparation repas principal du soir</div></div>
+                    <div class="time-slot"><div class="time">18h00-19h00</div><div class="activity meal">🍽️ Repas en famille</div></div>
+                    <div class="time-slot"><div class="time">19h00-22h00</div><div class="activity personal">Temps libre en famille / Loisirs</div></div>
+                    <div class="time-slot"><div class="time">22h00-23h00</div><div class="activity personal">Routine sommeil (iPhone, séries, planification lendemain)</div></div>
+                    <div class="info-box"><span class="icon">💡</span> Le robot 🤖 peut nettoyer les chambres et le salon aujourd'hui.</div>
+                </div>
+
+                <!-- DIMANCHE -->
+                <div class="schedule-day" style="background-color: var(--free-day-bg);">
+                    <div class="day-header">
+                        <div class="day-title">DIMANCHE</div>
+                        <span class="day-type day-free">Weekend</span>
+                    </div>
+                    <div class="time-slot"><div class="time">08h00-09h00</div><div class="activity personal">Réveil flexible</div></div>
+                    <div class="time-slot"><div class="time">09h00-10h15</div><div class="activity dog-walk">🐕 Promenade chien (1h15)</div></div>
+                    <div class="time-slot"><div class="time">10h15-11h00</div><div class="activity personal">Petit-déjeuner, détente</div></div>
+                    <div class="time-slot"><div class="time">11h00-13h00</div><div class="activity anniv">🎂 Projet Anniversaire fille (2h) : Création invitations / Jeux</div></div>
+                    <div class="time-slot"><div class="time">13h00-14h00</div><div class="activity meal flexible">🍽️ Repas midi (flexible)</div></div>
+                    <div class="time-slot"><div class="time">14h00-16h00</div><div class="activity ai">🧠 Apprentissage IA (2h) : Projet personnel IA / Veille techno</div></div>
+                    <div class="time-slot"><div class="time">16h00-17h00</div><div class="activity flexible">Temps libre / Préparation semaine à venir</div></div>
+                    <div class="time-slot"><div class="time">17h00-18h00</div><div class="activity meal">🍽️ Préparation repas principal du soir (peut être avancé si besoin)</div></div>
+                    <div class="time-slot"><div class="time">18h00-19h00</div><div class="activity meal">🍽️ Repas en famille</div></div>
+                    <div class="time-slot"><div class="time">19h00-21h30</div><div class="activity personal">Soirée détente en famille</div></div>
+                    <div class="time-slot"><div class="time">21h30-22h30</div><div class="activity personal">Routine sommeil (iPhone, séries, planification lendemain)</div></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="rules" class="tab-content">
+            <h2 class="section-title">✨ Vos Règles d'Or pour une Vie Équilibrée</h2>
+            <div class="rules-grid">
+                <div class="card">
+                    <h3><span class="icon">⏰</span> Horaires Clés</h3>
+                    <ul>
+                        <li><strong>Réveil Semaine:</strong> 5h20-5h30 (pour la fille)</li>
+                        <li><strong>Réveil Samedi:</strong> 7h30-8h30 (flexible selon les matchs)</li>
+                        <li><strong>Réveil Dimanche:</strong> Flexible</li>
+                        <li><strong>Coucher Cible:</strong> 22h30 max (pour viser 7h de sommeil)</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3><span class="icon">🐕</span> La Promenade du Chien</h3>
+                    <p>Non négociable : <strong>1h15 minimum par jour</strong>.</p>
+                    <ul>
+                        <li>✅ Utilisez 45min pour écouter des podcasts d'emploi ou des formations.</li>
+                        <li>✅ Splittez la promenade si nécessaire sur les jours de travail.</li>
+                        <li>❌ Le fils ne promène pas, la fille occasionnellement (ne pas compter dessus).</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3><span class="icon">☀️</span> Routine Matinale (Jours Libres)</h3>
+                    <ul>
+                        <li><input type="checkbox"> 5h20-5h30 : Réveil, lever et préparation fille.</li>
+                        <li><input type="checkbox"> 5h30-6h45 : Promenade chien (45min utiles pour vous).</li>
+                        <li><input type="checkbox"> 6h45-7h30 : Petit-déjeuner et douche.</li>
+                        <li><input type="checkbox"> 7h30 : Début des activités planifiées.</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3><span class="icon">✔️</span> Checklist Quotidienne (Exemple)</h3>
+                    <div class="checklist">
+                        <ul>
+                            <li><input type="checkbox" id="check-chien"> 🐕 Promenade chien 1h15 effectuée</li>
+                            <li><input type="checkbox" id="check-robot"> 🤖 Robot aspirateur/laveur activé</li>
+                            <li><input type="checkbox" id="check-repas"> 🍽️ Repas principal du jour préparé</li>
+                            <li><input type="checkbox" id="check-planning"> ✍️ Planning du lendemain revu</li>
+                            <li><input type="checkbox" id="check-objectif"> ⭐ Un petit pas vers un objectif majeur accompli (candidature, prompt, désencombrement...)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3><span class="icon">📵</span> Routine du Soir (Actuelle)</h3>
+                    <p>Pour le moment, nous maintenons votre routine actuelle :</p>
+                    <ul>
+                        <li>Utilisation de l'iPhone avec luminosité min. et Night Shift.</li>
+                        <li>Visionnage de séries et planification de la journée suivante.</li>
+                        <li>Cette technique vous aide à l'endormissement. Nous l'ajusterons plus tard si vous le souhaitez.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="candidatures" class="tab-content">
+            <h2 class="section-title">💼 Suivi de vos Candidatures</h2>
+            <div class="candidatures-header">
+                <div class="objective">Objectif Hebdomadaire : <span>4-6 candidatures complètes</span></div>
+                <div class="counter">Candidatures Envoyées (cette semaine) : <span id="candidatureCount">0</span></div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date Envoi</th>
+                        <th>Entreprise</th>
+                        <th>Poste</th>
+                        <th>Contact</th>
+                        <th>Relance Prévue</th>
+                        <th>Statut</th>
+                        <th>Notes</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="candidatureTableBody">
+                    <tr>
+                        <td><input type="date" value="2025-11-17"></td>
+                        <td><input type="text" placeholder="Nom entreprise"></td>
+                        <td><input type="text" placeholder="Intitulé du poste"></td>
+                        <td><input type="text" placeholder="Email/LinkedIn"></td>
+                        <td><input type="date"></td>
+                        <td>
+                            <select class="status-selector">
+                                <option value="attente" selected>En attente</option>
+                                <option value="relance">Relance</option>
+                                <option value="entretien">Entretien</option>
+                                <option value="refus">Refus</option>
+                            </select>
+                        </td>
+                        <td><input type="text" placeholder="Détails"></td>
+                        <td><button class="remove-row-btn">🗑️</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <button class="add-row-btn" id="addCandidatureRow">➕ Ajouter une candidature</button>
+            <div class="alert alert-info" style="margin-top: 20px;">
+                <span class="icon">💡</span>
+                Le statut se mettra à jour automatiquement avec un code couleur. N'oubliez pas de relancer !
+            </div>
+        </div>
+
+        <div id="projects" class="tab-content">
+            <h2 class="section-title">🎯 Vos Projets Personnels</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <h3><span class="icon">🎂</span> Anniversaire Fille (Fév-Mars)</h3>
+                    <p><strong>Deadline:</strong> Février-Mars (date exacte à définir)</p>
+                    <p><strong>Budget:</strong> À définir (estimation initiale)</p>
+                    <h4>Étapes Clés :</h4>
+                    <ul>
+                        <li>Idées thèmes / activités</li>
+                        <li>Liste invités</li>
+                        <li>Réservation lieu / prestataires (si nécessaire)</li>
+                        <li>Création et envoi invitations</li>
+                        <li>Achat cadeaux</li>
+                        <li>Préparation repas / gâteau</li>
+                        <li>Organisation jeux / animations</li>
+                    </ul>
+                    <div class="progress-bar"><div class="progress" style="width: 20%;">20%</div></div>
+                    <p style="margin-top: 10px;"><em>Prochaine action : Valider 3 idées de thèmes avec votre fille ce weekend.</em></p>
+                </div>
+
+                <div class="project-card">
+                    <h3><span class="icon">📚</span> Prompts HTML Révision Fils</h3>
+                    <p><strong>Objectif:</strong> Créer des outils interactifs pour l'aider à réviser.</p>
+                    <h4>Type de Prompts envisagés :</h4>
+                    <ul>
+                        <li>QCM interactifs</li>
+                        <li>Flashcards de définitions</li>
+                        <li>Exercices à trous / glisser-déposer</li>
+                        <li>Mini-quizz chronométrés</li>
+                    </ul>
+                    <p><strong>Progression:</strong> 2-3 prompts par semaine (Lundi, Mercredi)</p>
+                    <div class="alert alert-info">
+                        <span class="icon">💡</span> Pour affiner, j'ai besoin de savoir :
+                        <ul style="margin-top: 5px;">
+                            <li>✏️ Niveau scolaire de votre fils ?</li>
+                            <li>✏️ Ses 3 matières les plus difficiles ?</li>
+                            <li>✏️ Examens à venir (dates + matières prioritaires) ?</li>
+                        </ul>
+                    </div>
+                    <div class="progress-bar"><div class="progress" style="width: 10%;">10%</div></div>
+                    <p style="margin-top: 10px;"><em>Prochaine action : Discuter avec votre fils de ses besoins spécifiques.</em></p>
+                </div>
+
+                <div class="project-card">
+                    <h3><span class="icon">🏠</span> Désencombrement Maison</h3>
+                    <p><strong>Approche:</strong> Progressive et ciblée.</p>
+                    <h4>Zones prioritaires :</h4>
+                    <ul>
+                        <li>Cuisine (tiroirs, placards)</li>
+                        <li>Salle de bain (produits, linge)</li>
+                        <li>Chambres (vêtements, objets inutilisés)</li>
+                        <li>Salon (livres, déco)</li>
+                    </ul>
+                    <p><strong>Planning:</strong> 1h30 le Lundi, 1h30 le Mercredi, 2h le Samedi.</p>
+                    <p><strong>Stratégie:</strong> Une petite zone à la fois (ex: un tiroir, une étagère). Trois piles : Garder, Donner/Vendre, Jeter.</p>
+                    <div class="progress-bar"><div class="progress" style="width: 5%;">5%</div></div>
+                    <p style="margin-top: 10px;"><em>Prochaine action : Commencer par un tiroir de la cuisine ce Lundi.</em></p>
+                </div>
+
+                <div class="project-card">
+                    <h3><span class="icon">🧠</span> Apprentissage IA & Créatifs</h3>
+                    <p><strong>Objectif:</strong> Approfondir vos connaissances sur les IA et leurs dérivés.</p>
+                    <h4>Axes d'apprentissage :</h4>
+                    <ul>
+                        <li>Lecture d'articles et veille technologique</li>
+                        <li>Suivi de tutoriels (ex: création de chatbots simples, analyse de données)</li>
+                        <li>Expérimentation d'outils IA (génératifs, assistants)</li>
+                        <li>Création de petits projets personnels liés à l'IA</li>
+                    </ul>
+                    <p><strong>Temps alloué:</strong> 1h Lundi, 1h Mercredi, 2h Dimanche.</p>
+                    <div class="progress-bar"><div class="progress" style="width: 15%;">15%</div></div>
+                    <p style="margin-top: 10px;"><em>Prochaine action : Identifier un bon MOOC d'introduction à l'IA ou un podcast dédié.</em></p>
+                </div>
+            </div>
+        </div>
+
+        <div id="stats" class="tab-content">
+            <h2 class="section-title">📊 Statistiques & Motivation</h2>
+            <div class="alert alert-info">
+                <span class="icon">📈</span>
+                Cette section est en cours de développement ! Nous collecterons des données sur vos progrès (temps alloué, objectifs atteints) pour vous offrir des graphiques motivants, des badges de réussite et des synthèses hebdomadaires.
+                Pour l'instant, c'est l'endroit pour célébrer vos petites victoires !
+            </div>
+            <div class="bonus-features-grid">
+                <div class="feature-card">
+                    <h4>Timer Pomodoro</h4>
+                    <p class="timer-display" id="pomodoroTimer">25:00</p>
+                    <div class="timer-controls">
+                        <button id="startTimer">Démarrer</button>
+                        <button id="pauseTimer">Pause</button>
+                        <button id="resetTimer">Réinitialiser</button>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <h4>Notes Rapides</h4>
+                    <textarea id="quickNotes" class="notes-area" placeholder="Écrivez vos idées, rappels, réflexions ici..."></textarea>
+                    <button class="action-button" id="saveNotes">Sauvegarder Notes</button>
+                    <p style="font-size: 0.8em; margin-top: 5px; color: #888;">(Sauvegardées automatiquement dans votre navigateur)</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Export PDF du Planning</h4>
+                    <p>Générez un PDF de votre planning hebdomadaire.</p>
+                    <button class="action-button" onclick="alert('Fonctionnalité en cours de développement !')">Exporter Planning</button>
+                </div>
+                <div class="feature-card">
+                    <h4>Mode Focus</h4>
+                    <p>Cache les distractions pour une concentration maximale.</p>
+                    <button class="action-button" onclick="document.body.classList.toggle('focus-mode')">Activer/Désactiver</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Tab functionality
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+
+                    button.classList.add('active');
+                    document.getElementById(button.dataset.tab).classList.add('active');
+                });
+            });
+
+            // Dark Mode Toggle
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const body = document.body;
+
+            darkModeToggle.addEventListener('click', () => {
+                body.classList.toggle('dark-mode');
+                localStorage.setItem('darkMode', body.classList.contains('dark-mode'));
+            });
+
+            // Check for saved dark mode preference
+            if (localStorage.getItem('darkMode') === 'true') {
+                body.classList.add('dark-mode');
+            }
+
+            // Candidature Table Functionality
+            const candidatureTableBody = document.getElementById('candidatureTableBody');
+            const addCandidatureRowBtn = document.getElementById('addCandidatureRow');
+            const candidatureCountSpan = document.getElementById('candidatureCount');
+
+            function updateCandidatureCount() {
+                candidatureCountSpan.textContent = candidatureTableBody.rows.length;
+            }
+
+            function applyStatusClass(selectElement) {
+                const status = selectElement.value;
+                const row = selectElement.closest('tr');
+                row.className = ''; // Reset class
+                row.classList.add(`status-${status}`);
+            }
+
+            addCandidatureRowBtn.addEventListener('click', () => {
+                const newRow = candidatureTableBody.insertRow();
+                newRow.innerHTML = `
+                    <td><input type="date" value="${new Date().toISOString().slice(0,10)}"></td>
+                    <td><input type="text" placeholder="Nom entreprise"></td>
+                    <td><input type="text" placeholder="Intitulé du poste"></td>
+                    <td><input type="text" placeholder="Email/LinkedIn"></td>
+                    <td><input type="date"></td>
+                    <td>
+                        <select class="status-selector">
+                            <option value="attente" selected>En attente</option>
+                            <option value="relance">Relance</option>
+                            <option value="entretien">Entretien</option>
+                            <option value="refus">Refus</option>
+                        </select>
+                    </td>
+                    <td><input type="text" placeholder="Détails"></td>
+                    <td><button class="remove-row-btn">🗑️</button></td>
+                `;
+                const newSelect = newRow.querySelector('.status-selector');
+                newSelect.addEventListener('change', (e) => applyStatusClass(e.target));
+                newRow.querySelector('.remove-row-btn').addEventListener('click', (e) => {
+                    e.target.closest('tr').remove();
+                    updateCandidatureCount();
+                });
+                applyStatusClass(newSelect);
+                updateCandidatureCount();
+            });
+
+            // Initial setup for existing rows (if any, or first one)
+            candidatureTableBody.querySelectorAll('.status-selector').forEach(select => {
+                select.addEventListener('change', (e) => applyStatusClass(e.target));
+                applyStatusClass(select); // Apply initial styling
+            });
+            candidatureTableBody.querySelectorAll('.remove-row-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.target.closest('tr').remove();
+                    updateCandidatureCount();
+                });
+            });
+            updateCandidatureCount(); // Initial count
+
+            // Pomodoro Timer
+            const pomodoroTimerDisplay = document.getElementById('pomodoroTimer');
+            const startTimerBtn = document.getElementById('startTimer');
+            const pauseTimerBtn = document.getElementById('pauseTimer');
+            const resetTimerBtn = document.getElementById('resetTimer');
+
+            let timer;
+            let timeLeft = 25 * 60; // 25 minutes
+            let isRunning = false;
+
+            function formatTime(seconds) {
+                const minutes = Math.floor(seconds / 60);
+                const remainingSeconds = seconds % 60;
+                return `${minutes < 10 ? '0' : ''}${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+            }
+
+            function startTimer() {
+                if (!isRunning) {
+                    isRunning = true;
+                    timer = setInterval(() => {
+                        if (timeLeft > 0) {
+                            timeLeft--;
+                            pomodoroTimerDisplay.textContent = formatTime(timeLeft);
+                        } else {
+                            clearInterval(timer);
+                            isRunning = false;
+                            alert('Pomodoro terminé ! Prenez une pause !');
+                            pomodoroTimerDisplay.textContent = '25:00';
+                            timeLeft = 25 * 60;
+                        }
+                    }, 1000);
+                }
+            }
+
+            function pauseTimer() {
+                clearInterval(timer);
+                isRunning = false;
+            }
+
+            function resetTimer() {
+                clearInterval(timer);
+                isRunning = false;
+                timeLeft = 25 * 60;
+                pomodoroTimerDisplay.textContent = formatTime(timeLeft);
+            }
+
+            startTimerBtn.addEventListener('click', startTimer);
+            pauseTimerBtn.addEventListener('click', pauseTimer);
+            resetTimerBtn.addEventListener('click', resetTimer);
+
+            // Quick Notes (Local Storage)
+            const quickNotesArea = document.getElementById('quickNotes');
+            const saveNotesBtn = document.getElementById('saveNotes');
+
+            // Load notes on startup
+            if (localStorage.getItem('quickNotes')) {
+                quickNotesArea.value = localStorage.getItem('quickNotes');
+            }
+
+            // Save notes
+            saveNotesBtn.addEventListener('click', () => {
+                localStorage.setItem('quickNotes', quickNotesArea.value);
+                alert('Notes sauvegardées !');
+            });
+
+            // Optional: Auto-save notes every few seconds
+            quickNotesArea.addEventListener('input', () => {
+                clearTimeout(quickNotesArea.dataset.timeout);
+                quickNotesArea.dataset.timeout = setTimeout(() => {
+                    localStorage.setItem('quickNotes', quickNotesArea.value);
+                    console.log('Notes auto-sauvegardées.');
+                }, 2000); // Save after 2 seconds of inactivity
+            });
+
+            // Focus Mode (simple CSS toggle)
+            // Already handled by the button, just need the CSS.
+        });
+    </script>
+</body>
+</html>
