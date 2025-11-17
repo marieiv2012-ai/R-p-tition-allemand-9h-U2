@@ -1,0 +1,835 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Planificateur Hebdo — Organise ta vie</title>
+  <meta name="description" content="Planning hebdomadaire interactif et réaliste — dog walk, candidatures, courses, robot, projets, stats."/>
+  <!-- External libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+  <style>
+    :root{
+      --bg:#0f1724;
+      --card:#0b1220;
+      --glass: rgba(255,255,255,0.03);
+      --accent-1: linear-gradient(135deg,#6b21a8 0%,#0ea5e9 100%);
+      --accent-2: #7c3aed;
+      --muted: #94a3b8;
+      --success: #16a34a;
+      --danger: #ef4444;
+      --work: #ef4444;
+      --free: #10b981;
+      --glass-2: rgba(255,255,255,0.025);
+      color-scheme: dark;
+    }
+    /* Light theme variables */
+    .light {
+      --bg:#f7fafc;
+      --card:#ffffff;
+      --glass: rgba(2,6,23,0.03);
+      --muted:#475569;
+    }
+
+    html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;}
+    body{background: linear-gradient(180deg, rgba(10,12,20,1) 0%, rgba(8,10,16,1) 100%); padding:18px; color:#e6eef8;}
+    .container{max-width:1200px;margin:0 auto;}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px;border-radius:14px;background:var(--glass);box-shadow:0 6px 24px rgba(2,6,23,0.6);backdrop-filter: blur(6px);}
+    .title{display:flex;gap:12px;align-items:center;}
+    .logo{
+      width:72px;height:72px;border-radius:12px;background:var(--accent-1);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:26px;
+      box-shadow: 0 6px 18px rgba(12,8,40,0.6);
+    }
+    h1{margin:0;font-size:20px;letter-spacing:0.2px}
+    p.subtitle{margin:0;color:var(--muted);font-size:13px}
+
+    /* Tabs */
+    .tabs{display:flex;gap:8px;margin-top:16px;}
+    .tab{padding:8px 12px;border-radius:10px;background:transparent;border:1px solid rgba(255,255,255,0.03);cursor:pointer;color:var(--muted);}
+    .tab.active{background:linear-gradient(90deg, rgba(124,58,237,0.14), rgba(14,165,233,0.08));border:1px solid rgba(124,58,237,0.28);color:#fff;box-shadow:0 6px 18px rgba(12,8,40,0.5);}
+
+    main{margin-top:18px;display:grid;grid-template-columns:1fr;gap:18px;}
+
+    /* Planner */
+    .planner{display:flex;flex-direction:column;gap:12px;}
+    .planner-top{display:flex;gap:12px;align-items:center;justify-content:space-between;}
+    .legend{display:flex;gap:8px;align-items:center}
+    .legend .chip{padding:6px 10px;border-radius:999px;font-size:13px;background:var(--glass-2);display:flex;gap:8px;align-items:center}
+    .btn{padding:8px 12px;border-radius:10px;background:var(--accent-2);border:none;color:#fff;cursor:pointer;box-shadow:0 6px 18px rgba(12,8,40,0.4);}
+    .btn.secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+    .controls{display:flex;gap:8px;align-items:center}
+
+    /* Week grid */
+    .week-grid{overflow:auto;border-radius:12px;background:linear-gradient(180deg, rgba(9,11,18,0.6), rgba(8,10,16,0.3));padding:12px;}
+    .grid{display:grid;grid-template-columns:80px repeat(7, 1fr);gap:6px;min-width:980px;}
+    .time-col{display:flex;flex-direction:column;gap:6px;}
+    .time-cell{height:28px;display:flex;align-items:center;color:var(--muted);font-size:12px;padding-left:8px;}
+    .day-col{display:flex;flex-direction:column;gap:6px;}
+    .day-header{height:40px;display:flex;align-items:center;justify-content:center;border-radius:8px;font-weight:600}
+    .day-header.work{background:linear-gradient(90deg, rgba(239,68,68,0.12), rgba(239,68,68,0.05));color:var(--danger)}
+    .day-header.free{background:linear-gradient(90deg, rgba(16,185,129,0.12), rgba(16,185,129,0.05));color:var(--success)}
+    .slot{height:28px;border-radius:6px;background:transparent;border:1px dashed rgba(255,255,255,0.02);position:relative;padding:2px;font-size:12px;display:flex;align-items:center;gap:6px}
+    .slot.flex{background:linear-gradient(90deg, rgba(99,102,241,0.06), rgba(14,165,233,0.03));border:1px solid rgba(99,102,241,0.08)}
+    .slot.work-block{background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.1)}
+    .slot.dog{background:linear-gradient(90deg, rgba(251,146,60,0.08), rgba(250,204,21,0.03));border:1px solid rgba(250,204,21,0.08)}
+    .slot.robot{background:linear-gradient(90deg, rgba(14,165,233,0.06), rgba(124,58,237,0.03));border:1px solid rgba(14,165,233,0.08)}
+    .slot.course{background:linear-gradient(90deg, rgba(59,130,246,0.05), rgba(96,165,250,0.03));border:1px solid rgba(59,130,246,0.08)}
+    .slot.meal{background:linear-gradient(90deg, rgba(34,197,94,0.05), rgba(16,185,129,0.03));border:1px solid rgba(34,197,94,0.08)}
+    .slot .label{font-size:11px;color:var(--muted)}
+    .slot .emoji{font-size:14px}
+
+    /* Cards */
+    .cards{display:grid;grid-template-columns:1fr 420px;gap:12px;}
+    .card{background:var(--card);border-radius:12px;padding:12px;box-shadow: 0 8px 30px rgba(2,6,23,0.6);}
+
+    /* Rules & checklist */
+    .rules-list{display:flex;flex-direction:column;gap:8px}
+    .checklist{display:flex;flex-direction:column;gap:8px}
+    .checkline{display:flex;align-items:center;gap:8px}
+
+    /* Candidates table */
+    .table-wrap{overflow:auto}
+    table{width:100%;border-collapse:collapse;font-size:13px}
+    th,td{padding:8px;border-bottom:1px solid rgba(255,255,255,0.03);text-align:left}
+    th{font-size:12px;color:var(--muted)}
+    td.status{font-weight:600}
+    .status.wait{color:gold}
+    .status.follow{color:#f97316}
+    .status.refus{color:var(--danger)}
+    .status.interview{color:#60a5fa}
+
+    /* Projects list */
+    .project{display:flex;flex-direction:column;gap:6px;margin-bottom:8px}
+
+    /* Stats */
+    .stats-row{display:flex;gap:12px;align-items:center}
+    .chart-wrap{height:240px}
+
+    /* Footer small */
+    .small{font-size:12px;color:var(--muted)}
+
+    /* Responsive */
+    @media (max-width:980px){
+      .grid{min-width:720px}
+      .cards{grid-template-columns:1fr}
+    }
+
+    /* Animations */
+    .fade-in{animation:fadeIn .6s ease both}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="fade-in" role="banner">
+      <div class="title">
+        <div class="logo">✨</div>
+        <div>
+          <h1>Ma Semaine — Structure & Action</h1>
+          <p class="subtitle">Organise ta vie : travail, chiens, candidatures, projets — réaliste et durable 🗂️</p>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:8px;align-items:center">
+        <div class="small">Thème</div>
+        <button id="themeToggle" class="tab">☀️ / 🌙</button>
+        <button id="exportPdf" class="btn">📤 Exporter PDF</button>
+      </div>
+    </header>
+
+    <nav class="tabs" role="navigation" aria-label="Navigation principale">
+      <button class="tab active" data-tab="planner">🗓️ Planning Hebdomadaire</button>
+      <button class="tab" data-tab="rules">📏 Règles d'Or</button>
+      <button class="tab" data-tab="jobs">📨 Suivi Candidatures</button>
+      <button class="tab" data-tab="projects">🎯 Projets Personnels</button>
+      <button class="tab" data-tab="stats">📊 Statistiques & Motivation</button>
+    </nav>
+
+    <main>
+      <!-- PLANNER -->
+      <section id="planner" class="planner card fade-in" role="region" aria-labelledby="planner-title">
+        <div class="planner-top">
+          <div style="display:flex;flex-direction:column">
+            <strong id="planner-title">Planning Hebdomadaire</strong>
+            <div class="small">Créneaux 30 min — promenades chien 1h15 quotidiennes incluses — jours travail en rouge</div>
+          </div>
+
+          <div class="controls">
+            <div class="legend">
+              <div class="chip">🔴 Jour travail</div>
+              <div class="chip">🟢 Jour libre</div>
+              <div class="chip">🐕 Promenade</div>
+              <div class="chip">🤖 Robot</div>
+            </div>
+            <button id="populateSample" class="btn secondary">Pré-remplir semaine (contraintes)</button>
+            <button id="savePlan" class="btn">💾 Enregistrer</button>
+          </div>
+        </div>
+
+        <div class="week-grid" id="weekGrid" aria-hidden="false">
+          <div class="grid" id="gridRoot" role="table" aria-label="Planning horaire">
+            <!-- JS will inject time column and 7 day columns -->
+          </div>
+        </div>
+
+        <div style="display:flex;gap:8px;margin-top:12px;align-items:center">
+          <label class="small">Mode d'édition :</label>
+          <button id="editToggle" class="tab">Activer / Désactiver</button>
+
+          <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
+            <label class="small">Pomodoro</label>
+            <button id="startPom" class="btn secondary">▶️ Démarrer</button>
+            <button id="resetPom" class="btn secondary">↺ Reset</button>
+            <div id="pomDisplay" class="chip">25:00</div>
+          </div>
+        </div>
+      </section>
+
+      <div class="cards">
+        <!-- LEFT: Rules & Candidates -->
+        <div>
+          <!-- RULES -->
+          <section id="rules" class="card fade-in" role="region" aria-labelledby="rules-title" style="display:none">
+            <h3 id="rules-title">Règles d'Or</h3>
+            <div class="rules-list">
+              <div><strong>Horaires fixes</strong></div>
+              <div class="small">Lun/Mer : réveil 05:20-05:30 (surveiller départ fille 06:15). Mar/Jeu/Ven : départ 06:45 train — retour 17:50 (Mar/Jeu) / 16:50 (Ven).</div>
+
+              <div><strong>Promenade chien (non négociable)</strong></div>
+              <div class="small">1h15 minimum / jour — possibilité d'utiliser le téléphone pendant 45min (podcast, candidatures audio, apprentissage).</div>
+
+              <div><strong>Robot aspirateur</strong></div>
+              <div class="small">1 passage/jour pendant vos absences (45min pour 2 passages). Zones quotidiennes: cuisine, SDB, couloirs. Chambres + salon: 1x/semaine.</div>
+
+              <div><strong>Routine matinale</strong></div>
+              <div class="small">05:20 Réveil → 05:25 hydratation → 05:30 check départ fille → 06:00 préparation promenade chien → 06:30 départ fille / poursuivre promenade si besoin.</div>
+
+              <div><strong>Checklist quotidienne</strong></div>
+              <div class="checklist">
+                <label class="checkline"><input type="checkbox" class="dailyCheck"> 🐕 Promenade 1h15</label>
+                <label class="checkline"><input type="checkbox" class="dailyCheck"> 💾 1 sauvegarde / notes</label>
+                <label class="checkline"><input type="checkbox" class="dailyCheck"> ✉️ Candidatures (objectif hebdo)</label>
+                <label class="checkline"><input type="checkbox" class="dailyCheck"> 🍽️ Préparer repas du soir</label>
+              </div>
+            </div>
+          </section>
+
+          <!-- JOBS -->
+          <section id="jobs" class="card fade-in" role="region" aria-labelledby="jobs-title" style="display:none">
+            <h3 id="jobs-title">Suivi Candidatures</h3>
+
+            <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+              <button id="addRow" class="btn">➕ Ajouter</button>
+              <button id="clearJobs" class="btn secondary">🧽 Vider</button>
+              <div style="margin-left:auto" class="small">Objectif hebdo: <strong id="goalWeekly">10</strong></div>
+            </div>
+
+            <div class="table-wrap">
+              <table id="jobsTable" aria-describedby="jobs-title">
+                <thead>
+                  <tr>
+                    <th>Date</th><th>Entreprise</th><th>Poste</th><th>Contact</th><th>Relance</th><th>Statut</th><th>Notes</th><th></th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+
+            <div style="display:flex;gap:12px;align-items:center;margin-top:8px">
+              <div class="small">Compteur envois: <strong id="countSent">0</strong></div>
+              <div class="small">Relances: <strong id="countFollow">0</strong></div>
+              <div style="margin-left:auto">
+                <button id="exportCsv" class="btn secondary">⬇️ Export CSV</button>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- RIGHT: Projects & Stats -->
+        <div>
+          <section id="projects" class="card fade-in" role="region" aria-labelledby="projects-title" style="display:none">
+            <h3 id="projects-title">Projets Personnels</h3>
+
+            <div class="project">
+              <strong>🎂 Anniversaire fille — Février/Mars</strong>
+              <div class="small">Deadline: <input type="date" id="bdayDeadline"> • Budget: <input id="bdayBudget" placeholder="CHF" style="width:100px"></div>
+              <div style="margin-top:6px">
+                <textarea id="bdayIdeas" placeholder="Idées, invités, lieu..." rows="3" style="width:100%;border-radius:8px;padding:8px;background:transparent;border:1px solid rgba(255,255,255,0.04);"></textarea>
+              </div>
+            </div>
+
+            <div class="project">
+              <strong>🧩 Prompts HTML pour fils</strong>
+              <div class="small">Types: fiches révision, quiz interactifs, carte mémoire — fréquence: plusieurs fois / semaine</div>
+              <textarea id="promptExample" rows="4" placeholder="Exemple de prompt : 'Génère 10 questions niveau 9H sur fractions...'"></textarea>
+              <div style="display:flex;gap:8px;margin-top:6px">
+                <button id="addPrompt" class="btn">➕ Enregistrer prompt</button>
+                <button id="listPrompts" class="btn secondary">📋 Voir prompts</button>
+              </div>
+              <div id="promptList" class="small" style="margin-top:8px;max-height:140px;overflow:auto"></div>
+            </div>
+
+            <div class="project">
+              <strong>📦 Désencombrement</strong>
+              <div class="small">Zones: Cuisine, Salon, Chambres, Armoire entrée — Plan: 1 zone / semaine, dons & tri rapide 30-60min</div>
+              <div style="display:flex;gap:8px;margin-top:8px">
+                <input id="declutterZone" placeholder="Nouvelle zone à planifier" style="flex:1;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.03)"/>
+                <button id="addZone" class="btn secondary">Ajouter</button>
+              </div>
+              <ul id="zonesList" class="small" style="margin-top:6px"></ul>
+            </div>
+
+            <div class="project">
+              <strong>🎨 Projets loisirs & apprentissage IA</strong>
+              <div class="small">Apprendre concepts IA & outils dérivés — 2 sessions / semaine de 45-60min</div>
+              <textarea id="iaNotes" rows="3" placeholder="Sujets : 'prompt engineering', 'outils no-code'..."></textarea>
+            </div>
+          </section>
+
+          <section id="stats" class="card fade-in" role="region" aria-labelledby="stats-title" style="display:none">
+            <h3 id="stats-title">Statistiques & Motivation</h3>
+            <div class="stats-row">
+              <div style="flex:1">
+                <div class="chart-wrap"><canvas id="timeChart"></canvas></div>
+              </div>
+              <div style="width:260px;display:flex;flex-direction:column;gap:8px">
+                <div class="small">Réalisations semaine</div>
+                <div id="achievements" style="min-height:80px;background:var(--glass);padding:8px;border-radius:8px"></div>
+                <div class="small">Badges</div>
+                <div style="display:flex;gap:8px">
+                  <div class="chip">🏆 1 semaine de marches complètes</div>
+                  <div class="chip">✉️ 10 candidatures</div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <footer style="margin-top:12px" class="small card">
+        <div style="display:flex;gap:12px;align-items:center;justify-content:space-between">
+          <div>Impression-friendly · Mobile-first · Toggle thème · Sauvegarde locale</div>
+          <div>All times displayed in local timezone — utilise les créneaux 30min</div>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+<script>
+/* -----------------------
+   Utilities & Constants
+   ----------------------- */
+const DAYS = ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
+const WORK_DAYS = {1:true,3:true,4:true}; // index: 0 Lundi, 1 Mardi, 2 Mercredi...
+// Work day train times & return
+const TRAIN_OUT = '06:45';
+const RETURN_TIMES = {1:'17:50',3:'17:50',4:'16:50'}; // Tue, Thu, Fri
+// Dog walk min 1h15 = 75 minutes
+const DOG_MIN = 75;
+
+/* -----------------------
+   Theme toggle
+   ----------------------- */
+const body = document.body;
+const themeToggle = document.getElementById('themeToggle');
+themeToggle.addEventListener('click', ()=> {
+  body.classList.toggle('light');
+});
+
+/* -----------------------
+   Build grid dynamically
+   ----------------------- */
+const gridRoot = document.getElementById('gridRoot');
+
+// Create time column: from 05:00 to 23:30 step 30min
+function createTimeSlots() {
+  // header left
+  const leftHeader = document.createElement('div');
+  leftHeader.style.gridColumn = '1 / 2';
+  leftHeader.style.display='flex';leftHeader.style.alignItems='center';
+  leftHeader.innerHTML = '<div style="height:40px;"></div>';
+  gridRoot.appendChild(leftHeader);
+
+  // day headers
+  for(let d=0; d<7; d++){
+    const dayHeader = document.createElement('div');
+    dayHeader.className = 'day-header ' + (WORK_DAYS[d]? 'work':'free');
+    dayHeader.style.gridColumn = `${2 + d} / ${3 + d}`;
+    dayHeader.innerHTML = `<div style="display:flex;flex-direction:column;align-items:center">
+      <div style="font-weight:700">${DAYS[d]}</div>
+      <div class="small">${d===1||d===3||d===4 ? '🔴 Travail' : '🟢 Libre'}</div>
+    </div>`;
+    gridRoot.appendChild(dayHeader);
+  }
+
+  // Time labels and slots
+  const start = 5*60; // 05:00
+  const end = 23*60+30; // 23:30
+  let row = 0;
+  for(let t = start; t <= end; t += 30){
+    row++;
+    // time cell
+    const timeCell = document.createElement('div');
+    timeCell.className = 'time-cell';
+    timeCell.style.gridColumn = '1 / 2';
+    const hh = String(Math.floor(t/60)).padStart(2,'0');
+    const mm = String(t%60).padStart(2,'0');
+    timeCell.textContent = hh + ':' + mm;
+    gridRoot.appendChild(timeCell);
+
+    // day slots
+    for(let d=0; d<7; d++){
+      const slot = document.createElement('div');
+      slot.className = 'slot';
+      slot.dataset.day = d;
+      slot.dataset.time = `${hh}:${mm}`;
+      slot.dataset.index = row;
+      slot.setAttribute('role','button');
+      slot.setAttribute('tabindex','0');
+
+      // make certain slots uneditable unless edit mode
+      slot.addEventListener('click', slotClick);
+      slot.addEventListener('keydown', (e)=>{ if(e.key==='Enter') slotClick.call(slot,e) });
+
+      gridRoot.appendChild(slot);
+    }
+  }
+}
+createTimeSlots();
+
+/* -----------------------
+   Editing & persistence
+   ----------------------- */
+let editMode = false;
+const editToggle = document.getElementById('editToggle');
+editToggle.addEventListener('click', ()=> { editMode = !editMode; editToggle.classList.toggle('active'); });
+
+function slotClick(e){
+  if(!editMode) return;
+  // prompt to set quick activity label and category
+  const current = this;
+  const label = prompt('Activité (ex: Promenade chien, Candidatures, Courses, Robot, Repas, Libre):','Promenade chien');
+  if(!label) return;
+  // Determine class
+  current.textContent = '';
+  const emoji = chooseEmoji(label);
+  const lbl = document.createElement('span'); lbl.className='label'; lbl.textContent = label;
+  const em = document.createElement('span'); em.className='emoji'; em.textContent = emoji;
+  current.appendChild(em); current.appendChild(lbl);
+
+  // add helper classes
+  current.classList.remove('flex','work-block','dog','robot','course','meal');
+  const l = label.toLowerCase();
+  if(l.includes('promen') || l.includes('chien')) current.classList.add('dog');
+  else if(l.includes('robot') || l.includes('aspir')) current.classList.add('robot');
+  else if(l.includes('course')) current.classList.add('course');
+  else if(l.includes('repas')) current.classList.add('meal');
+  else if(l.includes('travail')) current.classList.add('work-block');
+  else current.classList.add('flex');
+
+  savePlanLocal();
+}
+
+function chooseEmoji(label){
+  const l = (label||'').toLowerCase();
+  if(l.includes('promen') || l.includes('chien')) return '🐕';
+  if(l.includes('candid')) return '✉️';
+  if(l.includes('course')) return '🛒';
+  if(l.includes('repas')) return '🍽️';
+  if(l.includes('robot')) return '🤖';
+  if(l.includes('désencombre')||l.includes('désencombrement')) return '📦';
+  return '📝';
+}
+
+/* -----------------------
+   Prepopulate week with constraints
+   ----------------------- */
+document.getElementById('populateSample').addEventListener('click', populateConstraints);
+
+function populateConstraints(){
+  // Clear grid
+  document.querySelectorAll('.slot').forEach(s => { s.textContent=''; s.className='slot'; });
+
+  // For weekdays Tue(1),Thu(3),Fri(4) add work blocks 06:45 depart and return
+  // Find slot index by time lookup
+  function findSlot(day, time){
+    return document.querySelector(`.slot[data-day="${day}"][data-time="${time}"]`);
+  }
+
+  // Add dog walk 1h15 daily: set as block starting typically 06:30 on free days or 06:30 on L/M/W as example.
+  for(let d=0; d<7; d++){
+    // choose start time: if work day, place walk early morning 06:30 or evening 16:30 if needed
+    let start = (WORK_DAYS[d]) ? '06:30' : '06:30';
+    // ensure 75min -> mark consecutive slots for 75 minutes = 3 x 30min = 90min, but we mark 75 as 2.5 slots approximate -> use 3 slots (1h30) to be realistic.
+    markSpan(d, start, 90, 'Promenade chien (1h15+)','dog');
+  }
+
+  // Mark work commute windows for Tue/Thu/Fri and returns
+  ['06:45','07:15'].forEach(t => {
+    // mark two 30-min blocks around departure
+    const depTimes = ['06:30','07:00'];
+  });
+  // Mark train departure precise block and work hours (approx 08:30 to return time - using 08:00-17:50)
+  for(let d of [1,3,4]){
+    // mark 'Travail' from 08:00 to return time - we will mark 08:00 until RETURN_TIMES[d]
+    const start='08:00';
+    const end = RETURN_TIMES[d] || '17:30';
+    markRange(d,start,end,'Travail (en déplacement)','work-block');
+  }
+
+  // Robot runs during dog walks/absences - schedule robot first daily at 09:00 for 45min if free day or during dog walk if away
+  for(let d=0; d<7; d++){
+    // choose robot start time: if work day, schedule at 08:30 (while you leave); else schedule at 09:30
+    let rs = WORK_DAYS[d] ? '08:30' : '09:30';
+    markSpan(d, rs, 45,'Robot (aspirateur)','robot');
+  }
+
+  // Courses examples: plan quick 30-60min trips on Wed/Thu afternoon
+  markSpan(2,'11:30',60,'Courses + repas midi','course'); // Mercredi midi
+  markSpan(3,'18:00',60,'Grande course (30min trajet A/R)','course'); // Jeudi soir
+
+  // Meals: dinner every evening 18:00-19:00
+  for(let d=0; d<7; d++) markSpan(d,'18:00',60,'Repas soir','meal');
+
+  // Add flexible blocks (study, candidatures, declutter) on Mon/Wed
+  markSpan(0,'08:30',60,'Candidatures (objectif quotidien)','flex');
+  markSpan(2,'08:30',120,'Candidatures & Prompts HTML','flex');
+
+  // Save
+  savePlanLocal();
+}
+
+function markSpan(day, startTime, minutes, label,classTag){
+  // get nearest 30min slot start
+  const hh = startTime.split(':')[0]; const mm = startTime.split(':')[1];
+  let minutesFromStart = parseInt(hh)*60 + parseInt(mm);
+  // number of 30min slots
+  const slots = Math.ceil(minutes/30);
+  for(let s=0;s<slots;s++){
+    const tMin = minutesFromStart + s*30;
+    const hh2 = String(Math.floor(tMin/60)).padStart(2,'0');
+    const mm2 = String(tMin%60).padStart(2,'0');
+    const target = document.querySelector(`.slot[data-day="${day}"][data-time="${hh2}:${mm2}"]`);
+    if(!target) continue;
+    target.textContent='';
+    const em = document.createElement('span'); em.className='emoji'; em.textContent = chooseEmoji(label);
+    const lbl = document.createElement('span'); lbl.className='label'; lbl.textContent = label;
+    target.appendChild(em); target.appendChild(lbl);
+    target.classList.add(classTag);
+  }
+}
+
+function markRange(day, startTime, endTime, label, classTag){
+  // mark from startTime inclusive to endTime exclusive
+  const sM = startTime.split(':'); const eM = endTime.split(':');
+  let startMin = parseInt(sM[0])*60 + parseInt(sM[1]);
+  let endMin = parseInt(eM[0])*60 + parseInt(eM[1]);
+  for(let t = startMin; t < endMin; t += 30){
+    const hh = String(Math.floor(t/60)).padStart(2,'0');
+    const mm = String(t%60).padStart(2,'0');
+    const target = document.querySelector(`.slot[data-day="${day}"][data-time="${hh}:${mm}"]`);
+    if(!target) continue;
+    target.textContent='';
+    const em = document.createElement('span'); em.className='emoji'; em.textContent = chooseEmoji(label);
+    const lbl = document.createElement('span'); lbl.className='label'; lbl.textContent = label;
+    target.appendChild(em); target.appendChild(lbl);
+    target.classList.add(classTag);
+  }
+}
+
+/* -----------------------
+   Local Storage: save/load plan
+   ----------------------- */
+const savePlan = document.getElementById('savePlan');
+savePlan.addEventListener('click', savePlanLocal);
+
+function savePlanLocal(){
+  const data = [];
+  document.querySelectorAll('.slot').forEach(s => {
+    if(s.textContent.trim() !== ''){
+      data.push({
+        day: s.dataset.day,
+        time: s.dataset.time,
+        html: s.innerHTML,
+        classes: s.className
+      });
+    }
+  });
+  localStorage.setItem('weeklyPlan', JSON.stringify(data));
+  alert('Planning enregistré localement ✔️');
+}
+
+function loadPlanLocal(){
+  const raw = localStorage.getItem('weeklyPlan');
+  if(!raw) return;
+  try{
+    const data = JSON.parse(raw);
+    // clear
+    document.querySelectorAll('.slot').forEach(s => { s.textContent=''; s.className='slot'; });
+    for(const item of data){
+      const s = document.querySelector(`.slot[data-day="${item.day}"][data-time="${item.time}"]`);
+      if(!s) continue;
+      s.innerHTML = item.html;
+      s.className = item.classes;
+    }
+  }catch(e){ console.error(e) }
+}
+loadPlanLocal();
+
+/* -----------------------
+   Pomodoro Timer
+   ----------------------- */
+let pomRemaining = 25*60;
+let pomInterval = null;
+const pomDisplay = document.getElementById('pomDisplay');
+document.getElementById('startPom').addEventListener('click', ()=>{
+  if(pomInterval){ clearInterval(pomInterval); pomInterval=null; document.getElementById('startPom').textContent='▶️ Démarrer'; return; }
+  pomInterval = setInterval(()=> {
+    pomRemaining--;
+    const mm = String(Math.floor(pomRemaining/60)).padStart(2,'0');
+    const ss = String(pomRemaining%60).padStart(2,'0');
+    pomDisplay.textContent = `${mm}:${ss}`;
+    if(pomRemaining<=0){ clearInterval(pomInterval); pomInterval=null; pomRemaining=25*60; alert('Pomodoro terminé 🎉'); pomDisplay.textContent='25:00'; document.getElementById('startPom').textContent='▶️ Démarrer'; }
+  },1000);
+  document.getElementById('startPom').textContent='⏸️ Pause';
+});
+document.getElementById('resetPom').addEventListener('click', ()=> { clearInterval(pomInterval); pomInterval=null; pomRemaining=25*60; pomDisplay.textContent='25:00'; document.getElementById('startPom').textContent='▶️ Démarrer'; });
+
+/* -----------------------
+   Candidate tracker (local editable table)
+   ----------------------- */
+const jobsTbody = document.querySelector('#jobsTable tbody');
+const countSent = document.getElementById('countSent');
+const countFollow = document.getElementById('countFollow');
+
+document.getElementById('addRow').addEventListener('click', ()=> addJobRow({date: today(),company:'',position:'',contact:'',follow:'',status:'attente',notes:''}));
+document.getElementById('clearJobs').addEventListener('click', ()=> { if(confirm('Vider le tableau de candidatures ?')){ localStorage.removeItem('jobsData'); renderJobs(); }});
+document.getElementById('exportCsv').addEventListener('click', exportJobsCsv);
+
+function today(){ const d = new Date(); return d.toISOString().slice(0,10); }
+
+function renderJobs(){
+  jobsTbody.innerHTML='';
+  const data = JSON.parse(localStorage.getItem('jobsData')||'[]');
+  let sent=0, follow=0;
+  data.forEach((row,idx)=> {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><input value="${row.date||''}" data-i="${idx}" data-k="date" style="width:120px"></td>
+      <td><input value="${row.company||''}" data-i="${idx}" data-k="company"></td>
+      <td><input value="${row.position||''}" data-i="${idx}" data-k="position"></td>
+      <td><input value="${row.contact||''}" data-i="${idx}" data-k="contact"></td>
+      <td><input value="${row.follow||''}" data-i="${idx}" data-k="follow" style="width:120px"></td>
+      <td class="status"><select data-i="${idx}" data-k="status">
+        <option value="attente" ${row.status==='attente'?'selected':''}>Attente</option>
+        <option value="relance" ${row.status==='relance'?'selected':''}>Relance</option>
+        <option value="entretien" ${row.status==='entretien'?'selected':''}>Entretien</option>
+        <option value="refus" ${row.status==='refus'?'selected':''}>Refus</option>
+      </select></td>
+      <td><input value="${row.notes||''}" data-i="${idx}" data-k="notes"></td>
+      <td><button data-i="${idx}" class="btn secondary removeRow">🗑️</button></td>
+    `;
+    jobsTbody.appendChild(tr);
+    if(row.status==='attente') sent++;
+    if(row.status==='relance') follow++;
+  });
+
+  // bind edits
+  jobsTbody.querySelectorAll('input,select').forEach(el => {
+    el.addEventListener('change', (e)=>{
+      const i = e.target.dataset.i; const k = e.target.dataset.k;
+      const data = JSON.parse(localStorage.getItem('jobsData')||'[]');
+      data[i][k] = e.target.value;
+      localStorage.setItem('jobsData', JSON.stringify(data));
+      updateCounts();
+    });
+  });
+  jobsTbody.querySelectorAll('.removeRow').forEach(btn=>{
+    btn.addEventListener('click', (e)=> {
+      const i = e.currentTarget.dataset.i;
+      const data = JSON.parse(localStorage.getItem('jobsData')||'[]');
+      data.splice(i,1);
+      localStorage.setItem('jobsData', JSON.stringify(data));
+      renderJobs();
+    });
+  });
+  updateCounts();
+}
+
+function addJobRow(row){
+  const data = JSON.parse(localStorage.getItem('jobsData')||'[]');
+  data.push(row);
+  localStorage.setItem('jobsData', JSON.stringify(data));
+  renderJobs();
+}
+
+function updateCounts(){
+  const data = JSON.parse(localStorage.getItem('jobsData')||'[]');
+  countSent.textContent = data.length;
+  countFollow.textContent = data.filter(d=>d.status==='relance').length;
+}
+
+function exportJobsCsv(){
+  const data = JSON.parse(localStorage.getItem('jobsData')||'[]');
+  if(!data.length){ alert('Aucune candidature à exporter'); return; }
+  const header = ['Date','Entreprise','Poste','Contact','Relance','Statut','Notes'];
+  const rows = data.map(r => header.map(h=> JSON.stringify(r[Object.keys(r)[header.indexOf(h)]]) || '').join(','));
+  const csv = [header.join(',')].concat(rows).join('\\n');
+  const blob = new Blob([csv],{type:'text/csv'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download='candidatures.csv'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+/* -----------------------
+   Load saved jobs on start
+   ----------------------- */
+renderJobs();
+
+/* -----------------------
+   Prompts & Declutter zones
+   ----------------------- */
+document.getElementById('addPrompt').addEventListener('click', ()=> {
+  const txt = document.getElementById('promptExample').value.trim();
+  if(!txt) return alert('Renseigne un prompt');
+  const prompts = JSON.parse(localStorage.getItem('prompts')||'[]');
+  prompts.push({text:txt,date:today()});
+  localStorage.setItem('prompts', JSON.stringify(prompts));
+  document.getElementById('promptExample').value='';
+  renderPrompts();
+});
+document.getElementById('listPrompts').addEventListener('click', renderPrompts);
+function renderPrompts(){
+  const prompts = JSON.parse(localStorage.getItem('prompts')||'[]');
+  const container = document.getElementById('promptList'); container.innerHTML='';
+  prompts.slice().reverse().forEach(p => {
+    const div = document.createElement('div'); div.style.padding='6px'; div.style.borderBottom='1px solid rgba(255,255,255,0.02)';
+    div.textContent = `${p.date} — ${p.text}`;
+    container.appendChild(div);
+  });
+}
+renderPrompts();
+
+document.getElementById('addZone').addEventListener('click', ()=> {
+  const zone = document.getElementById('declutterZone').value.trim();
+  if(!zone) return;
+  const zones = JSON.parse(localStorage.getItem('zones')||'[]');
+  zones.push({zone,added:today()});
+  localStorage.setItem('zones', JSON.stringify(zones));
+  document.getElementById('declutterZone').value='';
+  renderZones();
+});
+function renderZones(){
+  const zones = JSON.parse(localStorage.getItem('zones')||'[]');
+  const ul = document.getElementById('zonesList'); ul.innerHTML='';
+  zones.forEach((z,i)=> {
+    const li = document.createElement('li'); li.textContent = `${z.zone} — (${z.added}) `;
+    const btn = document.createElement('button'); btn.textContent='Terminé'; btn.className='btn secondary'; btn.style.marginLeft='8px';
+    btn.addEventListener('click', ()=> {
+      zones.splice(i,1); localStorage.setItem('zones', JSON.stringify(zones)); renderZones();
+    });
+    li.appendChild(btn);
+    ul.appendChild(li);
+  });
+}
+renderZones();
+
+/* -----------------------
+   Stats Chart (uses Chart.js)
+   ----------------------- */
+const ctx = document.getElementById('timeChart').getContext('2d');
+let chart = new Chart(ctx, {
+  type:'doughnut',
+  data:{
+    labels:['Promenade chien','Travail','Candidatures','Courses','Repas','Robot','Loisirs'],
+    datasets:[{data:[525,720,120,90,210,60,180]}] // minutes example
+  },
+  options:{
+    plugins:{legend:{position:'bottom'}},
+    responsive:true,
+    maintainAspectRatio:false
+  }
+});
+
+/* -----------------------
+   Achievements & weekly recap
+   ----------------------- */
+function computeAchievements(){
+  // quick heuristic: count dog walks present, candidatures count, declutter zones completed
+  const slots = Array.from(document.querySelectorAll('.slot'));
+  const dogCount = slots.filter(s=>s.className.includes('dog') && s.textContent.trim()).length;
+  const candCount = JSON.parse(localStorage.getItem('jobsData')||'[]').length;
+  const zones = JSON.parse(localStorage.getItem('zones')||'[]').length;
+  const ach = [];
+  if(dogCount >= 7) ach.push('🏆 Promenades: 7 / 7');
+  else ach.push(`🐕 Promenades complétées: ${Math.round(dogCount/3)} jours estimés`);
+  ach.push(`✉️ Candidatures envoyées: ${candCount}`);
+  ach.push(`📦 Zones désencombrées: ${zones}`);
+  document.getElementById('achievements').innerHTML = ach.map(a=>'<div>'+a+'</div>').join('');
+}
+computeAchievements();
+
+/* -----------------------
+   Export PDF of planner (html2canvas + jsPDF)
+   ----------------------- */
+document.getElementById('exportPdf').addEventListener('click', async ()=>{
+  const element = document.querySelector('.container');
+  const canvas = await html2canvas(element, {scale:1.6, useCORS:true, scrollY:-window.scrollY});
+  const img = canvas.toDataURL('image/png');
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF({orientation:'portrait',unit:'px',format:[canvas.width,canvas.height]});
+  pdf.addImage(img,'PNG',0,0,canvas.width,canvas.height);
+  pdf.save('planning_semaine.pdf');
+});
+
+/* -----------------------
+   Export / Import helpers (optional)
+   ----------------------- */
+function exportAllData(){
+  const obj = {
+    plan: localStorage.getItem('weeklyPlan'),
+    jobs: localStorage.getItem('jobsData'),
+    prompts: localStorage.getItem('prompts'),
+    zones: localStorage.getItem('zones')
+  };
+  const blob = new Blob([JSON.stringify(obj)],{type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'planner_backup.json'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+/* -----------------------
+   Tab navigation
+   ----------------------- */
+document.querySelectorAll('.tab[data-tab]').forEach(btn => {
+  btn.addEventListener('click', ()=> {
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    btn.classList.add('active');
+    const tab = btn.dataset.tab;
+    ['planner','rules','jobs','projects','stats'].forEach(id=>{
+      document.getElementById(id).style.display = (id===tab ? (id==='planner' ? 'flex':'block') : 'none');
+    });
+    // recompute stats view if shown
+    if(tab==='stats') computeAchievements();
+  });
+});
+
+/* -----------------------
+   Accessibility / print styles
+   ----------------------- */
+window.onbeforeunload = ()=> { /* autosave not required, plan saved on demand */ };
+
+/* -----------------------
+   Initial sample prefill (keeps minimal)
+   ----------------------- */
+if(!localStorage.getItem('weeklyPlan')){
+  // populate automatically but unobtrusive
+  // auto-prepopulate basic constraints without prompting the user
+  populateConstraints();
+}
+
+</script>
+</body>
+</html>
