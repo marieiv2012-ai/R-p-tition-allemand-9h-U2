@@ -1,0 +1,1816 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Coach Personnel IA - Ton Guide pour une Vie Épanouie</title>
+    <!-- Font Awesome pour les icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Chart.js pour les graphiques -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* CSS EMBEDDED - Commencerait normalement dans style.css */
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-color: #764ba2;
+            --text-color: #333;
+            --bg-color-light: #f4f7f6;
+            --bg-card-light: white;
+            --shadow-light: rgba(0,0,0,0.1);
+            --border-light: #e0e0e0;
+
+            /* Dark mode variables */
+            --text-color-dark: #e0e0e0;
+            --bg-color-dark: #2c2c3e;
+            --bg-card-dark: #3a3a50;
+            --shadow-dark: rgba(0,0,0,0.5);
+            --border-dark: #4a4a60;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-color-light);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode {
+            background: var(--bg-color-dark);
+            color: var(--text-color-dark);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: var(--bg-card-light);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px var(--shadow-light);
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        body.dark-mode header {
+            background: var(--bg-card-dark);
+            box-shadow: 0 10px 30px var(--shadow-dark);
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: var(--text-color);
+            font-size: 1.1em;
+            transition: color 0.3s;
+        }
+
+        body.dark-mode .subtitle {
+            color: var(--text-color-dark);
+        }
+
+        .nav-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .nav-tab {
+            background: var(--bg-card-light);
+            padding: 12px 25px;
+            border-radius: 30px;
+            box-shadow: 0 5px 15px var(--shadow-light);
+            cursor: pointer;
+            font-weight: bold;
+            color: var(--secondary-color);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        body.dark-mode .nav-tab {
+            background: var(--bg-card-dark);
+            box-shadow: 0 5px 15px var(--shadow-dark);
+            color: var(--text-color-dark);
+        }
+
+        .nav-tab:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px var(--shadow-light);
+        }
+
+        body.dark-mode .nav-tab:hover {
+            box-shadow: 0 8px 20px var(--shadow-dark);
+        }
+
+        .nav-tab.active {
+            background: var(--primary-gradient);
+            color: white;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+            background: var(--bg-card-light);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px var(--shadow-light);
+            margin-bottom: 20px;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        body.dark-mode .tab-content {
+            background: var(--bg-card-dark);
+            box-shadow: 0 10px 30px var(--shadow-dark);
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2, h3 {
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid var(--border-light);
+            transition: color 0.3s, border-color 0.3s;
+        }
+
+        body.dark-mode h2, body.dark-mode h3 {
+            color: var(--text-color-dark);
+            border-color: var(--border-dark);
+        }
+
+        /* Schedule specific styles */
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .schedule-day {
+            background: var(--bg-color-light);
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 5px 15px var(--shadow-light);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        body.dark-mode .schedule-day {
+            background: var(--bg-card-dark);
+            box-shadow: 0 5px 15px var(--shadow-dark);
+        }
+
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-light);
+            transition: border-color 0.3s;
+        }
+
+        body.dark-mode .day-header {
+            border-color: var(--border-dark);
+        }
+
+        .day-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--secondary-color);
+            transition: color 0.3s;
+        }
+
+        body.dark-mode .day-title {
+            color: var(--text-color-dark);
+        }
+
+        .day-type {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+            color: white;
+        }
+
+        .day-work { background-color: #e74c3c; } /* Rouge pour jours de travail */
+        .day-free { background-color: #27ae60; } /* Vert pour jours libres */
+        .day-weekend { background-color: #f39c12; } /* Orange pour weekend */
+
+
+        .time-slot {
+            display: flex;
+            margin-bottom: 10px;
+            gap: 10px;
+            padding: 8px;
+            border-left: 4px solid var(--primary-gradient);
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 5px;
+            align-items: flex-start;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        body.dark-mode .time-slot {
+            background: rgba(118, 75, 162, 0.1);
+            border-left-color: var(--primary-gradient);
+        }
+
+        .time {
+            font-weight: bold;
+            flex-shrink: 0;
+            width: 80px;
+        }
+
+        .activity {
+            flex-grow: 1;
+            color: var(--text-color);
+            transition: color 0.3s;
+        }
+
+        body.dark-mode .activity {
+            color: var(--text-color-dark);
+        }
+
+        .activity strong {
+            color: var(--secondary-color);
+            transition: color 0.3s;
+        }
+
+        body.dark-mode .activity strong {
+            color: var(--text-color-dark);
+        }
+
+        .flexible-slot {
+            border-left-color: #f39c12;
+            background: rgba(243, 156, 18, 0.05);
+        }
+
+        body.dark-mode .flexible-slot {
+            border-left-color: #f39c12;
+            background: rgba(243, 156, 18, 0.1);
+        }
+
+        /* Golden Rules / Checklists */
+        .rules-list, .checklist {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 20px;
+        }
+
+        .rules-list li, .checklist li {
+            background: var(--bg-color-light);
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px var(--shadow-light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        body.dark-mode .rules-list li, body.dark-mode .checklist li {
+            background: var(--bg-card-dark);
+            box-shadow: 0 2px 8px var(--shadow-dark);
+        }
+
+        .rules-list li i, .checklist li i {
+            color: var(--secondary-color);
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px dashed var(--border-light);
+            transition: border-color 0.3s;
+        }
+
+        body.dark-mode .task-item {
+            border-color: var(--border-dark);
+        }
+
+        .task-item:last-child {
+            border-bottom: none;
+        }
+
+        .task-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: var(--secondary-color);
+        }
+
+        /* Job Tracker */
+        .job-tracker-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: var(--bg-card-light);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px var(--shadow-light);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        body.dark-mode .job-tracker-table {
+            background: var(--bg-card-dark);
+            box-shadow: 0 5px 15px var(--shadow-dark);
+        }
+
+        .job-tracker-table th, .job-tracker-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-light);
+            transition: border-color 0.3s;
+        }
+
+        body.dark-mode .job-tracker-table th, body.dark-mode .job-tracker-table td {
+            border-color: var(--border-dark);
+        }
+
+        .job-tracker-table th {
+            background: var(--primary-gradient);
+            color: white;
+            font-weight: bold;
+        }
+
+        .job-tracker-table tr:nth-child(even) {
+            background-color: rgba(0,0,0,0.02);
+        }
+
+        body.dark-mode .job-tracker-table tr:nth-child(even) {
+            background-color: rgba(255,255,255,0.05);
+        }
+
+        .status-attente { background-color: #fcf8e3; color: #8a6d3b; }
+        .status-relance { background-color: #d9edf7; color: #31708f; }
+        .status-entretien { background-color: #dff0d8; color: #3c763d; }
+        .status-refus { background-color: #f2dede; color: #a94442; }
+
+        body.dark-mode .status-attente { background-color: #5b542c; color: #d0c08b; }
+        body.dark-mode .status-relance { background-color: #2b4f67; color: #87ceeb; }
+        body.dark-mode .status-entretien { background-color: #3b5f3b; color: #9be9a8; }
+        body.dark-mode .status-refus { background-color: #6d3a3a; color: #e99090; }
+
+        .add-entry-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+            background: var(--bg-color-light);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px var(--shadow-light);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        body.dark-mode .add-entry-form {
+            background: var(--bg-card-dark);
+            box-shadow: 0 2px 10px var(--shadow-dark);
+        }
+
+        .add-entry-form input, .add-entry-form select {
+            flex: 1 1 calc(33% - 15px); /* 3 items per row, with gap */
+            padding: 10px;
+            border: 1px solid var(--border-light);
+            border-radius: 5px;
+            background: var(--bg-card-light);
+            color: var(--text-color);
+            transition: border-color 0.3s, background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode .add-entry-form input, body.dark-mode .add-entry-form select {
+            border-color: var(--border-dark);
+            background: var(--bg-color-dark);
+            color: var(--text-color-dark);
+        }
+
+        .add-entry-form button {
+            flex: 1 1 100%; /* Full width for button */
+            background: var(--secondary-color);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
+        }
+
+        .add-entry-form button:hover {
+            background: #5a3c8a;
+        }
+
+        /* Projects */
+        .project-card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .project-card {
+            background: var(--bg-card-light);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px var(--shadow-light);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        body.dark-mode .project-card {
+            background: var(--bg-card-dark);
+            box-shadow: 0 5px 15px var(--shadow-dark);
+        }
+
+        .project-card h3 {
+            border-bottom: 1px dashed var(--border-light);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            transition: border-color 0.3s;
+        }
+
+        body.dark-mode .project-card h3 {
+            border-color: var(--border-dark);
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        body.dark-mode .progress-bar-container {
+            background-color: #555;
+        }
+
+        .progress-bar {
+            height: 20px;
+            background: var(--primary-gradient);
+            width: 0%; /* Initial width */
+            border-radius: 5px;
+            text-align: center;
+            color: white;
+            line-height: 20px;
+            font-size: 0.8em;
+            transition: width 0.5s ease-in-out;
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: var(--bg-card-light);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px var(--shadow-light);
+            text-align: center;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        body.dark-mode .stat-card {
+            background: var(--bg-card-dark);
+            box-shadow: 0 5px 15px var(--shadow-dark);
+        }
+
+        .stat-card h4 {
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+            transition: color 0.3s;
+        }
+
+        body.dark-mode .stat-card h4 {
+            color: var(--text-color-dark);
+        }
+
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .chart-container {
+            background: var(--bg-card-light);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px var(--shadow-light);
+            margin-top: 20px;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        body.dark-mode .chart-container {
+            background: var(--bg-card-dark);
+            box-shadow: 0 5px 15px var(--shadow-dark);
+        }
+
+        /* General utility classes */
+        .info-box, .alert {
+            background: #e6f7ff;
+            color: #31708f;
+            padding: 15px;
+            border-left: 5px solid #2196F3;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        body.dark-mode .info-box, body.dark-mode .alert {
+            background: #1a364a;
+            color: #87ceeb;
+            border-left-color: #2196F3;
+        }
+
+        .info-box.danger, .alert.danger {
+            background: #f8d7da;
+            color: #721c24;
+            border-left-color: #dc3545;
+        }
+        body.dark-mode .info-box.danger, body.dark-mode .alert.danger {
+            background: #4a1a1e;
+            color: #e99090;
+            border-left-color: #dc3545;
+        }
+
+        .info-box .icon, .alert .icon {
+            font-size: 1.5em;
+            color: #2196F3;
+        }
+        .info-box.danger .icon, .alert.danger .icon {
+            color: #dc3545;
+        }
+
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: var(--text-color);
+            transition: color 0.3s;
+        }
+
+        body.dark-mode .form-group label {
+            color: var(--text-color-dark);
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="date"],
+        .form-group input[type="number"],
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-light);
+            border-radius: 5px;
+            background: var(--bg-card-light);
+            color: var(--text-color);
+            transition: border-color 0.3s, background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode .form-group input, body.dark-mode .form-group textarea, body.dark-mode .form-group select {
+            border-color: var(--border-dark);
+            background: var(--bg-color-dark);
+            color: var(--text-color-dark);
+        }
+
+        .btn {
+            background: var(--secondary-color);
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background: #5a3c8a;
+        }
+
+        /* Dark mode toggle */
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--bg-color-light);
+            border: 1px solid var(--border-light);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 5px var(--shadow-light);
+            transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+        }
+
+        body.dark-mode .dark-mode-toggle {
+            background: var(--bg-card-dark);
+            border-color: var(--border-dark);
+            box-shadow: 0 2px 5px var(--shadow-dark);
+        }
+
+        .dark-mode-toggle i {
+            color: var(--text-color);
+            font-size: 1.2em;
+            transition: color 0.3s;
+        }
+
+        body.dark-mode .dark-mode-toggle i {
+            color: var(--text-color-dark);
+        }
+
+        /* Pomodoro Timer */
+        .pomodoro-timer {
+            text-align: center;
+            margin-top: 20px;
+            background: var(--bg-color-light);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px var(--shadow-light);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        body.dark-mode .pomodoro-timer {
+            background: var(--bg-card-dark);
+            box-shadow: 0 5px 15px var(--shadow-dark);
+        }
+
+        #timer-display {
+            font-size: 3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--secondary-color);
+            transition: color 0.3s;
+        }
+
+        body.dark-mode #timer-display {
+            color: var(--text-color-dark);
+        }
+
+        .timer-controls button {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            margin: 0 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .timer-controls button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Quick Notes */
+        #quick-notes-textarea {
+            width: 100%;
+            height: 150px;
+            padding: 15px;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 1em;
+            resize: vertical;
+            background: var(--bg-card-light);
+            color: var(--text-color);
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+            transition: border-color 0.3s, background-color 0.3s, color 0.3s, box-shadow 0.3s;
+        }
+
+        body.dark-mode #quick-notes-textarea {
+            border-color: var(--border-dark);
+            background: var(--bg-color-dark);
+            color: var(--text-color-dark);
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .nav-tabs {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .nav-tab {
+                border-radius: 10px;
+            }
+
+            .schedule-grid, .project-card-grid, .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .add-entry-form input, .add-entry-form select {
+                flex: 1 1 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-rocket"></i> Mon Coach Personnel IA</h1>
+            <p class="subtitle">Analyse, Organise et Améliore chaque aspect de ta vie avec bienveillance.</p>
+            <div class="dark-mode-toggle" id="darkModeToggle">
+                <i class="fas fa-moon"></i>
+            </div>
+        </header>
+
+        <nav class="nav-tabs">
+            <div class="nav-tab active" data-tab="weekly-schedule"><i class="fas fa-calendar-alt"></i> Planning Hebdomadaire</div>
+            <div class="nav-tab" data-tab="golden-rules"><i class="fas fa-trophy"></i> Règles d'Or & Routines</div>
+            <div class="nav-tab" data-tab="job-tracker"><i class="fas fa-briefcase"></i> Suivi Candidatures</div>
+            <div class="nav-tab" data-tab="personal-projects"><i class="fas fa-lightbulb"></i> Projets Personnels</div>
+            <div class="nav-tab" data-tab="stats-motivation"><i class="fas fa-chart-line"></i> Stats & Motivation</div>
+            <div class="nav-tab" data-tab="tools-notes"><i class="fas fa-tools"></i> Outils & Notes</div>
+        </nav>
+
+        <!-- Planning Hebdomadaire -->
+        <section id="weekly-schedule" class="tab-content active">
+            <h2><i class="fas fa-calendar-check"></i> Ton Planning Hebdomadaire Détaillé</h2>
+            <div class="info-box">
+                <span class="icon"><i class="fas fa-info-circle"></i></span>
+                <div>
+                    <strong>Rappel important :</strong> Ce planning est une base solide. La flexibilité est la clé ! N'hésite pas à ajuster les blocs "Temps Libre / Flex" en fonction de ton énergie et des imprévus.
+                    <br>
+                    Le robot aspirateur/laveur est planifié pour fonctionner pendant que tu es absente AVEC le chien, assurant ainsi le bien-être de ton animal.
+                </div>
+            </div>
+
+            <div class="schedule-grid">
+                <!-- LUNDI -->
+                <div class="schedule-day">
+                    <div class="day-header">
+                        <div class="day-title">LUNDI</div>
+                        <span class="day-type day-free">Journée Libre</span>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">05h20 - 06h30</div>
+                        <div class="activity">⏰ Réveil, routine matinale, préparation départ fille (train 06h15)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">06h30 - 07h45</div>
+                        <div class="activity">🐕 Promenade chien (1h15) - **ROBOT ASPIRATEUR** (Cuisine, SDB, couloirs)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">07h45 - 08h30</div>
+                        <div class="activity">☕ Petit-déjeuner, douche, détente</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">08h30 - 10h00</div>
+                        <div class="activity">💼 <strong>RECHERCHES EMPLOI</strong> (candidatures, réseaux)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">10h00 - 11h00</div>
+                        <div class="activity">🏠 Désencombrement / Tâches ménagères (ex: Chambres/Salon robot aujourd'hui)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">11h00 - 12h00</div>
+                        <div class="activity">📚 <strong>PROJET FILS</strong> : Création prompts HTML</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">12h00 - 13h00</div>
+                        <div class="activity">🛒 Courses complémentaires (30min A/R + 30min courses) + Repas midi rapide</div>
+                    </div>
+                    <div class="time-slot flexible-slot">
+                        <div class="time">13h00 - 14h00</div>
+                        <div class="activity">💡 PROJET ANNIVERSAIRE FILLE / APPRENTISSAGE IA</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">14h00 - 15h30</div>
+                        <div class="activity">📚 <strong>PROJET FILS</strong> : Suite prompts HTML / Tâches administratives</div>
+                    </div>
+                    <div class="time-slot flexible-slot">
+                        <div class="time">15h30 - 17h30</div>
+                        <div class="activity">🧘‍♀️ Temps libre / Rattrapage / Temps pour soi</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">17h30 - 18h30</div>
+                        <div class="activity">🍳 Préparation repas du soir</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">18h30 - 19h30</div>
+                        <div class="activity">🍽️ Repas en famille</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">19h30 - 20h00</div>
+                        <div class="activity">🧹 Rangement rapide cuisine, temps libre</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">20h00 - 20h15</div>
+                        <div class="activity">🐕 Dernière sortie chien (besoins)</div>
+                    </div>
+                    <div class="time-slot flexible-slot">
+                        <div class="time">20h15 - 22h00</div>
+                        <div class="activity">📺 Temps libre (séries sur iPhone), détente</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">22h00 - 22h30</div>
+                        <div class="activity">📱 Routine coucher (planification lendemain sur iPhone)</div>
+                    </div>
+                </div>
+
+                <!-- MARDI -->
+                <div class="schedule-day">
+                    <div class="day-header">
+                        <div class="day-title">MARDI</div>
+                        <span class="day-type day-work">Jour de Travail</span>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">05h20 - 06h15</div>
+                        <div class="activity">⏰ Réveil, routine matinale, préparation départ fille</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">06h15 - 06h45</div>
+                        <div class="activity">🚄 Préparation départ pour le train</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">06h45 - 17h50</div>
+                        <div class="activity">🏢 **TRAVAIL** (inclut transports)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">17h50 - 18h00</div>
+                        <div class="activity">🏡 Retour à la maison</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">18h00 - 19h15</div>
+                        <div class="activity">🐕 Promenade chien (1h15) - **ROBOT ASPIRATEUR** (Cuisine, SDB, couloirs)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">19h15 - 20h00</div>
+                        <div class="activity">🍳 Préparation repas du soir & dîner</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">20h00 - 20h15</div>
+                        <div class="activity">🐕 Dernière sortie chien (besoins)</div>
+                    </div>
+                    <div class="time-slot flexible-slot">
+                        <div class="time">20h15 - 22h00</div>
+                        <div class="activity">📺 Temps libre (séries sur iPhone), détente après le travail</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">22h00 - 22h30</div>
+                        <div class="activity">📱 Routine coucher (planification lendemain sur iPhone)</div>
+                    </div>
+                </div>
+
+                <!-- MERCREDI -->
+                <div class="schedule-day">
+                    <div class="day-header">
+                        <div class="day-title">MERCREDI</div>
+                        <span class="day-type day-free">Journée Libre</span>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">05h20 - 06h30</div>
+                        <div class="activity">⏰ Réveil, routine matinale, préparation départ fille</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">06h30 - 07h45</div>
+                        <div class="activity">🐕 Promenade chien (1h15) - **ROBOT ASPIRATEUR** (Cuisine, SDB, couloirs)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">07h45 - 08h30</div>
+                        <div class="activity">☕ Petit-déjeuner, douche, détente</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">08h30 - 10h00</div>
+                        <div class="activity">💼 <strong>RECHERCHES EMPLOI</strong> (candidatures, réseaux)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">10h00 - 11h00</div>
+                        <div class="activity">🏠 Désencombrement / Tâches ménagères</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">11h00 - 12h00</div>
+                        <div class="activity">📚 <strong>PROJET FILS</strong> : Création prompts HTML</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">12h00 - 13h00</div>
+                        <div class="activity">🛒 Courses complémentaires (30min A/R + 30min courses) + Repas midi fils & rapide pour moi</div>
+                    </div>
+                    <div class="time-slot flexible-slot">
+                        <div class="time">13h00 - 14h00</div>
+                        <div class="activity">💡 PROJET ANNIVERSAIRE FILLE / APPRENTISSAGE IA</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">14h00 - 15h30</div>
+                        <div class="activity">📚 <strong>PROJET FILS</strong> : Suite prompts HTML / Tâches administratives</div>
+                    </div>
+                    <div class="time-slot flexible-slot">
+                        <div class="time">15h30 - 17h30</div>
+                        <div class="activity">🧘‍♀️ Temps libre / Rattrapage / Temps pour soi</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">17h30 - 18h30</div>
+                        <div class="activity">🍳 Préparation repas du soir</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">18h30 - 19h30</div>
+                        <div class="activity">🍽️ Repas en famille</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">19h30 - 20h00</div>
+                        <div class="activity">🧹 Rangement rapide cuisine, temps libre</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">20h00 - 20h15</div>
+                        <div class="activity">🐕 Dernière sortie chien (besoins)</div>
+                    </div>
+                    <div class="time-slot flexible-slot">
+                        <div class="time">20h15 - 22h00</div>
+                        <div class="activity">📺 Temps libre (séries sur iPhone), détente</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">22h00 - 22h30</div>
+                        <div class="activity">📱 Routine coucher (planification lendemain sur iPhone)</div>
+                    </div>
+                </div>
+
+                <!-- JEUDI -->
+                <div class="schedule-day">
+                    <div class="day-header">
+                        <div class="day-title">JEUDI</div>
+                        <span class="day-type day-work">Jour de Travail</span>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">05h20 - 06h15</div>
+                        <div class="activity">⏰ Réveil, routine matinale, préparation départ fille</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">06h15 - 06h45</div>
+                        <div class="activity">🚄 Préparation départ pour le train</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">06h45 - 17h50</div>
+                        <div class="activity">🏢 **TRAVAIL** (inclut transports)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">17h50 - 18h00</div>
+                        <div class="activity">🏡 Retour à la maison</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">18h00 - 19h15</div>
+                        <div class="activity">🐕 Promenade chien (1h15) - **ROBOT ASPIRATEUR** (Cuisine, SDB, couloirs)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">19h15 - 20h00</div>
+                        <div class="activity">🍳 Préparation repas du soir & dîner</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">20h00 - 20h15</div>
+                        <div class="activity">🐕 Dernière sortie chien (besoins)</div>
+                    </div>
+                    <div class="time-slot flexible-slot">
+                        <div class="time">20h15 - 22h00</div>
+                        <div class="activity">📺 Temps libre (séries sur iPhone), détente après le travail</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">22h00 - 22h30</div>
+                        <div class="activity">📱 Routine coucher (planification lendemain sur iPhone)</div>
+                    </div>
+                </div>
+
+                <!-- VENDREDI -->
+                <div class="schedule-day">
+                    <div class="day-header">
+                        <div class="day-title">VENDREDI</div>
+                        <span class="day-type day-work">Jour de Travail</span>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">05h20 - 06h15</div>
+                        <div class="activity">⏰ Réveil, routine matinale, préparation départ fille</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">06h15 - 06h45</div>
+                        <div class="activity">🚄 Préparation départ pour le train</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">06h45 - 16h50</div>
+                        <div class="activity">🏢 **TRAVAIL** (inclut transports)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">16h50 - 17h00</div>
+                        <div class="activity">🏡 Retour à la maison (plus tôt !)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">17h00 - 18h15</div>
+                        <div class="activity">🐕 Promenade chien (1h15) - **ROBOT ASPIRATEUR** (Cuisine, SDB, couloirs)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">18h15 - 19h00</div>
+                        <div class="activity">🍳 Préparation repas du soir & dîner</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">19h00 - 19h15</div>
+                        <div class="activity">🐕 Dernière sortie chien (besoins)</div>
+                    </div>
+                    <div class="time-slot flexible-slot">
+                        <div class="time">19h15 - 22h00</div>
+                        <div class="activity">🎉 Soirée libre, détente (début du weekend !)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">22h00 - 22h30</div>
+                        <div class="activity">📱 Routine coucher (planification lendemain sur iPhone)</div>
+                    </div>
+                </div>
+
+                <!-- SAMEDI -->
+                <div class="schedule-day">
+                    <div class="day-header">
+                        <div class="day-title">SAMEDI</div>
+                        <span class="day-type day-weekend">Weekend</span>
+                    </div>
+                    <div class="time-slot flexible-slot">
+                        <div class="time">07h30 - 08h30</div>
+                        <div class="activity">⏰ Réveil plus tardif, routine tranquille</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">08h30 - 09h45</div>
+                        <div class="activity">🐕 Promenade chien (1h15) - **ROBOT ASPIRATEUR** (Cuisine, SDB, couloirs)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">09h45 - 10h30</div>
+                        <div class="activity">☕ Petit-déjeuner en famille</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">10h30 - 12h30</div>
+                        <div class="activity">🛒 <strong>GRANDE COURSE</strong> (30min A/R + 1h30 courses)</div>
+                    </div>
+                    <div class="time-slot flexible-slot">
+                        <div class="time">12h30 - 13h30</div>
+                        <div class="activity">🍽️ Repas midi</div>
+                    </div>
+                    <div class="time-slot flexible-slot">
+                        <div class="time">13h30 - 17h00</div>
+                        <div class="activity">⚽ Activités enfants (match de foot), temps perso, projets</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">17h00 - 18h00</div>
+                        <div class="activity">🍳 Préparation repas du soir</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">18h00 - 19h00</div>
+                        <div class="activity">🍽️ Repas en famille</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">19h00 - 20h00</div>
+                        <div class="activity">🧹 Rangement rapide, jeux en famille</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">20h00 - 20h15</div>
+                        <div class="activity">🐕 Dernière sortie chien (besoins)</div>
+                    </div>
+                    <div class="time-slot flexible-slot">
+                        <div class="time">20h15 - 22h00</div>
+                        <div class="activity">🎬 Soirée détente, films, séries</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">22h00 - 22h30</div>
+                        <div class="activity">📱 Routine coucher (planification rapide si besoin)</div>
+                    </div>
+                </div>
+
+                <!-- DIMANCHE -->
+                <div class="schedule-day">
+                    <div class="day-header">
+                        <div class="day-title">DIMANCHE</div>
+                        <span class="day-type day-weekend">Weekend</span>
+                    </div>
+                    <div class="time-slot flexible-slot">
+                        <div class="time">Matin</div>
+                        <div class="activity">⏰ Réveil flexible, routine tranquille, petit-déjeuner</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">Flexible</div>
+                        <div class="activity">🐕 Promenade chien (1h15) - **ROBOT ASPIRATEUR** (Cuisine, SDB, couloirs ou Chambres/Salon si pas fait)</div>
+                    </div>
+                    <div class="time-slot flexible-slot">
+                        <div class="time">Midi</div>
+                        <div class="activity">👨‍👩‍👧‍👦 Temps en famille, repas flexible</div>
+                    </div>
+                    <div class="time-slot flexible-slot">
+                        <div class="time">Après-midi</div>
+                        <div class="activity">🧘‍♀️ Repos, loisirs, activités personnelles, préparation semaine</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">Soir</div>
+                        <div class="activity">🍳 Préparation repas du soir (peut être plus élaboré)</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">20h00 - 20h15</div>
+                        <div class="activity">🐕 Dernière sortie chien (besoins)</div>
+                    </div>
+                    <div class="time-slot flexible-slot">
+                        <div class="time">20h15 - 22h00</div>
+                        <div class="activity">📖 Lecture, détente, préparation mentale pour la semaine</div>
+                    </div>
+                    <div class="time-slot">
+                        <div class="time">22h00 - 22h30</div>
+                        <div class="activity">📱 Routine coucher (planification semaine sur iPhone)</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Règles d'Or & Routines -->
+        <section id="golden-rules" class="tab-content">
+            <h2><i class="fas fa-trophy"></i> Tes Règles d'Or pour l'Équilibre</h2>
+
+            <div class="info-box">
+                <span class="icon"><i class="fas fa-lightbulb"></i></span>
+                <div>
+                    Ces règles sont les piliers de ton organisation. Elles sont conçues pour te donner un cadre, mais souviens-toi qu'elles sont là pour te servir, pas l'inverse. Adapte-les si nécessaire !
+                </div>
+            </div>
+
+            <h3><i class="fas fa-hourglass-start"></i> Routine Matinale (Jours de semaine)</h3>
+            <ul class="rules-list">
+                <li><i class="fas fa-clock"></i> **Réveil à 05h20-05h30 :** Indispensable pour t'assurer que ta fille prenne son train et pour avoir un début de journée serein.</li>
+                <li><i class="fas fa-dog"></i> **Promenade du chien (1h15) :** C'est ton premier moment d'activité et de connexion avec la nature. Profite des 45 min pour écouter des podcasts sur la recherche d'emploi ou des formations.</li>
+                <li><i class="fas fa-coffee"></i> **Petit-déjeuner & Douche :** Prends ce temps pour toi.</li>
+                <li><i class="fas fa-robot"></i> **Robot Aspirateur/Laveur :** Sur les jours libres (Lun/Mer) lance-le pendant ta première longue promenade avec le chien. Les jours de travail, lance-le dès ton retour, pendant que tu sors le chien pour la première longue balade.</li>
+            </ul>
+
+            <h3><i class="fas fa-moon"></i> Routine du Soir (Non négociable pour le moment)</h3>
+            <div class="alert alert-info">
+                <span class="icon"><i class="fas fa-info-circle"></i></span>
+                <div>
+                    **Routine iPhone avant de dormir :** Pour le moment, nous maintenons cette routine car elle t'aide à t'endormir. L'objectif est l'efficacité. Nous pourrons l'ajuster dans un second temps si tu le souhaites. L'essentiel est de respecter le temps alloué à la planification et à la détente.
+                </div>
+            </div>
+            <ul class="rules-list">
+                <li><i class="fas fa-mobile-alt"></i> **iPhone (luminosité min + Night Shift) :** Jusqu'à la dernière minute, pour tes séries et la planification du lendemain.</li>
+                <li><i class="fas fa-pencil-alt"></i> **Planification :** Profite de ce moment pour visualiser ta journée à venir, te fixer les priorités et te sentir prêt.e.</li>
+                <li><i class="fas fa-bed"></i> **Extinction des lumières :** Idéalement viser 22h30 pour un sommeil suffisant.</li>
+            </ul>
+
+            <h3><i class="fas fa-tasks"></i> Checklist Quotidienne (à cocher chaque jour)</h3>
+            <ul class="checklist">
+                <li><input type="checkbox" class="task-checkbox" id="check-chien-1"> <label for="check-chien-1"><i class="fas fa-paw"></i> Promenade chien (1h15 principale) effectuée</label></li>
+                <li><input type="checkbox" class="task-checkbox" id="check-chien-2"> <label for="check-chien-2"><i class="fas fa-paw"></i> Sorties chien secondaires (20h00) effectuées</label></li>
+                <li><input type="checkbox" class="task-checkbox" id="check-repas"> <label for="check-repas"><i class="fas fa-utensils"></i> Repas principal préparé</label></li>
+                <li><input type="checkbox" class="task-checkbox" id="check-robot"> <label for="check-robot"><i class="fas fa-robot"></i> Robot aspirateur/laveur lancé pendant une absence AVEC le chien</label></li>
+                <li><input type="checkbox" class="task-checkbox" id="check-iphone-routine"> <label for="check-iphone-routine"><i class="fas fa-mobile-alt"></i> Routine iPhone et planification du soir respectées</label></li>
+                <li><input type="checkbox" class="task-checkbox" id="check-sommeil"> <label for="check-sommeil"><i class="fas fa-bed"></i> Tentative de coucher à 22h30</label></li>
+            </ul>
+        </section>
+
+        <!-- Suivi Candidatures -->
+        <section id="job-tracker" class="tab-content">
+            <h2><i class="fas fa-briefcase"></i> Suivi de tes Candidatures d'Emploi</h2>
+            <div class="info-box">
+                <span class="icon"><i class="fas fa-bullseye"></i></span>
+                <div>
+                    <strong>Objectif :</strong> Trouver un emploi à 100%. Nous visons des candidatures régulières, 1 à 2 fois par semaine, intégrées dans tes journées libres. Chaque pas compte !
+                </div>
+            </div>
+
+            <h3><i class="fas fa-plus-circle"></i> Ajouter une Nouvelle Candidature</h3>
+            <form id="add-application-form" class="add-entry-form">
+                <input type="text" id="app-date" placeholder="Date d'envoi (JJ/MM/AAAA)" required>
+                <input type="text" id="app-company" placeholder="Entreprise" required>
+                <input type="text" id="app-position" placeholder="Poste visé" required>
+                <input type="text" id="app-contact" placeholder="Contact (e-mail/téléphone)">
+                <input type="text" id="app-followup" placeholder="Relance prévue (JJ/MM/AAAA)">
+                <select id="app-status">
+                    <option value="attente">En attente</option>
+                    <option value="relance">À relancer</option>
+                    <option value="entretien">Entretien</option>
+                    <option value="refus">Refus</option>
+                    <option value="accepte">Accepté ! 🎉</option>
+                </select>
+                <input type="text" id="app-notes" placeholder="Notes (points importants de l'offre, etc.)">
+                <button type="submit"><i class="fas fa-paper-plane"></i> Ajouter la candidature</button>
+            </form>
+
+            <h3><i class="fas fa-list-alt"></i> Liste des Candidatures</h3>
+            <p>Total des candidatures envoyées : <strong id="total-applications">0</strong></p>
+            <table class="job-tracker-table">
+                <thead>
+                    <tr>
+                        <th>Date d'envoi</th>
+                        <th>Entreprise</th>
+                        <th>Poste</th>
+                        <th>Contact</th>
+                        <th>Relance prévue</th>
+                        <th>Statut</th>
+                        <th>Notes</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="application-list">
+                    <!-- Les candidatures seront ajoutées ici par JS -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Projets Personnels -->
+        <section id="personal-projects" class="tab-content">
+            <h2><i class="fas fa-lightbulb"></i> Tes Projets Personnels & Développement</h2>
+            <div class="project-card-grid">
+
+                <!-- Projet Anniversaire Fille -->
+                <div class="project-card">
+                    <h3><i class="fas fa-birthday-cake"></i> Organiser l'Anniversaire de ta fille</h3>
+                    <div class="info-box danger">
+                        <span class="icon"><i class="fas fa-exclamation-triangle"></i></span>
+                        <div>
+                            **Deadline imminente :** Février-Mars. Il est crucial de commencer la planification !
+                        </div>
+                    </div>
+                    <p><strong>Objectif :</strong> Créer une expérience mémorable pour l'anniversaire de ta fille.</p>
+                    <ul>
+                        <li><i class="fas fa-calendar-alt"></i> **Deadline :** Février - Mars</li>
+                        <li><i class="fas fa-money-bill-wave"></i> **Budget :** À définir (combien es-tu prête à y consacrer ?)</li>
+                        <li><i class="fas fa-brain"></i> **Idées initiales :**
+                            <ul>
+                                <li>Thème souhaité ?</li>
+                                <li>Liste d'invités (amis, famille) ?</li>
+                                <li>Lieu (à la maison, extérieur, salle louée) ?</li>
+                                <li>Activités/animations prévues ?</li>
+                                <li>Repas/Gâteau ?</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div class="form-group">
+                        <label for="anni-progress">Progression :</label>
+                        <input type="range" id="anni-progress" min="0" max="100" value="0" oninput="updateProgressBar('anni-progress')">
+                        <div class="progress-bar-container"><div class="progress-bar" id="anni-bar">0%</div></div>
+                    </div>
+                    <button class="btn"><i class="fas fa-edit"></i> Démarrer la planification</button>
+                </div>
+
+                <!-- Projet Prompts HTML Fils -->
+                <div class="project-card">
+                    <h3><i class="fas fa-code"></i> Créer des Prompts HTML pour la révision de ton fils</h3>
+                    <div class="info-box">
+                        <span class="icon"><i class="fas fa-chalkboard-teacher"></i></span>
+                        <div>
+                            **Tes créneaux :** Lundi 11h-12h & 14h-15h30, Mercredi 11h-12h & 14h-15h30. Environ 5-6 heures par semaine.
+                        </div>
+                    </div>
+                    <p><strong>Objectif :</strong> Développer des outils interactifs et ludiques pour aider ton fils à réviser.</p>
+                    <ul>
+                        <li><i class="fas fa-user-graduate"></i> **Niveau scolaire de ton fils :** <span id="fils-niveau">À compléter</span></li>
+                        <li><i class="fas fa-times"></i> **Matières difficiles :** <span id="fils-matieres">À compléter</span></li>
+                        <li><i class="fas fa-tasks"></i> **Types d'exercices préférés :** <span id="fils-exos">À compléter</span></li>
+                        <li><i class="fas fa-calendar-day"></i> **Examens à venir :** <span id="fils-exams">À compléter</span></li>
+                        <li><i class="fas fa-bullseye"></i> **Progression :** X prompts réalisés / Objectif Y</li>
+                    </ul>
+                    <div class="form-group">
+                        <label for="prompts-progress">Progression :</label>
+                        <input type="range" id="prompts-progress" min="0" max="100" value="0" oninput="updateProgressBar('prompts-progress')">
+                        <div class="progress-bar-container"><div class="progress-bar" id="prompts-bar">0%</div></div>
+                    </div>
+                    <button class="btn"><i class="fas fa-plus"></i> Ajouter un prompt</button>
+                    <div class="alert alert-info" style="margin-top:15px;">
+                        <span class="icon">💡</span>
+                        <strong>Complète cette section :</strong>
+                        <ul style="margin-top: 10px;">
+                            <li>✏️ Niveau scolaire de ton fils ? (collège, lycée, études sup)</li>
+                            <li>✏️ Ses 3 matières les plus difficiles ?</li>
+                            <li>✏️ Type d'exercices préférés ? (QCM, flashcards, exercices à trous...)</li>
+                            <li>✏️ Examens à venir ? (dates + matières prioritaires)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Projet Désencombrement Maison -->
+                <div class="project-card">
+                    <h3><i class="fas fa-box-open"></i> Désencombrement progressif de la maison</h3>
+                    <div class="info-box">
+                        <span class="icon"><i class="fas fa-calendar-day"></i></span>
+                        <div>
+                            **Ton créneau :** Lundi 10h00-11h00. Un créneau régulier pour une avancée constante.
+                        </div>
+                    </div>
+                    <p><strong>Objectif :</strong> Alléger ton espace de vie pour plus de sérénité.</p>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> **Zones ciblées (exemples) :**
+                            <ul>
+                                <li>Cuisine (tiroirs, placards)</li>
+                                <li>Salon (étagères, magazines)</li>
+                                <li>Chambres (vêtements, livres)</li>
+                                <li>Bureau (papiers, fournitures)</li>
+                            </ul>
+                        </li>
+                        <li><i class="fas fa-recycle"></i> **Stratégie :** Une zone par semaine, trier, jeter/donner/vendre.</li>
+                        <li><i class="fas fa-hand-holding-heart"></i> **Dons :** Identifier les associations locales.</li>
+                    </ul>
+                    <div class="form-group">
+                        <label for="declutter-progress">Progression :</label>
+                        <input type="range" id="declutter-progress" min="0" max="100" value="0" oninput="updateProgressBar('declutter-progress')">
+                        <div class="progress-bar-container"><div class="progress-bar" id="declutter-bar">0%</div></div>
+                    </div>
+                    <button class="btn"><i class="fas fa-broom"></i> Choisir la prochaine zone</button>
+                </div>
+
+                <!-- Projet Apprentissage IA -->
+                <div class="project-card">
+                    <h3><i class="fas fa-robot"></i> Apprendre plus sur les IA et ses dérivés</h3>
+                    <div class="info-box">
+                        <span class="icon"><i class="fas fa-star"></i></span>
+                        <div>
+                            **Créneau flexible :** Tes moments libres (Lundi/Mercredi après-midi, weekend). Profite des 45 min de promenade du chien pour écouter des podcasts sur le sujet !
+                        </div>
+                    </div>
+                    <p><strong>Objectif :</strong> Développer tes connaissances et compétences dans un domaine d'avenir passionnant.</p>
+                    <ul>
+                        <li><i class="fas fa-book"></i> **Ressources suggérées :**
+                            <ul>
+                                <li>Cours en ligne (Coursera, Udemy, edX)</li>
+                                <li>Podcasts spécialisés (ex: "DataGen" ou "Future of Everything")</li>
+                                <li>Livres sur l'IA grand public (ex: "Deep Learning" de Goodfellow)</li>
+                                <li>Veille technologique (blogs, articles, newsletters)</li>
+                            </ul>
+                        </li>
+                        <li><i class="fas fa-question-circle"></i> **Axes d'exploration :** Machine Learning, traitement du langage naturel, éthique de l'IA, outils d'IA générative (comme Gemini !).</li>
+                    </ul>
+                    <div class="form-group">
+                        <label for="ai-progress">Progression :</label>
+                        <input type="range" id="ai-progress" min="0" max="100" value="0" oninput="updateProgressBar('ai-progress')">
+                        <div class="progress-bar-container"><div class="progress-bar" id="ai-bar">0%</div></div>
+                    </div>
+                    <button class="btn"><i class="fas fa-play"></i> Démarrer une nouvelle ressource</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Statistiques & Motivation -->
+        <section id="stats-motivation" class="tab-content">
+            <h2><i class="fas fa-chart-line"></i> Tes Statistiques & Motivation</h2>
+            <div class="info-box">
+                <span class="icon"><i class="fas fa-award"></i></span>
+                <div>
+                    **Célèbre tes succès !** Le suivi visuel t'aidera à rester motivée et à prendre conscience de tes progrès, même les plus petits.
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4>Candidatures ce mois-ci</h4>
+                    <div class="stat-value" id="stat-apps-month">0</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Prompts HTML créés</h4>
+                    <div class="stat-value" id="stat-html-prompts">0</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Zones désencombrées</h4>
+                    <div class="stat-value" id="stat-decluttered-zones">0</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Jours avec 1h15 chien</h4>
+                    <div class="stat-value" id="stat-dog-walks-week">0</div>
+                </div>
+            </div>
+
+            <h3><i class="fas fa-chart-pie"></i> Vue d'ensemble</h3>
+            <div class="chart-container">
+                <canvas id="weeklyActivityChart"></canvas>
+            </div>
+
+            <h3><i class="fas fa-trophy"></i> Badges de réussite</h3>
+            <p>Débloque des badges à mesure que tu progresses !</p>
+            <div class="badges-container" style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 20px;">
+                <span style="font-size: 2.5em; opacity: 0.4;"><i class="fas fa-fire"></i></span> <!-- 7 jours consécutifs de checklist -->
+                <span style="font-size: 2.5em; opacity: 0.4;"><i class="fas fa-star"></i></span> <!-- 10 candidatures envoyées -->
+                <span style="font-size: 2.5em; opacity: 0.4;"><i class="fas fa-magic"></i></span> <!-- Anniversaire fille organisé -->
+                <span style="font-size: 2.5em; opacity: 0.4;"><i class="fas fa-house-damage"></i></span> <!-- 5 zones désencombrées -->
+                <span style="font-size: 2.5em; opacity: 0.4;"><i class="fas fa-brain"></i></span> <!-- Premier prompt HTML -->
+                <span style="font-size: 2.5em; opacity: 0.4;"><i class="fas fa-award"></i></span> <!-- Ton premier job ! -->
+                <span style="font-size: 2.5em; opacity: 0.4;"><i class="fas fa-robot"></i></span> <!-- 10 heures d'apprentissage IA -->
+            </div>
+        </section>
+
+        <!-- Outils & Notes -->
+        <section id="tools-notes" class="tab-content">
+            <h2><i class="fas fa-tools"></i> Outils Utiles & Notes Rapides</h2>
+
+            <h3><i class="fas fa-stopwatch"></i> Timer Pomodoro</h3>
+            <div class="pomodoro-timer">
+                <div id="timer-display">25:00</div>
+                <div class="timer-controls">
+                    <button id="start-timer"><i class="fas fa-play"></i> Démarrer</button>
+                    <button id="pause-timer"><i class="fas fa-pause"></i> Pause</button>
+                    <button id="reset-timer"><i class="fas fa-sync-alt"></i> Reset</button>
+                    <button id="short-break">Courte pause (5min)</button>
+                    <button id="long-break">Longue pause (15min)</button>
+                </div>
+            </div>
+            <div class="info-box" style="margin-top: 20px;">
+                <span class="icon"><i class="fas fa-lightbulb"></i></span>
+                <div>
+                    **Le Pomodoro** est une technique de gestion du temps qui consiste à travailler par périodes de 25 minutes (pomodoros) séparées par de courtes pauses. Idéal pour les tâches de recherche d'emploi ou de création de prompts !
+                </div>
+            </div>
+
+            <h3><i class="fas fa-pencil-alt"></i> Notes Rapides</h3>
+            <textarea id="quick-notes-textarea" placeholder="Écris tes pensées, idées, rappels ici... Elles seront sauvegardées automatiquement."></textarea>
+            <p style="font-size: 0.9em; color: #888; text-align: right; margin-top: 5px;">*Les notes sont sauvegardées automatiquement dans ton navigateur.</p>
+
+            <h3><i class="fas fa-file-pdf"></i> Exporter ton planning</h3>
+            <p>Clique sur ce bouton pour générer un PDF de ton planning actuel.</p>
+            <button class="btn" id="export-pdf-button"><i class="fas fa-file-pdf"></i> Exporter en PDF (Prochainement)</button>
+            <div class="info-box" style="margin-top: 20px;">
+                <span class="icon"><i class="fas fa-exclamation-triangle"></i></span>
+                <div>
+                    **Note :** L'export PDF est une fonctionnalité avancée. Pour l'instant, tu peux utiliser la fonction d'impression de ton navigateur (Ctrl+P ou Cmd+P) pour imprimer cette page.
+                </div>
+            </div>
+        </section>
+
+    </div> <!-- Fin du container -->
+
+    <script>
+        // JAVASCRIPT EMBEDDED - Commencerait normalement dans script.js
+        document.addEventListener('DOMContentLoaded', () => {
+            const navTabs = document.querySelectorAll('.nav-tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const body = document.body;
+
+            // --- Dark Mode Toggle ---
+            const currentTheme = localStorage.getItem('theme');
+            if (currentTheme === 'dark') {
+                body.classList.add('dark-mode');
+                darkModeToggle.querySelector('i').classList.replace('fa-moon', 'fa-sun');
+            }
+
+            darkModeToggle.addEventListener('click', () => {
+                body.classList.toggle('dark-mode');
+                if (body.classList.contains('dark-mode')) {
+                    localStorage.setItem('theme', 'dark');
+                    darkModeToggle.querySelector('i').classList.replace('fa-moon', 'fa-sun');
+                } else {
+                    localStorage.setItem('theme', 'light');
+                    darkModeToggle.querySelector('i').classList.replace('fa-sun', 'fa-moon');
+                }
+                // Update charts if they exist
+                if (window.myWeeklyActivityChart) {
+                    updateChartColors();
+                    myWeeklyActivityChart.update();
+                }
+            });
+
+            // --- Tab Switching ---
+            navTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    navTabs.forEach(item => item.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+
+                    tab.classList.add('active');
+                    const targetTab = tab.dataset.tab;
+                    document.getElementById(targetTab).classList.add('active');
+
+                    // Re-render chart if navigating to stats tab
+                    if (targetTab === 'stats-motivation' && !window.myWeeklyActivityChart) {
+                        renderWeeklyActivityChart();
+                    }
+                });
+            });
+
+            // --- Checkbox Persistence (Golden Rules) ---
+            const checkboxes = document.querySelectorAll('.checklist .task-checkbox');
+            checkboxes.forEach(checkbox => {
+                const savedState = localStorage.getItem(checkbox.id);
+                if (savedState === 'true') {
+                    checkbox.checked = true;
+                }
+                checkbox.addEventListener('change', () => {
+                    localStorage.setItem(checkbox.id, checkbox.checked);
+                });
+            });
+
+            // --- Job Tracker ---
+            const addApplicationForm = document.getElementById('add-application-form');
+            const applicationList = document.getElementById('application-list');
+            const totalApplicationsSpan = document.getElementById('total-applications');
+
+            let applications = JSON.parse(localStorage.getItem('jobApplications')) || [];
+
+            function renderApplications() {
+                applicationList.innerHTML = '';
+                applications.forEach((app, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${app.date}</td>
+                        <td>${app.company}</td>
+                        <td>${app.position}</td>
+                        <td>${app.contact}</td>
+                        <td>${app.followup}</td>
+                        <td class="status-${app.status}">${app.status}</td>
+                        <td>${app.notes}</td>
+                        <td>
+                            <button class="btn btn-sm" onclick="deleteApplication(${index})"><i class="fas fa-trash"></i></button>
+                        </td>
+                    `;
+                    applicationList.appendChild(row);
+                });
+                totalApplicationsSpan.textContent = applications.length;
+                localStorage.setItem('jobApplications', JSON.stringify(applications));
+                updateStats(); // Update stats whenever applications change
+            }
+
+            window.deleteApplication = (index) => {
+                applications.splice(index, 1);
+                renderApplications();
+            };
+
+            addApplicationForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const newApp = {
+                    date: document.getElementById('app-date').value,
+                    company: document.getElementById('app-company').value,
+                    position: document.getElementById('app-position').value,
+                    contact: document.getElementById('app-contact').value,
+                    followup: document.getElementById('app-followup').value,
+                    status: document.getElementById('app-status').value,
+                    notes: document.getElementById('app-notes').value,
+                };
+                applications.push(newApp);
+                addApplicationForm.reset();
+                renderApplications();
+            });
+
+            renderApplications(); // Initial render
+
+            // --- Project Progress Bars ---
+            function updateProgressBar(id) {
+                const slider = document.getElementById(id);
+                const progressBar = document.getElementById(id.replace('-progress', '-bar'));
+                const value = slider.value;
+                progressBar.style.width = value + '%';
+                progressBar.textContent = value + '%';
+                localStorage.setItem(id, value);
+            }
+
+            // Load saved progress
+            document.querySelectorAll('.project-card input[type="range"]').forEach(slider => {
+                const savedValue = localStorage.getItem(slider.id);
+                if (savedValue) {
+                    slider.value = savedValue;
+                    updateProgressBar(slider.id);
+                } else {
+                    updateProgressBar(slider.id); // Set initial 0%
+                }
+                slider.addEventListener('input', () => updateProgressBar(slider.id));
+            });
+
+            // --- Pomodoro Timer ---
+            let timer;
+            let timeInSeconds = 25 * 60; // Default Pomodoro time
+            let isRunning = false;
+            const timerDisplay = document.getElementById('timer-display');
+            const startBtn = document.getElementById('start-timer');
+            const pauseBtn = document.getElementById('pause-timer');
+            const resetBtn = document.getElementById('reset-timer');
+            const shortBreakBtn = document.getElementById('short-break');
+            const longBreakBtn = document.getElementById('long-break');
+
+            function updateTimerDisplay() {
+                const minutes = Math.floor(timeInSeconds / 60);
+                const seconds = timeInSeconds % 60;
+                timerDisplay.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            }
+
+            function startTimer() {
+                if (isRunning) return;
+                isRunning = true;
+                timer = setInterval(() => {
+                    if (timeInSeconds > 0) {
+                        timeInSeconds--;
+                        updateTimerDisplay();
+                    } else {
+                        clearInterval(timer);
+                        isRunning = false;
+                        alert('Temps écoulé ! Prenez une pause.');
+                        // Potentially play a sound
+                    }
+                }, 1000);
+            }
+
+            function pauseTimer() {
+                clearInterval(timer);
+                isRunning = false;
+            }
+
+            function resetTimer(newTime = 25 * 60) {
+                clearInterval(timer);
+                isRunning = false;
+                timeInSeconds = newTime;
+                updateTimerDisplay();
+            }
+
+            startBtn.addEventListener('click', startTimer);
+            pauseBtn.addEventListener('click', pauseTimer);
+            resetBtn.addEventListener('click', () => resetTimer(25 * 60)); // Reset to Pomodoro
+            shortBreakBtn.addEventListener('click', () => resetTimer(5 * 60));
+            longBreakBtn.addEventListener('click', () => resetTimer(15 * 60));
+
+            updateTimerDisplay(); // Initial display
+
+            // --- Quick Notes ---
+            const quickNotesTextarea = document.getElementById('quick-notes-textarea');
+            const savedNotes = localStorage.getItem('quickNotes');
+            if (savedNotes) {
+                quickNotesTextarea.value = savedNotes;
+            }
+            quickNotesTextarea.addEventListener('input', () => {
+                localStorage.setItem('quickNotes', quickNotesTextarea.value);
+            });
+
+            // --- Statistics ---
+            const statAppsMonth = document.getElementById('stat-apps-month');
+            const statHtmlPrompts = document.getElementById('stat-html-prompts');
+            const statDeclutteredZones = document.getElementById('stat-decluttered-zones');
+            const statDogWalksWeek = document.getElementById('stat-dog-walks-week');
+
+            function updateStats() {
+                statAppsMonth.textContent = applications.length; // Simple count for now
+                statHtmlPrompts.textContent = localStorage.getItem('prompts-progress') || '0'; // Use progress slider value
+                statDeclutteredZones.textContent = localStorage.getItem('declutter-progress') || '0'; // Use progress slider value
+                
+                // For dog walks, we'd need more complex tracking, here's a placeholder:
+                let completedDogWalks = 0;
+                checkboxes.forEach(cb => {
+                    if (cb.id.startsWith('check-chien') && cb.checked) {
+                        completedDogWalks++;
+                    }
+                });
+                statDogWalksWeek.textContent = completedDogWalks;
+            }
+            updateStats(); // Initial update
+
+            // Chart.js - Weekly Activity
+            let myWeeklyActivityChart;
+
+            function getChartColors() {
+                return body.classList.contains('dark-mode') ? {
+                    fontColor: '#e0e0e0',
+                    gridColor: '#4a4a60',
+                    tooltipBg: '#3a3a50',
+                    tooltipBorder: '#4a4a60'
+                } : {
+                    fontColor: '#333',
+                    gridColor: '#e0e0e0',
+                    tooltipBg: 'white',
+                    tooltipBorder: '#ccc'
+                };
+            }
+
+            function updateChartColors() {
+                if (myWeeklyActivityChart) {
+                    const colors = getChartColors();
+                    myWeeklyActivityChart.options.scales.y.ticks.color = colors.fontColor;
+                    myWeeklyActivityChart.options.scales.x.ticks.color = colors.fontColor;
+                    myWeeklyActivityChart.options.scales.y.grid.color = colors.gridColor;
+                    myWeeklyActivityChart.options.scales.x.grid.color = colors.gridColor;
+                    myWeeklyActivityChart.options.plugins.legend.labels.color = colors.fontColor;
+                    myWeeklyActivityChart.options.plugins.tooltip.backgroundColor = colors.tooltipBg;
+                    myWeeklyActivityChart.options.plugins.tooltip.borderColor = colors.tooltipBorder;
+                }
+            }
+
+
+            function renderWeeklyActivityChart() {
+                const ctx = document.getElementById('weeklyActivityChart').getContext('2d');
+                const colors = getChartColors();
+
+                if (myWeeklyActivityChart) {
+                    myWeeklyActivityChart.destroy(); // Destroy previous chart instance
+                }
+
+                myWeeklyActivityChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
+                        datasets: [
+                            {
+                                label: 'Heures Travail / Recherche Emploi',
+                                data: [1.5, 9, 1.5, 9, 9, 0, 0], // Exemple : 1.5h recherche Lundi/Mercredi, 9h travail M/J/V
+                                backgroundColor: 'rgba(102, 126, 234, 0.7)',
+                                borderColor: 'rgba(102, 126, 234, 1)',
+                                borderWidth: 1
+                            },
+                            {
+                                label: 'Heures Projets Perso (HTML, Anniv, IA)',
+                                data: [3.5, 0, 3.5, 0, 0, 2, 1], // Exemple : 3.5h L/Me, 2h Sam, 1h Dim
+                                backgroundColor: 'rgba(118, 75, 162, 0.7)',
+                                borderColor: 'rgba(118, 75, 162, 1)',
+                                borderWidth: 1
+                            },
+                            {
+                                label: 'Heures Désencombrement',
+                                data: [1, 0, 1, 0, 0, 0, 0], // Exemple : 1h L/Me
+                                backgroundColor: 'rgba(243, 156, 18, 0.7)',
+                                borderColor: 'rgba(243, 156, 18, 1)',
+                                borderWidth: 1
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Heures',
+                                    color: colors.fontColor
+                                },
+                                ticks: {
+                                    color: colors.fontColor
+                                },
+                                grid: {
+                                    color: colors.gridColor
+                                }
+                            },
+                            x: {
+                                ticks: {
+                                    color: colors.fontColor
+                                },
+                                grid: {
+                                    color: colors.gridColor
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: colors.fontColor
+                                }
+                            },
+                            tooltip: {
+                                backgroundColor: colors.tooltipBg,
+                                borderColor: colors.tooltipBorder,
+                                borderWidth: 1,
+                                titleColor: colors.fontColor,
+                                bodyColor: colors.fontColor
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Initial chart render if on stats tab, otherwise render on tab switch
+            if (document.getElementById('stats-motivation').classList.contains('active')) {
+                renderWeeklyActivityChart();
+            }
+
+            // Export PDF (Placeholder - requires a library like jsPDF)
+            document.getElementById('export-pdf-button').addEventListener('click', () => {
+                alert("La fonctionnalité d'export PDF est en cours de développement ! Pour l'instant, tu peux utiliser la fonction d'impression de ton navigateur (Ctrl+P ou Cmd+P).");
+            });
+
+        });
+    </script>
+</body>
+</html>
