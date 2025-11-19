@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Coach Personnel - Planning de Vie Optimisé</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .nav-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .nav-tab {
+            padding: 10px 20px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .nav-tab.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .section {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        h3 {
+            color: #764ba2;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .task-list {
+            list-style: none;
+        }
+
+        .task-item {
+            background: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            border-left: 5px solid #ddd;
+            display: flex;
+            align-items: center;
+        }
+
+        .task-item.priority-high {
+            border-left-color: #ff6b6b;
+            background: #fff5f5;
+        }
+
+        .task-item.priority-medium {
+            border-left-color: #ffd93d;
+            background: #fffdf0;
+        }
+
+        .task-item.priority-low {
+            border-left-color: #6bcfe7;
+            background: #f0faff;
+        }
+
+        .task-checkbox {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        .schedule-day {
+            margin-bottom: 40px;
+        }
+
+        .day-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .day-title {
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+
+        .day-type {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        .day-type.day-work {
+            background: #ff6b6b;
+        }
+
+        .day-type.day-free {
+            background: #6bcfe7;
+        }
+
+        .time-slot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+        }
+
+        .time {
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .activity {
+            flex: 1;
+            margin-left: 15px;
+            font-size: 1.1em;
+        }
+
+        .flexible {
+            color: #ff6b6b;
+            font-style: italic;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+        }
+
+        .info-box {
+            background: #e8f4f8;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #6bcfe7;
+        }
+
+        .alert {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #ffd93d;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            border-left-color: #17a2b8;
+        }
+
+        .icon {
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+
+        ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        li {
+            margin-bottom: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"], input[type="date"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #5a67d8;
+        }
+
+        @media (max-width: 768px) {
+            .time-slot {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .activity {
+                margin-left: 0;
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Mon Coach Personnel IA</h1>
+            <p class="subtitle">Planning Optimisé pour une Vie Équilibrée - Version 2.0</p>
+            <p><em>Adapté à tes contraintes : Travail (Mar/Ven), Réveil tôt (Lun/Mer), Chien (3x/jour), Courses/Buanderie/Robot, Repas & Routine Soir.</em></p>
+        </header>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showSection('priorites')">Priorités</button>
+            <button class="nav-tab" onclick="showSection('planning')">Planning Hebdo</button>
+            <button class="nav-tab" onclick="showSection('suivi')">Suivi & Outils</button>
+            <button class="nav-tab" onclick="showSection('personnalisation')">Personnalisation</button>
+        </div>
+
+        <!-- Section Priorités -->
+        <div id="priorites" class="section active">
+            <h2>🎯 Tes Priorités Hiérarchisées (Optimisées avec Tes Infos)</h2>
+            <p><em>Basé sur une analyse systémique : Santé (sommeil malgré réveils tôt), Quotidien (chien non négociable, courses/buanderie), Travail/Équilibre, Développement (enfants, perso). Blocs flexibles pour adaptation.</em></p>
+            <div class="task-list">
+                <div class="task-item priority-high">
+                    <input type="checkbox" class="task-checkbox" onchange="updateProgress()">
+                    <div><strong>1. SANTÉ & SOMMEIL</strong> : 7h min/jour (coucher 21h-22h max, malgré routine soir actuelle). Adapter pour réveils 5h30 (Lun/Mer) et 6h45 (Mar/Jeu/Ven).</div>
+                </div>
+                <div class="task-item priority-high">
+                    <input type="checkbox" class="task-checkbox" onchange="updateProgress()">
+                    <div><strong>2. CHIEN</strong> : 3 sorties/jour (1h15 principale + 2x 5-20min). Intégrer dans blocs mobiles ; impliquer fille si possible.</div>
+                </div>
+                <div class="task-item priority-high">
+                    <input type="checkbox" class="task-checkbox" onchange="updateProgress()">
+                    <div><strong>3. QUOTIDIEN MAISON</strong> : Buanderie (5-7 machines/sem, combiner avec sorties), Robot aspirateur (1x/jour absent + chien, 20-45min), Courses (1 grande +1-3 compléments/sem, 30min trajet).</div>
+                </div>
+                <div class="task-item priority-medium">
+                    <input type="checkbox" class="task-checkbox" onchange="updateProgress()">
+                    <div><strong>4. REPAS & NUTRITION</strong> : 1 repas principal/jour (soir en semaine/Sam, flexible Dim). Prépa rapide Lundis/Mercredis (restes).</div>
+                </div>
+                <div class="task-item priority-medium">
+                    <input type="checkbox" class="task-checkbox" onchange="updateProgress()">
+                    <div><strong>5. TRAVAIL & ÉQUILIBRE</strong> : Journées fixes (Mar/Jeu/Ven) ; Lundis/Mercredis pour recharge/perso. Éviter épuisement (blocs flexibles).</div>
+                </div>
+                <div class="task-item priority-low">
+                    <input type="checkbox" class="task-checkbox" onchange="updateProgress()">
+                    <div><strong>6. DÉVELOPPEMENT PERSO/ENFANTS</strong> : Temps pour enfants (fille train, fils repas Mer) ; routine soir (évoluer vers planif sans écran).</div>
+                </div>
+            </div>
+            <div id="progress-bar" style="margin-top: 20px; width: 100%; height: 20px; background: #f0f0f0; border-radius: 10px; overflow: hidden;">
+                <div id="progress-fill" style="height: 100%; background: #667eea; width: 0%; transition: width 0.3s;"></div>
+            </div>
+            <p id="progress-text" style="margin-top: 10px; text-align: center;">Progrès : 0% (0/6 tâches)</p>
+        </div>
+
+        <!-- Section Planning -->
+        <div id="planning" class="section">
+            <h2>📅 Planning Hebdo en Blocs Flexibles</h2>
+            <p><em>Blocs d'activités (durées approximatives) pour flexibilité : Adapter si énergie basse ou imprévus. Priorité : Chien/robot intégrés. Repas principal soir (sauf Dim). Buanderie/courses combinées avec sorties. Routine soir : Maintenir pour l'instant, évoluer plus tard.</em></p>
+
+            <!-- LUNDI (Journée libre, réveil 5h30 pour fille) -->
+            <div class="schedule-day">
+                <div class="day-header">
+                    <div class="day-title">LUNDI</div>
+                    <span class="day-type day-free">Journée libre (réveil 5h30)</span>
+                </div>
+                <div class="time-slot">
+                    <div class="time">5h30 - 6h30</div>
+                    <div class="activity">👨‍👩‍👧‍👦 Aide fille train (6h15) + 🐕 Sortie chien courte (5-20min) + Petit-déj rapide</div>
+                </div>
+                <div class="time-slot">
+                    <div class="time">7h00 - 8h00</div>
+                    <div class="activity">🛌 Recharge sommeil si besoin + Routine matin (café, planif jour)</div>
+                </div>
+                <div class="time-slot">
+                    <div class="time">8h00 - 9h30 <span class="flexible">(flexible)</span></div>
+                    <div class="activity">🏠 Buanderie si machines en attente (descente avec sortie) + Robot aspirateur (20min simple, zones cuisine/SDB/couloirs)</div>
+                </div>
+                <div class="time-slot">
+                    <div class="time">9h30 - 11h00</div>
+                    <div class="activity">🛒 Courses complément si besoin (30min trajet + shop) OU Temps perso (livre/podcast)</div>
+                </div>
+                <div class="time-slot">
+                    <div class="time">11h00 - 12h30</div>
+                    <div class="activity">🍽️ Repas midi rapide (restes) + 🐕 Sortie principale chien (1h15, avec écoute audio si énergie OK)</div>
+                </div>
+                <div class="time-slot">
+                    <div class="time">12h30 - 14h00 <span class="flexible">(flexible)</span></div>
+                    <div class="activity">💼 Temps pro/perso (recherches emploi OU développement enfants, ex. prompts HTML pour fils 1-2h)</div>
+                </div>
+                <div class="time-slot">
+                    <div class="time">14h00 - 15h00</div>
+                    <div class="activity">🏠 Rangement/désencombrement (1h, zone ciblée) + Robot approfondi si absent (45min, chambres/salon)</div>
+                </div>
+                <div class="time-slot">
+                    <div class="time">15h00 - 17h00</div>
+                    <div class="activity">🆓 Temps libre/équilibre (marche, méditation OU aide enfants)</div>
+                </div>
+                <div class="time-slot">
+                    <div class="time">17h00 - 18h00</div>
+                    <div class="activity">🐕 Sortie chien courte + Prépa repas soir</div>
+                </div>
+                <div class="time-slot">
+                    <div class="time">18h00 - 19h30</div>
+                    <div class="activity">🍽️ Repas principal soir (prépa 30min + manger)</div>
+                </div>
+                <div class="time-slot">
+                    <div class="time">19h30 - 21h00</div>
+                    <div class="activity">👨‍👩‍👧‍👦 Temps famille (fils repas si besoin) + Routine détente</div>
+                </div>
+                <div class="time-slot">
+                    <div class="time">21h00 - 22h00</div>
+                    <div class="activity">📱 Routine soir actuelle (séries/planif, lumière min) → Coucher pour 7h sommeil</div>
+                </div>
+            </div>
+
+            <!-- MARDI (Travail toute la journée) -->
+            <div class="schedule-day">
+                <div class="day-header">
+                    <div class="day-title">MARDI</div>
+                    <span class="day-type day-work">Travail (6h45-17h50)</span>
+                </div>
+                <div class="time-slot">
+                    <div class="time">5h00 - 6h45</div>
+                    <div class="activity">🛌 Réveil tôt + 🐕 Sortie courte + Prépa départ train</div>
+                </div>
+                <div class="time-slot">
+                    <div class="time">6h45 - 17h50</div>
+                    <div class="activity">💼 Travail (train aller/retour inclus)</div>
+                </div>
+                <div class="time-slot">
+                    <div class="time">17h50 - 18h30 <span class="flexible">(flexible)</span></div>
+                    <div class="activity">🏠 Arrivée + 🐕 Sortie principale (1h15) + Buanderie si besoin (descente rapide)</div>
+                </div>
+                <div class="time-slot">
+                    <div class="time">18h30 - 19h30</div>
+                    <div class="activity">🍽️ Prépa & repas principal soir</div>
+                </div>
+                <div class="time-slot">
+                    <div class="time">19h30 - 20h30</div>
+                    <div class="activity">Robot aspirateur (lancer si absent, 20min) + Temps famille</div>
+                </div>
+                <div class="time-slot">
+                    <div class="time">20h30 - 22h00</div>
+                    <div class="activity">📱 Routine soir + 🐕 Sortie courte avant coucher</div>
+                </div>
+            </div>
+
+            <!-- MERCREDI (Journée libre, réveil 5h30) -->
+            <div class="schedule-day">
+                <div class="day-header">
+                    <div class="day-title">MERCREDI</div>
+                    <span class="day-type day-free">Journée libre (réveil 5h30, fils midi)</span>
+                </div>
+                <div class="time-slot">
+                    <div class="time">5h30 - 6h30</div>
+                    <div class="activity">👨‍👩‍👧‍👦 Aide fille + 🐕 Sortie courte + Petit-déj</div>
+                </div>
+                <div class="time-slot">
+                    <div class="time">7h00 - 9h00</div>
+                    <div class="activity">🛒 Courses grande si besoin (1h incl. trajet) + Buanderie combinée</div>
+                </div>
+                <div class="time-slot">
+                    <div class="time">9h00 - 10h30 <span class="flexible">(flexible)</span></div>
+                    <div class="activity">🏠 Nettoyage/robot (45min approfondi) + Rangement</div>
+                </div>
+                <div class="time-slot">
+                    <div class="time">10h30 - 12h00</div>
+                    <div class="activity">💼 Temps pro/perso (ex. prompts fils 1.5h)</div>
+                </div>
+                <div class="time-slot">
+                    <div class="time">12h00 - 13h00</div>
+                    <div class="activity">🍽️ Repas midi rapide (fils inclus, restes)</div>
+                </div>
+                <div class="time-slot">
+                    <div class="time">13h00 - 14h30</div>
+                    <div class="activity">🐕 Sortie principale (1h15) + Détente</div>
+                </div>
+                <div class="time-slot">
+                    <div class="time">14h30 - 16h00 <span class="flexible">(flexible)</span></div>
+                    <div class="activity">🆓 Développement perso (livre/podcast 1.5h)</div>
+                </div>
+                <div class="time-slot">
+                    <div class="time">16h00 - 18h00</div>
+                    <div class="activity">👨‍👩‍👧‍👦 Temps enfants + 🐕 Sortie courte</div>
+                </div>
+                <div class="time-slot">
+                    <div class="time">18h00 - 19h30</div>
+                    <div class="activity">🍽️ Repas principal soir</div>
+                </div>
+                <div class="time-slot">
+                    <div class="time">19h30 - 22h00</div>
+                    <div class="activity">Routine soir + Coucher</div>
+                </div>
+            </div>
+
+            <!-- JEUDI (Travail) -->
+            <div class="schedule-day">
+                <div class="day-header">
+                    <div class="day-title">JEUDI</div>
+                    <span class="day-type day-work">Travail (6h45-17h50)</span>
+                </div>
+                <!-- Similaire à Mardi, avec ajustements si besoin -->
+                <div class="time-slot">
+                    <div class="time">5h00 - 6h45</div>
+                    <div class="activity">Prépa matin + 🐕 Sortie courte</div>
+                </div>
+                <div class="time-slot">
+                    <div class="time">6h45 - 17h50</div>
+                    <div class="activity">💼 Travail</div>
+                </div>
+                <div class="time-slot">
+                    <div class="time">17h50 - 19h30 <span class="flexible">(flexible)</span></div>
+                    <div class="activity">🐕 Sortie principale + Buanderie + 🍽️ Repas soir</div>
+                </div>
+                <div class="time-slot">
+                    <div class="time">19h30 - 22h00</div>
+                    <div class="activity">Robot + Routine soir + 🐕 Sortie courte</div>
+                </div>
+            </div>
+
+            <!-- VENDREDI (Travail, retour 16h45) -->
+            <div class="schedule-day">
+                <div class="day-header">
+                    <div class="day-title">VENDREDI</div>
+                    <span class="day-type day-work">Travail (6h45-16h45)</span>
+                </div>
+                <div class="time-slot">
+                    <div class="time">5h00 - 6h45</div>
+                    <div class="activity">Prépa + 🐕 Sortie</div>
+                </div>
+                <div class="time-slot">
+                    <div class="time">6h45 - 16h45</div>
+                    <div class="activity">💼 Travail</div>
+                </div>
+                <div class="time-slot">
+                    <div class="time">16h45 - 18h15</div>
+                    <div class="activity">🏠 Arrivée + 🐕 Sortie principale + Robot (lancer)</div>
+                </div>
+                <div class="time-slot">
+                    <div class="time">18h15 - 19h30</div>
+                    <div class="activity">🍽️ Repas soir</div>
+                </div>
+                <div class="time-slot">
+                    <div class="time">19h30 - 22h00</div>
+                    <div class="activity">Temps famille + Routine soir</div>
+                </div>
+            </div>
+
+            <!-- SAMEDI (Flexible) -->
+            <div class="schedule-day">
+                <div class="day-header">
+                    <div class="day-title">SAMEDI</div>
+                    <span class="day-type day-free">Weekend flexible</span>
+                </div>
+                <div class="time-slot">
+                    <div class="time">Matin flexible (7h+)</div>
+                    <div class="activity">🐕 Sortie + 🛒 Courses si besoin + Buanderie</div>
+                </div>
+                <div class="time-slot">
+                    <div class="time">Midi/Soir</div>
+                    <div class="activity">🍽️ Repas principal soir + Temps perso/famille + Robot quotidien</div>
+                </div>
+                <div class="time-slot">
+                    <div class="time">Soir</div>
+                    <div class="activity">Routine soir + Coucher tôt pour récup</div>
+                </div>
+            </div>
+
+            <!-- DIMANCHE (Flexible) -->
+            <div class="schedule-day">
+                <div class="day-header">
+                    <div class="day-title">DIMANCHE</div>
+                    <span class="day-type day-free">Repos & Recharge</span>
+                </div>
+                <div class="time-slot">
+                    <div class="time">Flexible toute journée</div>
+                    <div class="activity">🐕 Sorties + 🍽️ Repas quand programme le permet + Planif semaine + Développement (lire/podcast)</div>
+                </div>
+                <div class="time-slot">
+                    <div class="time">Soir</div>
+                    <div class="activity">Routine soir + Prépa Lun</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Suivi -->
+        <div id="suivi" class="section">
+            <h2>📊 Tableau de Suivi Hebdo (Copie en Excel/Google Sheets)</h2>
+            <p><em>Suivi progrès : Coche tâches, note énergie, ajuste blocs. Ressources : Podcast "The Tim Ferriss Show" pour organisation ; Livre "Atomic Habits" pour routines.</em></p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Jour</th>
+                        <th>Blocs Complétés</th>
+                        <th>Énergie (1-10)</th>
+                        <th>Ajustements</th>
+                        <th>Notes (Succès/Échecs)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Lundi</td>
+                        <td><input type="checkbox"> <input type="checkbox"> <input type="checkbox"></td>
+                        <td><select><option>1</option><option>5</option><option>10</option></select></td>
+                        <td><input type="text" placeholder="Ex: Blocs raccourcis"></td>
+                        <td><textarea placeholder="Ex: Bonne sortie chien, mais fatigué après courses"></textarea></td>
+                    </tr>
+                    <!-- Ajoute lignes pour autres jours -->
+                    <tr>
+                        <td colspan="5" style="text-align: center; color: #666;"><em>Ajoute tes entrées hebdo...</em></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="info-box">
+                <h3>🎯 Suivi Spécifique : Chien & Maison</h3>
+                <p><strong>Objectif :</strong> 21 sorties/sem (3/jour) ; 5-7 lessives ; Robot 7x/sem. Célèbre : 1 sortie = +1 point bien-être !</p>
+            </div>
+        </div>
+
+        <!-- Section Personnalisation -->
+        <div id="personnalisation" class="section">
+            <h2>🔧 Personnalisation & Questions pour Ajuster</h2>
+            <p><em>Pour cohérence : Réponds pour raffiner (ex. énergie, blocages). Je m'adapte à ton rythme.</em></p>
+
+            <div class="form-group">
+                <label>Quels blocages actuels (ex. énergie buanderie) ?</label>
+                <textarea rows="3" placeholder="Décris..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Objectifs perso (ex. emploi, enfants) ?</label>
+                <input type="text" placeholder="Ex: 2 candidatures/sem">
+            </div>
+
+            <div class="form-group">
+                <label>Disponibilités énergie (matin/soir) ?</label>
+                <select>
+                    <option>Matin haute</option>
+                    <option>Soir haute</option>
+                    <option>Équilibrée</option>
+                </select>
+            </div>
+
+            <div class="alert alert-info">
+                <span class="icon">💡</span>
+                <strong>Questions pour Éducation Fils (si pertinent) :</strong>
+                <ul>
+                    <li>✏️ Niveau scolaire ?</li>
+                    <li>✏️ Matières difficiles ?</li>
+                    <li>✏️ Type exercices préférés ?</li>
+                    <li>✏️ Examens à venir ?</li>
+                </ul>
+            </div>
+
+            <button onclick="saveCustom()">Sauvegarder & Générer Nouveau Planning</button>
+            <p id="custom-feedback" style="margin-top: 10px; color: #667eea;"></p>
+        </div>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function updateProgress() {
+            const checkboxes = document.querySelectorAll('.task-checkbox:checked');
+            const total = document.querySelectorAll('.task-checkbox').length;
+            const percent = (checkboxes.length / total) * 100;
+            document.getElementById('progress-fill').style.width = percent + '%';
+            document.getElementById('progress-text').textContent = `Progrès : ${percent}% (${checkboxes.length}/${total} tâches)`;
+        }
+
+        function saveCustom() {
+            // Simulation sauvegarde (en vrai, localStorage ou envoi)
+            document.getElementById('custom-feedback').textContent = 'Planning personnalisé sauvegardé ! Réponds pour itérer.';
+        }
+
+        // Init progrès
+        updateProgress();
+    </script>
+</body>
+</html>
