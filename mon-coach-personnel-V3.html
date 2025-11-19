@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Coach Personnel IA - Planning Optimisé</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%); /* Light, professional background */
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            background: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        h1 {
+            color: #4a69bd; /* A calming blue */
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.2em;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .nav-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+            justify-content: center;
+            background: #e9eff7;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .nav-tab-item {
+            padding: 12px 20px;
+            border-radius: 8px;
+            background: #fff;
+            color: #4a69bd;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .nav-tab-item:hover, .nav-tab-item.active {
+            background: #4a69bd;
+            color: #fff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transform: translateY(-2px);
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px 0;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        h2, h3 {
+            color: #4a69bd;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e0e6ed;
+            padding-bottom: 8px;
+        }
+
+        h2 {
+            font-size: 2em;
+        }
+
+        h3 {
+            font-size: 1.5em;
+        }
+
+        p {
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+            margin-bottom: 20px;
+        }
+
+        ul li {
+            padding: 8px 0;
+            border-bottom: 1px dotted #eee;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            color: #444;
+        }
+
+        ul li:last-child {
+            border-bottom: none;
+        }
+
+        .info-box {
+            background: #e6f2ff; /* Light blue for info */
+            border-left: 5px solid #4a69bd;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .info-box h3 {
+            color: #3a539b;
+            margin-top: 0;
+            border-bottom: none;
+            padding-bottom: 0;
+            margin-bottom: 10px;
+        }
+
+        .info-box p, .info-box ul li {
+            color: #3a539b;
+        }
+
+        .alert {
+            background: #fff3cd; /* Warning yellow for alerts */
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .alert-info {
+            background: #e6f2ff;
+            border-left-color: #4a69bd;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            border-left-color: #28a745;
+        }
+
+        .alert .icon {
+            font-size: 1.5em;
+            color: #ffc107;
+        }
+
+        .alert-info .icon {
+            color: #4a69bd;
+        }
+
+        .alert-success .icon {
+            color: #28a745;
+        }
+
+
+        .task-list {
+            margin-top: 20px;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #f8fbfd;
+            border: 1px solid #e0e6ed;
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+            transition: background-color 0.2s ease;
+        }
+
+        .task-item:hover {
+            background-color: #eef4fb;
+        }
+
+        .task-checkbox {
+            min-width: 20px;
+            min-height: 20px;
+            accent-color: #4a69bd;
+            cursor: pointer;
+        }
+
+        .task-item.completed {
+            background-color: #e6ffed;
+            border-color: #a7e0b7;
+            opacity: 0.8;
+            text-decoration: line-through;
+        }
+
+        .task-item.completed div {
+            color: #777;
+        }
+
+        .priority-high { color: #d9534f; font-weight: bold; } /* Red */
+        .priority-medium { color: #f0ad4e; } /* Orange */
+        .priority-low { color: #5bc0de; } /* Blue */
+
+
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .schedule-day {
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .day-header {
+            background: #4a69bd;
+            color: #fff;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.3em;
+            font-weight: 700;
+        }
+
+        .day-type {
+            font-size: 0.8em;
+            padding: 4px 8px;
+            border-radius: 5px;
+            background: rgba(255,255,255,0.2);
+        }
+
+        .day-work { background: #d9534f; } /* Red for work days */
+        .day-free { background: #5cb85c; } /* Green for free days */
+
+        .schedule-content {
+            padding: 15px 20px;
+        }
+
+        .time-slot {
+            display: flex;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dotted #e0e6ed;
+            align-items: flex-start;
+        }
+
+        .time-slot:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .time {
+            font-weight: 600;
+            color: #4a69bd;
+            width: 80px;
+            flex-shrink: 0;
+            padding-right: 10px;
+        }
+
+        .activity {
+            color: #555;
+            flex-grow: 1;
+        }
+        .activity strong {
+            color: #333;
+        }
+
+        /* Icons */
+        .activity::before {
+            margin-right: 5px;
+        }
+        .activity[data-icon="work"]::before { content: "💼"; }
+        .activity[data-icon="dog"]::before { content: "🐕"; }
+        .activity[data-icon="home"]::before { content: "🏠"; }
+        .activity[data-icon="cooking"]::before { content: "🍽️"; }
+        .activity[data-icon="chores"]::before { content: "🧹"; }
+        .activity[data-icon="kids"]::before { content: "👨‍👩‍👧‍👦"; }
+        .activity[data-icon="personal"]::before { content: "🧘"; }
+        .activity[data-icon="shopping"]::before { content: "🛒"; }
+        .activity[data-icon="laundry"]::before { content: "🧺"; }
+        .activity[data-icon="study"]::before { content: "📚"; }
+        .activity[data-icon="robot"]::before { content: "🤖"; }
+        .activity[data-icon="sleep"]::before { content: "😴"; }
+        .activity[data-icon="screen"]::before { content: "📱"; } /* For evening routine */
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: #f8fbfd;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e6ed;
+        }
+
+        th {
+            background: #4a69bd;
+            color: #fff;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9em;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f0f4f8;
+        }
+
+        tr:hover {
+            background-color: #eef4fb;
+        }
+
+        .button {
+            display: inline-block;
+            background: #4a69bd;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 15px;
+            transition: background-color 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background: #3a539b;
+        }
+
+        .toggle-btn {
+            background-color: #6c757d;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+        }
+        .toggle-btn:hover {
+            background-color: #5a6268;
+        }
+
+        details {
+            background: #f8fbfd;
+            border: 1px solid #e0e6ed;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            padding: 15px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+        }
+
+        summary {
+            font-weight: bold;
+            color: #4a69bd;
+            cursor: pointer;
+            outline: none;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 10px;
+        }
+        summary:hover {
+            color: #3a539b;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 1em;
+            margin-top: 10px;
+            resize: vertical;
+        }
+
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 1000;
+        }
+
+        body.dark-mode {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: #ecf0f1;
+        }
+
+        body.dark-mode .container {
+            background: #34495e;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        body.dark-mode header, body.dark-mode .nav-tab-item {
+            background: #2c3e50;
+        }
+
+        body.dark-mode h1, body.dark-mode h2, body.dark-mode h3, body.dark-mode .nav-tab-item, body.dark-mode .time {
+            color: #85a9df;
+        }
+
+        body.dark-mode .subtitle, body.dark-mode p, body.dark-mode ul li, body.dark-mode .activity {
+            color: #bdc3c7;
+        }
+
+        body.dark-mode .nav-tabs {
+            background: #2c3e50;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+        }
+
+        body.dark-mode .nav-tab-item {
+            background: #34495e;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        body.dark-mode .nav-tab-item:hover, body.dark-mode .nav-tab-item.active {
+            background: #85a9df;
+            color: #2c3e50;
+        }
+
+        body.dark-mode .info-box {
+            background: #3a539b;
+            border-left-color: #85a9df;
+        }
+        body.dark-mode .info-box h3, body.dark-mode .info-box p, body.dark-mode .info-box ul li {
+            color: #ecf0f1;
+        }
+
+        body.dark-mode .alert {
+            background: #4b4b3a;
+            border-left-color: #d8a011;
+        }
+
+        body.dark-mode .alert-info {
+            background: #3a539b;
+            border-left-color: #85a9df;
+        }
+
+        body.dark-mode .alert .icon {
+            color: #ffeb3b;
+        }
+
+        body.dark-mode .alert-info .icon {
+            color: #85a9df;
+        }
+
+        body.dark-mode .task-item {
+            background: #3a4b5c;
+            border-color: #4a69bd;
+            color: #ecf0f1;
+        }
+        body.dark-mode .task-item.completed {
+            background-color: #2a4130;
+            border-color: #5cb85c;
+        }
+        body.dark-mode .task-item.completed div {
+            color: #95a5a6;
+        }
+        body.dark-mode .task-item:hover {
+            background-color: #4a5d6f;
+        }
+
+        body.dark-mode .schedule-day {
+            background: #34495e;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        body.dark-mode .day-header {
+            background: #2c3e50;
+        }
+
+        body.dark-mode .time-slot {
+            border-bottom-color: #4a69bd;
+        }
+
+        body.dark-mode table {
+            background: #3a4b5c;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        body.dark-mode th {
+            background: #2c3e50;
+            color: #ecf0f1;
+        }
+        body.dark-mode td {
+            border-bottom-color: #4a69bd;
+            color: #ecf0f1;
+        }
+        body.dark-mode tr:nth-child(even) {
+            background-color: #34495e;
+        }
+        body.dark-mode tr:hover {
+            background-color: #4a5d6f;
+        }
+
+        body.dark-mode .button {
+            background: #85a9df;
+            color: #2c3e50;
+        }
+        body.dark-mode .button:hover {
+            background: #a9c5ec;
+        }
+
+        body.dark-mode details {
+            background: #3a4b5c;
+            border-color: #4a69bd;
+        }
+        body.dark-mode summary {
+            color: #85a9df;
+            border-bottom-color: #4a69bd;
+        }
+        body.dark-mode summary:hover {
+            color: #a9c5ec;
+        }
+        body.dark-mode textarea {
+            background: #2c3e50;
+            border-color: #4a69bd;
+            color: #ecf0f1;
+        }
+
+    </style>
+</head>
+<body>
+    <button class="dark-mode-toggle" onclick="toggleDarkMode()">☀️ / 🌙 Mode</button>
+
+    <div class="container">
+        <header>
+            <h1>🌟 Mon Compas Personnel V2.0 🌟</h1>
+            <p class="subtitle">
+                Analyse, Organisation et Équilibre – Ton allié pour une vie alignée avec tes valeurs.
+            </p>
+        </header>
+
+        <nav class="nav-tabs">
+            <div class="nav-tab-item active" onclick="openTab(event, 'Accueil')">👋 Accueil</div>
+            <div class="nav-tab-item" onclick="openTab(event, 'Priorites')">🎯 Priorités & Tâches</div>
+            <div class="nav-tab-item" onclick="openTab(event, 'Planning')">🗓️ Planning de la Semaine</div>
+            <div class="nav-tab-item" onclick="openTab(event, 'RechercheEmploi')">💼 Objectif Emploi</div>
+            <div class="nav-tab-item" onclick="openTab(event, 'EducationFils')">📚 Éducation Fils</div>
+            <div class="nav-tab-item" onclick="openTab(event, 'MesNotes')">✍️ Mes Notes</div>
+        </nav>
+
+        <div id="Accueil" class="tab-content active">
+            <h2>Bienvenue à bord !</h2>
+            <p>
+                Ce tableau de bord interactif est conçu pour t'aider à visualiser, organiser et optimiser les différents aspects de ta vie.
+                Nous allons commencer par mettre en lumière tes contraintes et tes objectifs pour construire un planning qui te ressemble, avec des "blocs d'activités" flexibles.
+            </p>
+            <div class="alert alert-info">
+                <span class="icon">💡</span>
+                <strong>Par où commencer ?</strong>
+                <p>
+                    Pour prendre en main cet outil, je te propose de naviguer dans les différents onglets.
+                    Commence par l'onglet "Planning de la Semaine" pour visualiser les blocs proposés, puis "Priorités & Tâches" pour ajuster et cocher ce qui est fait.
+                    N'hésite pas à utiliser la section "Mes Notes" pour tes réflexions ou ajustements.
+                </p>
+            </div>
+
+            <h3>Principes clés de ton coaching :</h3>
+            <ul>
+                <li><strong>Approche Systémique :</strong> Chaque domaine de ta vie est connecté. Nous cherchons l'harmonie globale.</li>
+                <li><strong>Flexibilité des Blocs :</strong> Les horaires sont indicatifs. Concentre-toi sur l'allocation de temps aux activités clés.</li>
+                <li><strong>Bienveillance :</strong> Rappelle-toi tes objectifs sans jugement. Chaque pas compte.</li>
+                <li><strong>Itération :</strong> Ce n'est qu'une première version ! Nous ajusterons ensemble après tes retours.</li>
+            </ul>
+
+            <div class="info-box">
+                <h3>Tes informations clés (rappel) :</h3>
+                <ul>
+                    <li><strong>Travail :</strong> Mardi, Jeudi (6h45-17h50), Vendredi (6h45-16h45).</li>
+                    <li><strong>Réveil matinal (enfants) :</strong> Lundi, Mercredi (5h30).</li>
+                    <li><strong>Chien :</strong> 3 sorties/jour minimum. 1 grande (55min-1h15) non-négociable.</li>
+                    <li><strong>Courses :</strong> Plusieurs fois/semaine (1 grande + 1-3 petites). 30 min A/R trajet. Pas de drive/livraison.</li>
+                    <li><strong>Lessive :</strong> 5-7 machines/semaine. Sous-sol (4 étages). Souvent quand tu sors. Enfants aident (fille ses affaires, fils 1 machine/semaine).</li>
+                    <li><strong>Robot aspirateur/laveur :</strong> Quotidien (cuisine, sdb, corridors) quand tu sors avec le chien (~20-45 min). Chambres/salon 1x/semaine.</li>
+                    <li><strong>Repas :</strong> 1 repas principal/jour (souvent le soir en semaine/samedi). Lundi/Mercredi midi : restes/rapide. Dimanche : flexible.</li>
+                    <li><strong>Routine soir :</strong> iPhone + séries/planif. (À aborder plus tard).</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="Priorites" class="tab-content">
+            <h2>🎯 Tes Priorités & Tâches</h2>
+            <p>Voici une proposition de priorités et une liste de tâches pour t'aider à structurer tes actions. N'hésite pas à les modifier !</p>
+
+            <h3>Priorités Globales (à valider/ajuster)</h3>
+            <div class="task-list">
+                <div class="task-item priority-high">
+                    <input type="checkbox" class="task-checkbox">
+                    <div><strong>1. Équilibre Personnel :</strong> Santé (sommeil 7h, moments de détente), Gestion de l'énergie.</div>
+                </div>
+                <div class="task-item priority-high">
+                    <input type="checkbox" class="task-checkbox">
+                    <div><strong>2. Gestion Foyer :</strong> Intégrer les tâches récurrentes (chien, repas, courses, lessive, robot) de manière fluide.</div>
+                </div>
+                <div class="task-item priority-medium">
+                    <input type="checkbox" class="task-checkbox">
+                    <div><strong>3. Objectif Professionnel :</strong> Avancement de la recherche d'emploi.</div>
+                </div>
+                <div class="task-item priority-medium">
+                    <input type="checkbox" class="task-checkbox">
+                    <div><strong>4. Soutien Enfants :</strong> Aide pour les devoirs / révisions (fils).</div>
+                </div>
+                <div class="task-item priority-low">
+                    <input type="checkbox" class="task-checkbox">
+                    <div><strong>5. Développement Personnel :</strong> Lecture, apprentissage, hobbies.</div>
+                </div>
+            </div>
+
+            <h3>Tâches Quotidiennes & Hebdomadaires</h3>
+            <details open>
+                <summary>Tâches Quotidiennes (à cocher chaque jour)</summary>
+                <div class="task-list">
+                    <div class="task-item">
+                        <input type="checkbox" class="task-checkbox">
+                        <div>🐕 Promenade chien (matin - grande)</div>
+                    </div>
+                    <div class="task-item">
+                        <input type="checkbox" class="task-checkbox">
+                        <div>🐕 Promenade chien (midi/après-midi - courte)</div>
+                    </div>
+                    <div class="task-item">
+                        <input type="checkbox" class="task-checkbox">
+                        <div>🐕 Promenade chien (soir - courte)</div>
+                    </div>
+                    <div class="task-item">
+                        <input type="checkbox" class="task-checkbox">
+                        <div>🍽️ Préparer/réchauffer repas principal (soir)</div>
+                    </div>
+                    <div class="task-item">
+                        <input type="checkbox" class="task-checkbox">
+                        <div>🧹 Nettoyer cuisine après repas (rapide)</div>
+                    </div>
+                    <div class="task-item">
+                        <input type="checkbox" class="task-checkbox">
+                        <div>🤖 Lancer robot (quand absent avec le chien)</div>
+                    </div>
+                    <div class="task-item">
+                        <input type="checkbox" class="task-checkbox">
+                        <div>📝 Petite planification/bilan de fin de journée (même avec iPhone)</div>
+                    </div>
+                    <div class="task-item">
+                        <input type="checkbox" class="task-checkbox">
+                        <div>💧 Boire suffisamment d'eau</div>
+                    </div>
+                </div>
+            </details>
+
+            <details>
+                <summary>Tâches Hebdomadaires (à répartir)</summary>
+                <div class="task-list">
+                    <div class="task-item">
+                        <input type="checkbox" class="task-checkbox">
+                        <div>🛒 Courses principales (1x)</div>
+                    </div>
+                    <div class="task-item">
+                        <input type="checkbox" class="task-checkbox">
+                        <div>🛒 Courses d'appoint (1-3x)</div>
+                    </div>
+                    <div class="task-item">
+                        <input type="checkbox" class="task-checkbox">
+                        <div>🧺 Lancer et étendre lessives (5-7 machines)</div>
+                    </div>
+                    <div class="task-item">
+                        <input type="checkbox" class="task-checkbox">
+                        <div>🧺 Plier et ranger lessives (incluant celles des enfants)</div>
+                    </div>
+                    <div class="task-item">
+                        <input type="checkbox" class="task-checkbox">
+                        <div>🧹 Nettoyage approfondi cuisine/sdb/corridors (robot) ou manuel si besoin.</div>
+                    </div>
+                     <div class="task-item">
+                        <input type="checkbox" class="task-checkbox">
+                        <div>🤖 Lancer robot pour chambres/salon (1x/semaine)</div>
+                    </div>
+                    <div class="task-item">
+                        <input type="checkbox" class="task-checkbox">
+                        <div>📄 Organiser papiers/e-mails (1 session courte)</div>
+                    </div>
+                    <div class="task-item">
+                        <input type="checkbox" class="task-checkbox">
+                        <div>📞 Appels/RDV administratifs (si besoin)</div>
+                    </div>
+                    <div class="task-item">
+                        <input type="checkbox" class="task-checkbox">
+                        <div>💼 Avancer recherche d'emploi (selon objectif)</div>
+                    </div>
+                    <div class="task-item">
+                        <input type="checkbox" class="task-checkbox">
+                        <div>📚 Travailler sur les outils HTML du fils (selon planning)</div>
+                    </div>
+                    <div class="task-item">
+                        <input type="checkbox" class="task-checkbox">
+                        <div>🧘 Moment "pour moi" (lecture, sport, loisir)</div>
+                    </div>
+                </div>
+            </details>
+
+             <div class="alert">
+                <span class="icon">⚠️</span>
+                <strong>Rappel bienveillant :</strong> N'oublie pas d'impliquer tes enfants pour leurs tâches respectives !
+                Plus ils sont autonomes, plus tu gagnes du temps et de l'énergie.
+            </div>
+        </div>
+
+        <div id="Planning" class="tab-content">
+            <h2>🗓️ Planning de la Semaine : Blocs d'Activités</h2>
+            <p>Ce planning est une proposition pour les "blocs d'activités". L'idée est de dédier du temps à chaque domaine sans être trop rigide à la minute près.</p>
+            <p><strong>Légende :</strong> 💼 Travail | 🐕 Chien | 🏠 Maison | 🍽️ Repas | 🛒 Courses | 🧺 Lessive | 🤖 Robot | 👨‍👩‍👧‍👦 Enfants | 🧘 Perso</p>
+
+            <div class="schedule-grid">
+                <!-- LUNDI -->
+                <div class="schedule-day">
+                    <div class="day-header">
+                        <div class="day-title">LUNDI</div>
+                        <span class="day-type day-free">Journée libre</span>
+                    </div>
+                    <div class="schedule-content">
+                        <div class="time-slot">
+                            <div class="time">5h30</div>
+                            <div class="activity" data-icon="kids"><strong>Réveil :</strong> Préparation fille (train 6h15)</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">6h30 - 7h30</div>
+                            <div class="activity" data-icon="dog"><strong>🐕 Promenade principale chien (1h)</strong></div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">7h30 - 8h30</div>
+                            <div class="activity" data-icon="home">Petit déjeuner, routines matinales.</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">8h30 - 10h00</div>
+                            <div class="activity" data-icon="home"><strong>🏠 Gestion Maison & Admin :</strong> Courriers, e-mails, mini-rangement.</div>
+                        </div>
+                         <div class="time-slot">
+                            <div class="time">10h00 - 10h20</div>
+                            <div class="activity" data-icon="dog">🐕 Promenade courte chien (20min) + 🤖 Lancer robot (cuisine/sdb/corridors).</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">10h20 - 12h00</div>
+                            <div class="activity" data-icon="work"><strong>💼 Bloc Recherche Emploi (1h40)</strong> : Cible 1-2 candidatures.</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">12h00 - 13h00</div>
+                            <div class="activity" data-icon="cooking">🍽️ Déjeuner (restes/rapide).</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">13h00 - 15h00</div>
+                            <div class="activity" data-icon="study"><strong>📚 Aide Fils :</strong> Création prompts HTML (2h).</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">15h00 - 15h20</div>
+                            <div class="activity" data-icon="dog">🐕 Promenade courte chien (20min).</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">15h20 - 17h00</div>
+                            <div class="activity" data-icon="shopping"><strong>🛒 Courses :</strong> Déplacement + courses d'appoint (si besoin). *Ou tâches maison/perso si pas de courses*.</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">17h00 - 19h00</div>
+                            <div class="activity" data-icon="cooking"><strong>🍽️ Préparation repas principal du soir.</strong> Famille.</div>
+                        </div>
+                         <div class="time-slot">
+                            <div class="time">19h00 - 20h00</div>
+                            <div class="activity" data-icon="chores">Repas & Nettoyage Cuisine (avec aide si possible).</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">20h00 - 21h30</div>
+                            <div class="activity" data-icon="personal">🧘 Temps personnel / Famille.</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">21h30 - 22h30</div>
+                            <div class="activity" data-icon="screen">📱 Routine du soir (séries/planif avec iPhone).</div>
+                        </div>
+                         <div class="time-slot">
+                            <div class="time">22h30</div>
+                            <div class="activity" data-icon="sleep">😴 Coucher.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MARDI -->
+                <div class="schedule-day">
+                    <div class="day-header">
+                        <div class="day-title">MARDI</div>
+                        <span class="day-type day-work">Journée de travail</span>
+                    </div>
+                    <div class="schedule-content">
+                        <div class="time-slot">
+                            <div class="time">5h30</div>
+                            <div class="activity" data-icon="home">Réveil, préparation.</div>
+                        </div>
+                         <div class="time-slot">
+                            <div class="time">5h45 - 6h30</div>
+                            <div class="activity" data-icon="dog"><strong>🐕 Promenade principale chien (45min)</strong> + 🤖 Lancer robot.</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">6h45 - 17h50</div>
+                            <div class="activity" data-icon="work"><strong>💼 JOURNÉE DE TRAVAIL.</strong> (Départ 6h45, Retour 17h50).</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">~18h00</div>
+                            <div class="activity" data-icon="dog">🐕 Promenade courte chien (15min). *Dès le retour*.</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">18h15 - 19h15</div>
+                            <div class="activity" data-icon="cooking">🍽️ Préparation repas principal (rapide).</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">19h15 - 20h15</div>
+                            <div class="activity" data-icon="chores">Repas & Nettoyage Cuisine.</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">20h15 - 21h30</div>
+                            <div class="activity" data-icon="personal">🧘 Temps famille/détente.</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">21h30 - 22h30</div>
+                            <div class="activity" data-icon="screen">📱 Routine du soir.</div>
+                        </div>
+                         <div class="time-slot">
+                            <div class="time">22h30</div>
+                            <div class="activity" data-icon="sleep">😴 Coucher.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MERCREDI -->
+                <div class="schedule-day">
+                    <div class="day-header">
+                        <div class="day-title">MERCREDI</div>
+                        <span class="day-type day-free">Journée libre</span>
+                    </div>
+                    <div class="schedule-content">
+                        <div class="time-slot">
+                            <div class="time">5h30</div>
+                            <div class="activity" data-icon="kids"><strong>Réveil :</strong> Préparation fille (train 6h15).</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">6h30 - 7h30</div>
+                            <div class="activity" data-icon="dog"><strong>🐕 Promenade principale chien (1h)</strong></div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">7h30 - 8h30</div>
+                            <div class="activity" data-icon="home">Petit déjeuner, routines matinales.</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">8h30 - 9h00</div>
+                            <div class="activity" data-icon="dog">🐕 Promenade courte chien (30min) + 🤖 Lancer robot.</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">9h00 - 10h30</div>
+                            <div class="activity" data-icon="home"><strong>🏠 Tâches Foyer :</strong> Lessive (lancer machine en sortant/revenant de promenade), rangement général.</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">10h30 - 12h30</div>
+                            <div class="activity" data-icon="study"><strong>📚 Aide Fils :</strong> Création prompts HTML (2h).</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">12h30 - 13h30</div>
+                            <div class="activity" data-icon="cooking">🍽️ Déjeuner (fils à la maison, restes/rapide pour toi).</div>
+                        </div>
+                         <div class="time-slot">
+                            <div class="time">13h30 - 15h00</div>
+                            <div class="activity" data-icon="shopping"><strong>🛒 Courses :</strong> Déplacement + courses principales/complémentaires.</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">15h00 - 15h20</div>
+                            <div class="activity" data-icon="dog">🐕 Promenade courte chien (20min).</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">15h20 - 17h00</div>
+                            <div class="activity" data-icon="home"><strong>🏠 Tâches Foyer :</strong> Plier lessive (avec aide), rangement, préparation repas.</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">17h00 - 19h00</div>
+                            <div class="activity" data-icon="cooking"><strong>🍽️ Préparation repas principal du soir.</strong> Famille.</div>
+                        </div>
+                         <div class="time-slot">
+                            <div class="time">19h00 - 20h00</div>
+                            <div class="activity" data-icon="chores">Repas & Nettoyage Cuisine (avec aide si possible).</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">20h00 - 21h30</div>
+                            <div class="activity" data-icon="personal">🧘 Temps personnel / Famille.</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">21h30 - 22h30</div>
+                            <div class="activity" data-icon="screen">📱 Routine du soir.</div>
+                        </div>
+                         <div class="time-slot">
+                            <div class="time">22h30</div>
+                            <div class="activity" data-icon="sleep">😴 Coucher.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- JEUDI -->
+                <div class="schedule-day">
+                    <div class="day-header">
+                        <div class="day-title">JEUDI</div>
+                        <span class="day-type day-work">Journée de travail</span>
+                    </div>
+                    <div class="schedule-content">
+                        <div class="time-slot">
+                            <div class="time">5h30</div>
+                            <div class="activity" data-icon="home">Réveil, préparation.</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">5h45 - 6h30</div>
+                            <div class="activity" data-icon="dog"><strong>🐕 Promenade principale chien (45min)</strong> + 🤖 Lancer robot.</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">6h45 - 17h50</div>
+                            <div class="activity" data-icon="work"><strong>💼 JOURNÉE DE TRAVAIL.</strong> (Départ 6h45, Retour 17h50).</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">~18h00</div>
+                            <div class="activity" data-icon="dog">🐕 Promenade courte chien (15min). *Dès le retour*.</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">18h15 - 19h15</div>
+                            <div class="activity" data-icon="cooking">🍽️ Préparation repas principal (rapide).</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">19h15 - 20h15</div>
+                            <div class="activity" data-icon="chores">Repas & Nettoyage Cuisine.</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">20h15 - 21h30</div>
+                            <div class="activity" data-icon="personal">🧘 Temps famille/détente.</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">21h30 - 22h30</div>
+                            <div class="activity" data-icon="screen">📱 Routine du soir.</div>
+                        </div>
+                         <div class="time-slot">
+                            <div class="time">22h30</div>
+                            <div class="activity" data-icon="sleep">😴 Coucher.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VENDREDI -->
+                <div class="schedule-day">
+                    <div class="day-header">
+                        <div class="day-title">VENDREDI</div>
+                        <span class="day-type day-work">Journée de travail</span>
+                    </div>
+                    <div class="schedule-content">
+                        <div class="time-slot">
+                            <div class="time">5h30</div>
+                            <div class="activity" data-icon="home">Réveil, préparation.</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">5h45 - 6h30</div>
+                            <div class="activity" data-icon="dog"><strong>🐕 Promenade principale chien (45min)</strong> + 🤖 Lancer robot.</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">6h45 - 16h45</div>
+                            <div class="activity" data-icon="work"><strong>💼 JOURNÉE DE TRAVAIL.</strong> (Départ 6h45, Retour 16h45).</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">~17h00</div>
+                            <div class="activity" data-icon="dog">🐕 Promenade courte chien (15min). *Dès le retour*.</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">17h15 - 18h30</div>
+                            <div class="activity" data-icon="shopping"><strong>🛒 Courses d'appoint ou de weekend</strong> (si nécessaire, sinon perso/maison).</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">18h30 - 19h30</div>
+                            <div class="activity" data-icon="cooking">🍽️ Préparation repas principal (détente, week-end !).</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">19h30 - 20h30</div>
+                            <div class="activity" data-icon="chores">Repas & Nettoyage Cuisine.</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">20h30 - 22h00</div>
+                            <div class="activity" data-icon="personal">🧘 Temps famille/détente.</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">22h00 - 23h00</div>
+                            <div class="activity" data-icon="screen">📱 Routine du soir (plus tard si tu le souhaites, c'est le week-end !).</div>
+                        </div>
+                         <div class="time-slot">
+                            <div class="time">23h00</div>
+                            <div class="activity" data-icon="sleep">😴 Coucher.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SAMEDI -->
+                <div class="schedule-day">
+                    <div class="day-header">
+                        <div class="day-title">SAMEDI</div>
+                        <span class="day-type day-free">Journée libre</span>
+                    </div>
+                    <div class="schedule-content">
+                        <div class="time-slot">
+                            <div class="time">~8h00</div>
+                            <div class="activity" data-icon="home">Réveil plus doux. Petit déjeuner.</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">9h00 - 10h00</div>
+                            <div class="activity" data-icon="dog"><strong>🐕 Promenade principale chien (1h)</strong> + 🤖 Lancer robot (chambres/salon pour nettoyage hebdo).</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">10h00 - 12h00</div>
+                            <div class="activity" data-icon="home"><strong>🏠 Blocs Foyer :</strong> Lessive (lancer/étendre), rangement spécifique, petites réparations.</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">12h00 - 13h00</div>
+                            <div class="activity" data-icon="cooking">🍽️ Déjeuner.</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">13h00 - 15h00</div>
+                            <div class="activity" data-icon="shopping"><strong>🛒 Courses principales :</strong> Le moment idéal pour la grosse session.</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">15h00 - 15h30</div>
+                            <div class="activity" data-icon="dog">🐕 Promenade courte chien (30min).</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">15h30 - 18h00</div>
+                            <div class="activity" data-icon="personal">🧘 Temps personnel / Activités familiales / Hobbies.</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">18h00 - 19h00</div>
+                            <div class="activity" data-icon="cooking">🍽️ Préparation repas principal du soir.</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">19h00 - 20h00</div>
+                            <div class="activity" data-icon="chores">Repas & Nettoyage Cuisine.</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">20h00+</div>
+                            <div class="activity" data-icon="personal">🥳 Soirée libre, détente.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DIMANCHE -->
+                <div class="schedule-day">
+                    <div class="day-header">
+                        <div class="day-title">DIMANCHE</div>
+                        <span class="day-type day-free">Journée libre</span>
+                    </div>
+                    <div class="schedule-content">
+                        <div class="time-slot">
+                            <div class="time">~9h00</div>
+                            <div class="activity" data-icon="home">Réveil doux, petit déjeuner en famille.</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">10h00 - 11h00</div>
+                            <div class="activity" data-icon="dog"><strong>🐕 Promenade principale chien (1h)</strong>.</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">11h00 - 13h00</div>
+                            <div class="activity" data-icon="home"><strong>🏠 Blocs Foyer / Préparation semaine :</strong> Plier/ranger lessive, préparation meal prep si souhaité, mini-rangement.</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">13h00 - 14h00</div>
+                            <div class="activity" data-icon="cooking">🍽️ Déjeuner (flexibilité).</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">14h00 - 17h00</div>
+                            <div class="activity" data-icon="personal">🧘 Temps famille / Loisirs / Recharge personnelle.</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">17h00 - 17h30</div>
+                            <div class="activity" data-icon="dog">🐕 Promenade courte chien (30min).</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">17h30 - 19h00</div>
+                            <div class="activity" data-icon="cooking">🍽️ Préparation repas principal du soir.</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">19h00 - 20h00</div>
+                            <div class="activity" data-icon="chores">Repas & Nettoyage Cuisine.</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">20h00 - 21h00</div>
+                            <div class="activity" data-icon="personal">🧘 Préparation mentale pour la semaine à venir, lecture, détente.</div>
+                        </div>
+                        <div class="time-slot">
+                            <div class="time">21h00 - 22h00</div>
+                            <div class="activity" data-icon="screen">📱 Routine du soir, planification sommaire du lendemain.</div>
+                        </div>
+                         <div class="time-slot">
+                            <div class="time">22h00</div>
+                            <div class="activity" data-icon="sleep">😴 Coucher (important pour le lundi matin tôt !).</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert">
+                <span class="icon">💡</span>
+                <strong>Ton équilibre vie pro/perso :</strong> Les jours de travail sont denses. Les jours "libres" sont l'occasion de souffler, mais aussi de gérer l'intendance et d'avancer sur tes objectifs personnels. L'objectif est de répartir la charge pour éviter la surcharge mentale et physique.
+            </div>
+            <div class="info-box">
+                <h3>Notes sur les "blocs d'activités" :</h3>
+                <ul>
+                    <li><strong>Promenades Chien :</strong> Elles sont intégrées comme des "ancres" fixes autour desquelles s'organisent d'autres tâches (robot, lessive, courses, écoute de podcasts pendant la grande balade).</li>
+                    <li><strong>Courses :</strong> J'ai proposé des créneaux le lundi, mercredi (plus grande session) et vendredi (complémentaire), mais tu peux ajuster en fonction de tes besoins.</li>
+                    <li><strong>Lessive :</strong> Les jours libres (lundi, mercredi, samedi) sont privilégiés, en lien avec les sorties pour le chien ou d'autres rendez-vous pour éviter des allers-retours.</li>
+                    <li><strong>Robot Aspirateur :</strong> Il est prévu de le lancer pendant les sorties chien pour maximiser ton temps libre.</li>
+                    <li><strong>Repas :</strong> J'ai consolidé la préparation du repas principal en soirée la plupart du temps, en gardant la flexibilité du dimanche.</li>
+                    <li><strong>Sommeil :</strong> Un objectif de coucher avant 22h30/23h est essentiel vu tes réveils matinaux.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="RechercheEmploi" class="tab-content">
+            <h2>💼 Objectif : Relancer ta recherche d'emploi</h2>
+            <p>Définissons ensemble un plan d'action concret et mesurable.</p>
+
+            <div class="info-box">
+                <h3>🎯 Ton objectif : Trouver un emploi qui te correspond</h3>
+                <p><strong>Temps alloué :</strong> 1h40 le lundi, à ajuster si tu peux dégager d'autres créneaux ou l'étaler.</p>
+                <p><strong>Actions hebdomadaires suggérées :</strong></p>
+                <ul>
+                    <li>Identifier 2-3 offres pertinentes.</li>
+                    <li>Adapter et envoyer 1-2 candidatures complètes.</li>
+                    <li>Faire de la veille (LinkedIn, sites d'emploi, réseau).</li>
+                </ul>
+            </div>
+
+            <h3>📋 Plan d'Action (Exemple à suivre)</h3>
+            <div class="task-list">
+                <div class="task-item">
+                    <input type="checkbox" class="task-checkbox">
+                    <div><strong>Semaine 1 : Bilan & Préparation</strong>
+                        <ul>
+                            <li>Mettre à jour CV et Lettre de motivation générique.</li>
+                            <li>Optimiser profil LinkedIn (photo, résumé, expériences).</li>
+                            <li>Lister 5 entreprises cibles.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <input type="checkbox" class="task-checkbox">
+                    <div><strong>Semaine 2 : Lancement & Veille</strong>
+                        <ul>
+                            <li>Identifier 3 offres et adapter CV/LM.</li>
+                            <li>Envoyer 1-2 candidatures.</li>
+                            <li>Commencer à suivre 2 entreprises cibles sur LinkedIn.</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Ajoute d'autres semaines selon ton rythme -->
+            </div>
+
+            <h3>📊 Tableau de suivi des candidatures (à utiliser ou reporter dans un Excel/Google Sheets)</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date envoi</th>
+                        <th>Entreprise</th>
+                        <th>Poste</th>
+                        <th>Contact</th>
+                        <th>Relance prévue</th>
+                        <th>Statut</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="date" style="width:100px;"></td>
+                        <td><input type="text" placeholder="Nom entreprise"></td>
+                        <td><input type="text" placeholder="Intitulé du poste"></td>
+                        <td><input type="email" placeholder="Email ou contact"></td>
+                        <td><input type="date" style="width:100px;"></td>
+                        <td>
+                            <select>
+                                <option>En attente</option>
+                                <option>Relancé</option>
+                                <option>Entretien 1</option>
+                                <option>Refus</option>
+                                <option>Autre</option>
+                            </select>
+                        </td>
+                        <td><textarea placeholder="Commentaires..." rows="1"></textarea></td>
+                    </tr>
+                    <!-- Tu peux copier/coller la ligne <tbody><tr>...</tr></tbody> pour ajouter de nouvelles candidatures -->
+                    <tr>
+                        <td colspan="7" style="text-align: center; color: #666;"><em>Ajouter tes candidatures au fur et à mesure...</em> <button class="button" onclick="addApplicationRow()">+ Ajouter une candidature</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="EducationFils" class="tab-content">
+            <h2>📚 Objectif : Créer des outils HTML interactifs pour réviser efficacement avec ton fils</h2>
+            <p>Une excellente initiative pour le soutenir dans ses études !</p>
+
+            <div class="info-box">
+                <h3>🎯 Ton objectif : Des outils ludiques pour faciliter les révisions</h3>
+                <p><strong>Temps alloué :</strong> Lundis 13h00-15h00 + Mercredis 10h30-12h30 = 4h/semaine.</p>
+                <p><strong>Production visée :</strong> 2-3 outils/prompts interactifs par semaine.</p>
+            </div>
+
+            <div class="alert alert-info">
+                <span class="icon">💡</span>
+                <strong>Complète cette section :</strong> Pour personnaliser au mieux ces outils, j'ai besoin de quelques précisions :
+                <ul>
+                    <li>✏️ Quel est le niveau scolaire de ton fils ? (collège, lycée, études sup)</li>
+                    <li>✏️ Quelles sont ses 3 matières les plus difficiles ou celles qui nécessitent le plus de révision ?</li>
+                    <li>✏️ Quel type d'exercices préfère-t-il ? (QCM, flashcards, exercices à trous, cartes mentales, défis chronométrés...)</li>
+                    <li>✏️ Y a-t-il des examens spécifiques à venir ? (dates + matières prioritaires).</li>
+                </ul>
+            </div>
+
+            <h3>📋 Planning création prompts (Exemple)</h3>
+            <div class="task-list">
+                <div class="task-item">
+                    <input type="checkbox" class="task-checkbox">
+                    <div><strong>Semaine 1 :</strong> Outil HTML pour les tables de multiplication (QCM).</div>
+                </div>
+                <div class="task-item">
+                    <input type="checkbox" class="task-checkbox">
+                    <div><strong>Semaine 2 :</strong> Flashcards HTML sur les capitales européennes.</div>
+                </div>
+                <div class="task-item">
+                    <input type="checkbox" class="task-checkbox">
+                    <div><strong>Semaine 3 :</strong> Exercice à trous pour les verbes irréguliers anglais.</div>
+                </div>
+            </div>
+            <p>N'oublie pas de tester les outils avec lui et de demander son feedback pour les améliorer !</p>
+        </div>
+
+        <div id="MesNotes" class="tab-content">
+            <h2>✍️ Mes Notes Personnelles & Réflexions</h2>
+            <p>Cet espace est le tien pour consigner tes pensées, tes ajustements, tes succès et tes défis. L'écriture est un puissant outil d'analyse et de progression.</p>
+            <textarea placeholder="Écris ici tes réflexions, tes observations sur le planning, ce qui fonctionne bien, ce qui est difficile à maintenir, tes idées pour les prochaines étapes..."></textarea>
+            <p class="subtitle" style="text-align: right; font-size: 0.9em; margin-top: 10px;"><em>(Tes notes seront sauvegardées si tu copies/colles ce HTML sur ton ordinateur)</em></p>
+             <div class="alert alert-success">
+                <span class="icon">🚀</span>
+                <strong>Célèbre tes succès !</strong> Chaque tâche cochée, chaque objectif avancé est une victoire. Sois fier(e) de tes efforts !
+            </div>
+        </div>
+
+    </div> <!-- /container -->
+
+    <script>
+        // Tab functionality
+        function openTab(evt, tabName) {
+            var i, tabcontent, navtabitems;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            navtabitems = document.getElementsByClassName("nav-tab-item");
+            for (i = 0; i < navtabitems.length; i++) {
+                navtabitems[i].className = navtabitems[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+        // Initialize with the first tab open
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelector(".nav-tab-item").click();
+
+            // Task checkboxes functionality
+            const checkboxes = document.querySelectorAll('.task-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    if (this.checked) {
+                        this.closest('.task-item').classList.add('completed');
+                    } else {
+                        this.closest('.task-item').classList.remove('completed');
+                    }
+                });
+            });
+
+            // Load saved state (dummy implementation, needs local storage for real persistence)
+            // This is just to demonstrate the concept. For real persistence, you'd use localStorage.
+            const savedState = JSON.parse(localStorage.getItem('coachPlanningState') || '{}');
+            for (const id in savedState.checkboxes) {
+                const checkbox = document.getElementById(id);
+                if (checkbox) {
+                    checkbox.checked = savedState.checkboxes[id];
+                    if (checkbox.checked) {
+                        checkbox.closest('.task-item').classList.add('completed');
+                    }
+                }
+            }
+            const textarea = document.querySelector('#MesNotes textarea');
+            if (textarea && savedState.notes) {
+                textarea.value = savedState.notes;
+            }
+            // Add unique IDs to checkboxes for saving state
+            checkboxes.forEach((cb, index) => {
+                cb.id = 'task-cb-' + index;
+            });
+
+
+            // Dark mode preference
+            if (localStorage.getItem('darkMode') === 'enabled') {
+                document.body.classList.add('dark-mode');
+            }
+        });
+
+
+        function addApplicationRow() {
+            const tableBody = document.querySelector('#RechercheEmploi tbody');
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td><input type="date" style="width:100px;"></td>
+                <td><input type="text" placeholder="Nom entreprise"></td>
+                <td><input type="text" placeholder="Intitulé du poste"></td>
+                <td><input type="email" placeholder="Email ou contact"></td>
+                <td><input type="date" style="width:100px;"></td>
+                <td>
+                    <select>
+                        <option>En attente</option>
+                        <option>Relancé</option>
+                        <option>Entretien 1</option>
+                        <option>Refus</option>
+                        <option>Autre</option>
+                    </select>
+                </td>
+                <td><textarea placeholder="Commentaires..." rows="1"></textarea></td>
+            `;
+            // Insert before the last row (which contains the "Add" button)
+            tableBody.insertBefore(newRow, tableBody.lastElementChild);
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        }
+        
+    </script>
+</body>
+</html>
