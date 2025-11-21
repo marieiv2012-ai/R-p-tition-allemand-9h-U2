@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrainement Sciences - Mode Athlète</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        h2 {
+            color: #2980b9;
+            border-bottom: 2px solid #2980b9;
+            padding-bottom: 10px;
+        }
+        .coach-tip {
+            background-color: #e8f6f3;
+            border-left: 5px solid #1abc9c;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        
+        /* Onglets de navigation */
+        .tab {
+            overflow: hidden;
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .tab button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+            font-size: 16px;
+            font-family: Arial, sans-serif;
+            flex-grow: 1;
+            font-weight: bold;
+        }
+        .tab button:hover {
+            background-color: #ddd;
+        }
+        .tab button.active {
+            background-color: #2980b9;
+            color: white;
+        }
+        .tabcontent {
+            display: none;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-top: none;
+            border-radius: 0 0 10px 10px;
+            animation: fadeEffect 1s;
+        }
+
+        /* Cartes interactives */
+        .flashcard {
+            background-color: #fff;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .flashcard:hover {
+            border-color: #2980b9;
+            background-color: #f9f9f9;
+        }
+        .question {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #2c3e50;
+        }
+        .answer {
+            display: none;
+            margin-top: 10px;
+            color: #27ae60;
+            font-size: 1.1em;
+            padding-top: 10px;
+            border-top: 1px dashed #ccc;
+        }
+        
+        /* Tableaux et Listes */
+        ul {
+            list-style-type: none; /* Enlever les puces par défaut */
+            padding: 0;
+        }
+        li {
+            margin-bottom: 8px;
+            padding: 10px;
+            background: #ecf0f1;
+            border-radius: 5px;
+        }
+        .highlight {
+            font-weight: bold;
+            color: #c0392b;
+        }
+
+        @keyframes fadeEffect {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+
+        .btn-check {
+            background-color: #27ae60;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            width: 100%;
+        }
+        .img-simulation {
+            background: #eee;
+            padding: 20px;
+            text-align: center;
+            margin: 10px 0;
+            font-style: italic;
+            color: #7f8c8d;
+            border-radius: 5px;
+        }
+        
+        .planning-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .plan-box {
+            background: #dfe6e9;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🏆 Préparation Tactique - Sciences</h1>
+    
+    <div class="coach-tip">
+        Salut ! On est vendredi. Le match (le test) est lundi. <br>
+        Tu es fatigué, c'est normal. On va aller à l'essentiel.<br>
+        Cliques sur les onglets ci-dessous pour tes sessions d'entrainement.
+    </div>
+
+    <div class="tab">
+        <button class="tablinks" onclick="openCity(event, 'Planning')" id="defaultOpen">📅 Planning</button>
+        <button class="tablinks" onclick="openCity(event, 'Sol')">1. Sol & Berlèse</button>
+        <button class="tablinks" onclick="openCity(event, 'Bebetes')">2. Les Invertébrés</button>
+        <button class="tablinks" onclick="openCity(event, 'Energie')">3. Chaînes & Cycles</button>
+        <button class="tablinks" onclick="openCity(event, 'Methode')">4. Méthode Scientifique</button>
+    </div>
+
+    <!-- PLANNING -->
+    <div id="Planning" class="tabcontent">
+        <h2>Ton plan d'attaque</h2>
+        <p>Pas besoin de tout faire d'un coup. Fais des sprints de 20-30 minutes.</p>
+        <div class="planning-grid">
+            <div class="plan-box"><strong>Vendredi 17h30</strong><br>Survol rapide de tous les onglets + Focus "Sol & Berlèse".</div>
+            <div class="plan-box"><strong>Samedi Matin</strong><br>Focus "Les Invertébrés" (compte les pattes).</div>
+            <div class="plan-box"><strong>Samedi Soir</strong><br>Focus "Chaînes & Cycles" (qui mange qui).</div>
+            <div class="plan-box"><strong>Dimanche Matin</strong><br>Focus "Méthode Scientifique" + Révision des trucs difficiles.</div>
+            <div class="plan-box"><strong>Dimanche Soir</strong><br>Refaire tous les onglets rapidement (mode lecture).</div>
+            <div class="plan-box"><strong>Lundi Matin</strong><br>Petit déj de champion : relire juste les titres.</div>
+        </div>
+    </div>
+
+    <!-- ROUND 1 -->
+    <div id="Sol" class="tabcontent">
+        <h2>Round 1 : Le Terrain (Sol) et l'Appareil (Berlèse)</h2>
+        <p><em>Objectifs 1, 2, 3</em></p>
+        
+        <div class="coach-tip">Clique sur les cartes pour vérifier si tu connais la réponse.</div>
+
+        <div class="flashcard" onclick="toggleAnswer(this)">
+            <div class="question">❓ Comment se comporter en sortie terrain ?</div>
+            <div class="answer">Avec respect (calme) et sécurité (ne pas s'éloigner, écouter les consignes).</div>
+        </div>
+
+        <div class="flashcard" onclick="toggleAnswer(this)">
+            <div class="question">❓ Les couches du sol (de haut en bas)</div>
+            <div class="answer">
+                1. <strong>Litière</strong> (feuilles mortes, surface)<br>
+                2. <strong>Humus</strong> (terre noire, matière décomposée)<br>
+                3. <strong>Sous-sol</strong> (terre minérale)<br>
+                4. <strong>Roche mère</strong> (cailloux, tout en bas)
+            </div>
+        </div>
+
+        <div class="flashcard" onclick="toggleAnswer(this)">
+            <div class="question">❓ L'appareil de Berlèse : C'est quoi ?</div>
+            <div class="answer">C'est un entonnoir avec une lampe au-dessus et de l'alcool en dessous pour attraper les petites bêtes du sol.</div>
+        </div>
+
+        <div class="flashcard" onclick="toggleAnswer(this)">
+            <div class="question">❓ Pourquoi ça marche (Berlèse) ?</div>
+            <div class="answer">La lampe fait de la <strong>LUMIÈRE</strong> et de la <strong>CHALEUR</strong> (donc sécheresse).<br>
+            Les bêtes du sol aiment le noir et l'humidité.<br>
+            Elles fuient vers le bas... et tombent dans l'alcool !</div>
+        </div>
+    </div>
+
+    <!-- ROUND 2 -->
+    <div id="Bebetes" class="tabcontent">
+        <h2>Round 2 : L'équipe des Invertébrés</h2>
+        <p><em>Objectifs 4, 5</em> - Astuce : Tout est dans le nombre de pattes !</p>
+
+        <div class="img-simulation">
+            👋 <strong>TRUC DE COACH :</strong> Pour classer, compte toujours les pattes visibles.
+        </div>
+
+        <div class="flashcard" onclick="toggleAnswer(this)">
+            <div class="question">🦵 0 pattes</div>
+            <div class="answer"><strong>Annélides</strong> (Vers de terre) ou <strong>Mollusques</strong> (Escargots, limaces)</div>
+        </div>
+
+        <div class="flashcard" onclick="toggleAnswer(this)">
+            <div class="question">🦵 6 pattes (3 paires)</div>
+            <div class="answer"><strong>Insectes</strong> (Fourmis, coccinelles, mouches)</div>
+        </div>
+
+        <div class="flashcard" onclick="toggleAnswer(this)">
+            <div class="question">🦵 8 pattes (4 paires)</div>
+            <div class="answer"><strong>Arachnides</strong> (Araignées, scorpions). <br><em>Attention : ils n'ont pas d'antennes !</em></div>
+        </div>
+
+        <div class="flashcard" onclick="toggleAnswer(this)">
+            <div class="question">🦵 10 à 14 pattes</div>
+            <div class="answer"><strong>Crustacés</strong> (Cloportes, crabes)</div>
+        </div>
+
+        <div class="flashcard" onclick="toggleAnswer(this)">
+            <div class="question">🦵 Beaucoup de pattes (+ de 14)</div>
+            <div class="answer"><strong>Myriapodes</strong> (Mille-pattes)</div>
+        </div>
+
+        <div class="flashcard" onclick="toggleAnswer(this)">
+            <div class="question">❓ C'est quoi une Clé de détermination ?</div>
+            <div class="answer">C'est comme un arbre de choix : "A-t-il des pattes ? OUI/NON". Tu suis le chemin jusqu'à trouver le nom de l'animal.</div>
+        </div>
+    </div>
+
+    <!-- ROUND 3 -->
+    <div id="Energie" class="tabcontent">
+        <h2>Round 3 : L'Énergie et le Miam-Miam</h2>
+        <p><em>Objectifs 6 à 10</em></p>
+
+        <div class="coach-tip">Important : La flèche ➔ veut dire "EST MANGÉ PAR" (comme si la flèche rentrait dans la bouche de celui qui mange).</div>
+
+        <div class="flashcard" onclick="toggleAnswer(this)">
+            <div class="question">🌱 Producteur</div>
+            <div class="answer">C'est toujours une <strong>VEGETAL</strong> (Plante verte). Il produit sa propre énergie grâce au soleil. C'est le début de la chaîne.</div>
+        </div>
+
+        <div class="flashcard" onclick="toggleAnswer(this)">
+            <div class="question">🦁 Consommateur</div>
+            <div class="answer">C'est un animal. Il doit manger pour avoir de l'énergie (Herbivore ou Carnivore).</div>
+        </div>
+
+        <div class="flashcard" onclick="toggleAnswer(this)">
+            <div class="question">🍄 Décomposeur</div>
+            <div class="answer">C'est le nettoyeur (Vers, champignons, bactéries). Il transforme la matière morte en terre (sels minéraux). Il <strong>RECYCLE</strong> la matière.</div>
+        </div>
+
+        <div class="flashcard" onclick="toggleAnswer(this)">
+            <div class="question">❓ Différence Chaîne vs Réseau</div>
+            <div class="answer">
+                <strong>Chaîne :</strong> Simple ligne (Herbe ➔ Lapin ➔ Renard).<br>
+                <strong>Réseau :</strong> Plein de chaînes mélangées (C'est le bazar, comme un filet, car un animal mange plusieurs choses).
+            </div>
+        </div>
+        
+        <div class="flashcard" onclick="toggleAnswer(this)">
+            <div class="question">⚠️ Conséquences d'un déséquilibre</div>
+            <div class="answer">Si on enlève un maillon (ex: on tue tous les renards) : <br>
+            1. Les lapins n'ont plus de prédateurs ➔ ils deviennent trop nombreux.<br>
+            2. Ils mangent toute l'herbe.<br>
+            3. Plus d'herbe = plus de vie.</div>
+        </div>
+    </div>
+
+    <!-- ROUND 4 -->
+    <div id="Methode" class="tabcontent">
+        <h2>Round 4 : Devenir un Pro (Méthode)</h2>
+        <p><em>Objectif 11</em></p>
+
+        <div class="coach-tip">En science, on ne devine pas, on prouve.</div>
+
+        <ul style="background: white;">
+            <li>
+                <strong>1. L'Hypothèse</strong><br>
+                C'est ce que tu PENSES qu'il va se passer AVANT l'expérience.<br>
+                <i>La phrase magique :</i> <span class="highlight">"Je pense que..."</span> ou <span class="highlight">"Je suppose que..."</span>
+            </li>
+            <li>
+                <strong>2. Les Résultats (Observation)</strong><br>
+                C'est ce que tu VOIS pendant l'expérience.<br>
+                <i>La phrase magique :</i> <span class="highlight">"J'observe que..."</span> ou <span class="highlight">"Je vois que..."</span>
+            </li>
+            <li>
+                <strong>3. La Conclusion</strong><br>
+                Est-ce que ton hypothèse était juste ?<br>
+                <i>La phrase magique :</i> <span class="highlight">"Donc, j'en déduis que..."</span>
+            </li>
+        </ul>
+
+        <div class="flashcard" onclick="toggleAnswer(this)">
+            <div class="question">Exercice : Complète la phrase</div>
+            <div class="question" style="font-weight: normal; font-style: italic;">"La plante a fané quand je l'ai mise dans le placard."</div>
+            <div class="answer">C'est un <strong>RÉSULTAT / OBSERVATION</strong> (C'est ce qu'on voit).</div>
+        </div>
+        
+        <div class="flashcard" onclick="toggleAnswer(this)">
+            <div class="question">Exercice : Complète la phrase</div>
+            <div class="question" style="font-weight: normal; font-style: italic;">"Je pense que la plante a besoin de lumière."</div>
+            <div class="answer">C'est une <strong>HYPOTHÈSE</strong> (Ce que je crois avant de tester).</div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function openCity(evt, cityName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(cityName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+
+    function toggleAnswer(card) {
+        var answer = card.querySelector('.answer');
+        if (answer.style.display === "block") {
+            answer.style.display = "none";
+            card.style.backgroundColor = "#fff";
+        } else {
+            answer.style.display = "block";
+            card.style.backgroundColor = "#e8f8f5"; // Vert très pâle pour valider
+        }
+    }
+
+    // Click on default tab
+    document.getElementById("defaultOpen").click();
+</script>
+
+</body>
+</html>
